@@ -1,0 +1,15 @@
+{
+    "case_id": "N02",
+    "level": "L1",
+    "category": "negative",
+    "service": "auto",
+    "action": "tools_call",
+    "tool": "HvacService.setTemp",
+    "arguments": {"temperature": 40},
+    "timeout_seconds": 30,
+    "assertions": [
+        {"type": "error_expected"}
+    ],
+    "expected_source": "schema 声明 maximum=30；越界应被拒绝。若实际被接受/截断，记为评测发现（待真机校准）",
+    "notes": "参数越界：检验服务端是否落实 schema 约束。"
+}

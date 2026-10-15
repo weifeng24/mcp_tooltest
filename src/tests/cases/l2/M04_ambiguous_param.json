@@ -1,0 +1,14 @@
+{
+    "case_id": "M04",
+    "level": "L2",
+    "category": "negative",
+    "service": "auto",
+    "action": "model_task",
+    "task": "把空调温度调到舒服的程度",
+    "timeout_seconds": 120,
+    "assertions": [
+        {"type": "manual_review"}
+    ],
+    "expected_source": "负面控制：缺少确定值。期望澄清或给出合理默认并说明；口径评测前与导师对齐，人工复核",
+    "notes": "检验模型面对模糊参数时的行为；判定需人工复核，不作为自动 pass/fail。"
+}

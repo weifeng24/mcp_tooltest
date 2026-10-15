@@ -1,0 +1,15 @@
+{
+    "case_id": "P03",
+    "level": "L1",
+    "category": "positive",
+    "service": "auto",
+    "action": "tools_call",
+    "tool": "HvacService.setTemp",
+    "arguments": {"temperature": 16},
+    "timeout_seconds": 30,
+    "assertions": [
+        {"type": "field_equals", "path": "success", "value": true}
+    ],
+    "expected_source": "MCP_Agent.md §9.3 inputSchema（minimum=16, maximum=30）；下边界值应被接受，待真机校准",
+    "notes": "边界值下界；上界 30 由同工具另一重复执行覆盖（repeat 或后续用例扩展）。"
+}

@@ -1,0 +1,11 @@
+{
+    "run_id": "replay-smoke",
+    "channel": "replay",
+    "server_ref": "configs/servers/ark_mcp_service.json",
+    "model_refs": [],
+    "case_glob": "tests/cases/l1/*.json",
+    "repeat": 1,
+    "timeout_seconds": 30,
+    "output_dir": "tests/results",
+    "notes": "离线回放冒烟运行：无设备时验证配置、判定与报告链路。"
+}

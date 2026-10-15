@@ -1,0 +1,15 @@
+{
+    "case_id": "P01",
+    "level": "L1",
+    "category": "positive",
+    "service": "MCPVehicleService",
+    "action": "tools_list",
+    "timeout_seconds": 30,
+    "assertions": [
+        {"type": "list_non_empty"},
+        {"type": "tools_have_schema"},
+        {"type": "tool_name_prefixed"}
+    ],
+    "expected_source": "MCP_Agent.md §9.3（Client 端格式带 serviceId 前缀）",
+    "notes": "工具枚举完整性：列表非空、每个工具带合法 inputSchema/outputSchema、工具名带 serviceId 前缀。"
+}

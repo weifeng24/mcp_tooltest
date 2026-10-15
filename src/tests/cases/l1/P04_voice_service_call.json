@@ -1,0 +1,15 @@
+{
+    "case_id": "P04",
+    "level": "L1",
+    "category": "positive",
+    "service": "MCPVoiceService",
+    "action": "tools_call",
+    "tool": "MCPVoiceService.setAcSwitch",
+    "arguments": {"value": 1},
+    "timeout_seconds": 30,
+    "assertions": [
+        {"type": "field_equals", "path": "success", "value": true}
+    ],
+    "expected_source": "test_config_ark.json mcp_interface.test_tools_call；待真机校准实际响应字段",
+    "notes": "多服务路由抽查：Voice 服务工具经 serviceId 前缀路由到正确服务；与 P02（空调类工具）分属不同服务。"
+}

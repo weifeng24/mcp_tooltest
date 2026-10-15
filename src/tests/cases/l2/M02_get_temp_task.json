@@ -1,0 +1,15 @@
+{
+    "case_id": "M02",
+    "level": "L2",
+    "category": "positive",
+    "service": "auto",
+    "action": "model_task",
+    "task": "现在空调设置的温度是多少？",
+    "timeout_seconds": 120,
+    "assertions": [
+        {"type": "model_selects_tool", "name_contains": "getTemp"},
+        {"type": "max_rounds", "value": 3}
+    ],
+    "expected_source": "任务语义",
+    "notes": "无参查询工具的选择与结果转述。"
+}

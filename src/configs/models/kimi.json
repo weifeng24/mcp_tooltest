@@ -1,0 +1,12 @@
+{
+    "model_config_id": "kimi-coding",
+    "provider": "kimi",
+    "model": "kimi-k2-0905-preview",
+    "base_url": "https://api.moonshot.cn/v1",
+    "api_key_env": "KIMI_API_KEY",
+    "generation": {
+        "temperature": 0.0,
+        "max_tokens": 1024
+    },
+    "notes": "Kimi coding plan 以 API key 接入；具体可用模型名与工具调用能力以开通时官方文档为准，使用前核实。"
+}

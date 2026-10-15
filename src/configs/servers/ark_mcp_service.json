@@ -1,0 +1,17 @@
+{
+    "server_id": "ark_mcp_service",
+    "baseline_tree": "/data/AIOS_Ark_2026-dev/lagvm/LINUX/android/vendor/mcp",
+    "baseline_commit": "f152ba865b433b0769af18c4ab03db501d24bbef",
+    "device_serial": "",
+    "services": [
+        "MCPVehicleService",
+        "MCPVoiceService",
+        "MCPMapService",
+        "MCPVGuiService",
+        "MCPKanziService",
+        "MCPGuideService",
+        "AndroidCameraProxy",
+        "NVCameraProxy"
+    ],
+    "notes": "Ark 树车端 mcp_service；device_serial 上机时填写。基线 commit 为 2026-10-13 记录的 HEAD（2026-09-11 合入）。"
+}
