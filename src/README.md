@@ -1,12 +1,19 @@
 # MCP 工具评测
 
-状态：项目准备阶段。当前仅有交付目录骨架及需求信息摘录，尚无可运行程序、已执行测试或评测结论。
+状态：需求已确认（2026-10-13 访谈确认，见 `../memory/DECISIONS.md` D013），进入实现阶段。被测对象为公司车载 `mcp_service`（8 个服务）；首版 L1 接口级必达、L2 模型级（DeepSeek＋Kimi）尽量做到；截止 2026-10-28；真机仅 1—2 次（下周一次）。尚无业务代码与评测结论。
 
 ## 课题概述
 
-评测 MCP 工具是否好用，支持灵活配置模型与 IDE／客户端。预期交付 MCP 工具集、评测工具及评测报告。
+评测车载 MCP 工具是否好用：接口层验证工具枚举、调用、参数约束与错误行为；模型层验证模型选工具与填参能力。配置化支持多模型切换。预期交付 MCP 工具集、评测工具及评测报告，另含必交的评测流程 Skill。
 
-具体需求来源及待确认范围见 [proposal.md](./proposal.md)。
+## 方案阅读顺序
+
+1. [需求分析与选题方案](./proposal.md)：公司要求、范围建议、验收和待确认事项。
+2. [技术与评测设计](./docs/design.md)：架构、接入、数据、指标及 AI 交互。
+3. [阶段计划](./tasks/plan.md)与[候选任务清单](./tasks/todo.md)：依赖、检查点及后续任务。
+4. [用例设计](./tests/cases/README.md)：至少 5 正向＋2 负面控制的候选场景。
+
+建议稿中的范围已按确认的意图收敛；IDE 直连车机的 L3 评测首版不做（自研传输非标准通道），详见 proposal.md §4.2。
 
 ## 目录结构
 
@@ -19,11 +26,14 @@ src/                         # 本地开发与交付区
 ├── midterm.md
 ├── src/                     # 源代码、开发脚本，当前为空；完整路径为 src/src/
 ├── tests/
-│   ├── cases/               # 测试输入，当前为空
-│   └── results/             # 测试结果及验证数据，当前为空
+│   ├── cases/               # 用例设计草案；尚无可执行用例
+│   └── results/             # 验证记录；尚无业务评测数据
 ├── docs/
-│   ├── design.md            # 技术方案，待编写
+│   ├── design.md            # 技术与评测设计建议稿
 │   └── report.md            # 结题报告，待编写
+├── tasks/
+│   ├── plan.md              # 阶段计划建议稿
+│   └── todo.md              # 候选任务与验收清单
 ├── skills/
 │   └── README.md            # Skill 目录预留说明
 └── skills-creator/
@@ -40,6 +50,7 @@ src/                         # 本地开发与交付区
 
 ## 验证与交付记录
 
+- 本轮资料与文档核验：[planning-validation-2026-10-13.md](./tests/results/planning-validation-2026-10-13.md)；不属于业务评测结果。
 - 中期记录：[midterm.md](./midterm.md)。
 - 技术方案：[docs/design.md](./docs/design.md)。
 - 结题报告：[docs/report.md](./docs/report.md)。
