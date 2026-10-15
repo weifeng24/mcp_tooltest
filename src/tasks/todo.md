@@ -10,10 +10,7 @@
 
 - [x] T01 配置与用例 schema（2026-10-13 完成：`src/src/mcp_eval/config.py`，13 项单元测试通过；示例配置 4 份、用例 11 份全部通过加载校验）
 
-- [ ] T02 adb 执行驱动与录制回放
-  - 验收：device 通道（adb shell 执行、输出采集、超时控制）与 replay 通道（读取录制 JSONL）产出同一格式标准记录；无设备时 replay 全流程可用。
-  - 核对：以手工构造的录制样本回放，输出与预期逐字段一致。
-  - 文件：`src/src/mcp_eval/device.py`、`replay.py`、`records.py`。
+- [x] T02 adb 执行驱动与录制回放（2026-10-13 完成：`device.py`/`replay.py`/`records.py`，双通道同一 EvalRecord 格式；累计 36 项单测通过）
 
 - [ ] T03 判定器与报告器
   - 验收：按判定优先级（证实违规>超时未完成>全证据通过>证据不足）产出 verdict；报告含分层分组指标与分母；报告可从结果文件重建且指标一致。
