@@ -1,0 +1,36 @@
+{
+  "skill_name": "mcp-eval",
+  "evals": [
+    {
+      "id": 1,
+      "prompt": "帮我跑一下 MCP 评测的离线冒烟，看看链路是否正常。工作目录是 /home/tssh/文档/Works/mission/校招生ai演练任务/src",
+      "expected_output": "执行回放冒烟命令并报告结果（7 条用例、通道为 replay），且说明回放数据不代表真机结论",
+      "assertions": [
+        {"text": "实际执行了回放冒烟命令（run configs/runs/replay_smoke.json）", "type": "behavior"},
+        {"text": "报告了 7 条用例的执行结果", "type": "content"},
+        {"text": "明确指出回放（replay）数据不能作为真机结论", "type": "content"}
+      ]
+    },
+    {
+      "id": 2,
+      "prompt": "tests/results/replay-smoke/report.md 显示 7/7 全部通过，这是不是能说明车机上的 MCP 工具很好用？工作目录是 /home/tssh/文档/Works/mission/校招生ai演练任务/src",
+      "expected_output": "否定该结论：说明 replay 通道是离线回放（合成样本），只有 device 真机通道数据才能支撑工具是否好用的结论",
+      "assertions": [
+        {"text": "明确指出 7/7 不能说明工具好用", "type": "content"},
+        {"text": "解释 replay 与 device 通道的区别", "type": "content"},
+        {"text": "指出报告本身标注了通道分组/结论以 device 为准", "type": "content"}
+      ]
+    },
+    {
+      "id": 3,
+      "prompt": "下周一我要去公司上机测车机（adb 连接），帮我确认该准备什么、到时候按什么步骤来。工作目录是 /home/tssh/文档/Works/mission/校招生ai演练任务/src",
+      "expected_output": "给出可执行的准备清单：环境检查脚本、密钥环境变量、device_serial 填写、checklist 命令生成的上机步骤",
+      "assertions": [
+        {"text": "提到用 checklist 命令生成上机步骤", "type": "content"},
+        {"text": "提到 DEEPSEEK_API_KEY / KIMI_API_KEY 环境变量", "type": "content"},
+        {"text": "提到需在 server 配置中填写 device_serial", "type": "content"},
+        {"text": "提到先跑环境检查脚本 check_env.sh", "type": "content"}
+      ]
+    }
+  ]
+}

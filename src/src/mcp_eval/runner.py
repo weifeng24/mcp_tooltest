@@ -167,10 +167,10 @@ cd {server['baseline_tree']} && git rev-parse HEAD   # 期望 {server['baseline_
 {adb} shell "mcp_service -c -t --mcp all"     # tools/list 全量；输出存为 tools 采集文件
 
 ## 3. L1 正式批次
-python3 -m mcp_eval run configs/runs/l1_device.json
+PYTHONPATH=src python3 -m mcp_eval run configs/runs/l1_device.json
 
-## 4. L2 双模型批次（如需）
-python3 -m mcp_eval run configs/runs/l2_device.json
+## 4. L2 双模型批次（如需；先 export DEEPSEEK_API_KEY / KIMI_API_KEY）
+PYTHONPATH=src python3 -m mcp_eval run configs/runs/l2_device.json
 
 ## 5. 状态恢复
 {adb} shell "mcp_service -c -t --camera --stop"   # 如有相机用例

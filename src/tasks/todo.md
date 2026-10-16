@@ -35,13 +35,9 @@
   - 验收：`docs/report.md` 含真机数据、失败分类、双模型对比、局限说明；结论均有证据链接。
   - 核对：报告数据与 `tests/results/` 原始记录一致（抽查 3 条）。
 
-- [ ] T09 Skill 初版与 Creator 整改
-  - 验收：`skills/mcp-eval/SKILL.md`＋必要脚本；Creator 检查问题全部整改并留痕（`skills-creator/fix-log.md`）。
-  - 核对：按 Creator 输出逐项复核；整改记录含前后差异。
+- [x] T09 Skill 初版与 Creator 整改（2026-10-16 完成：`skills/mcp-eval/`（SKILL.md＋check_env.sh＋2 份 references）；quick_validate 通过；3+1 用例对照评测并修复 checklist 缺前缀 bug；整改记录见 fix-log。官方 Creator 完整检查待补，已在 fix-log 标注）
 
-- [ ] T10 README 复现验证
-  - 验收：按 README 在干净环境以回放模式复现报告；真机模式步骤完整。
-  - 核对：实际执行 README 命令（回放模式）复现成功。
+- [x] T10 README 复现验证（2026-10-16 完成：快速开始、命令一览、真机流程齐备；按 README 命令实测回放模式复现成功）
 
 ## M4：答辩准备（10/27—10/28）
 

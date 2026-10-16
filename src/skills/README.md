@@ -1,14 +1,17 @@
-# Skill 目录预留
+# Skill 目录
 
-状态：未创建可用 Skill。是否必须独立交付 Skill、具体名称和初版 AI 辅助边界待确认。
-
-根据演练框架，确认后在本目录创建以下结构：
+本目录包含交付 Skill：
 
 ```text
-<skill-name>/
-├── SKILL.md
+mcp-eval/
+├── SKILL.md          # 评测执行与解读流程
 ├── scripts/
-└── references/
+│   └── check_env.sh  # 环境自检（不打印密钥）
+├── references/
+│   ├── report-guide.md     # 报告解读规则
+│   └── troubleshooting.md  # 常见报错与处理
+└── evals/
+    └── evals.json    # Creator 评测用例
 ```
 
-`<skill-name>` 是待替换的名称占位符，上述子目录和文件尚未创建。本说明不是 Skill 初版，也不构成 Creator 检查通过记录。
+整改记录见 [../skills-creator/fix-log.md](../skills-creator/fix-log.md)。
