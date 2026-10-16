@@ -16,9 +16,7 @@
 
 - [x] T04 L2 模型循环（2026-10-13 完成：`model_loop.py`＋OpenAI 兼容 providers（DeepSeek/Kimi/OpenRouter 同接口）；决策→校验→执行→回填循环、最大轮数/超时强约束、工具错误回填自我纠正均有测试；累计 68 项单测通过）
 
-- [ ] T05 上机脚本与检查清单冻结
-  - 验收：上机日清单（plan.md §3）每一步对应可执行命令；配置生成器能输出车机可用的 test_config；所有命令在无设备环境 dry-run 通过。
-  - 核对：对照清单逐步 dry-run，无缺失步骤。
+- [x] T05 上机脚本与检查清单冻结（2026-10-16 完成：`runner.py`＋CLI（run/gen-config/checklist）；回放冒烟 7/7 通过并产出报告；device 运行配置齐备；累计 72 项单测通过）
 
 ## M2：上机窗口（下周一天）
 

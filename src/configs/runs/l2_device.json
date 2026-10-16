@@ -1,0 +1,15 @@
+{
+    "run_id": "l2-device",
+    "channel": "device",
+    "server_ref": "configs/servers/ark_mcp_service.json",
+    "model_refs": [
+        "configs/models/deepseek.json",
+        "configs/models/kimi.json"
+    ],
+    "case_glob": "tests/cases/l2/*.json",
+    "tools_file": "tests/results/l2-device/tools_capture.json",
+    "repeat": 1,
+    "timeout_seconds": 120,
+    "output_dir": "tests/results",
+    "notes": "L2 双模型真机批次。tools_file 由上机清单第 2 步的 tools/list 采集生成；API 密钥经环境变量提供。"
+}

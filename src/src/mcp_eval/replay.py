@@ -12,6 +12,8 @@ from .records import EvalRecord, read_jsonl, request_signature
 
 
 class ReplayChannel:
+    name = "replay"
+
     def __init__(self, recording_path: str | Path) -> None:
         self.recording_path = Path(recording_path)
         self._index: dict[str, dict[str, Any]] = {}
@@ -23,7 +25,10 @@ class ReplayChannel:
             # 同一请求多次录制时以最后一条为准（后录制的更新）
             self._index[sig] = raw
 
-    def execute_case(self, case: dict[str, Any], run_id: str) -> EvalRecord:
+    def execute_case(
+        self, case: dict[str, Any], run_id: str, timeout: int | None = None
+    ) -> EvalRecord:
+        """回放用例。timeout 参数仅为与 DeviceChannel 接口一致，回放不使用。"""
         sig = request_signature(
             case["action"], case["service"], case.get("tool"), case.get("arguments")
         )

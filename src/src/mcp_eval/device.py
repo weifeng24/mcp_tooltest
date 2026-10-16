@@ -119,6 +119,8 @@ RunnerFn = Callable[[list[str], int], AdbResult]
 class DeviceChannel:
     """device 通道：经 adb 在车机执行用例，产出标准记录。"""
 
+    name = "device"
+
     def __init__(
         self,
         runner: RunnerFn,

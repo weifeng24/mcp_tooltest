@@ -117,6 +117,14 @@ RUN_SCHEMA: dict[str, Any] = {
         "server_ref": {"type": "string", "minLength": 1},
         "model_refs": {"type": "array", "items": {"type": "string", "minLength": 1}},
         "case_glob": {"type": "string", "minLength": 1},
+        "recording": {
+            "type": "string",
+            "description": "replay 通道必填：录制 JSONL 路径（相对交付区根目录）",
+        },
+        "tools_file": {
+            "type": "string",
+            "description": "L2 用例所需的 tools/list 采集文件路径",
+        },
         "repeat": {"type": "integer", "minimum": 1},
         "timeout_seconds": {"type": "integer", "minimum": 1},
         "output_dir": {"type": "string", "minLength": 1},
@@ -149,7 +157,14 @@ def validate_config(data: Any, kind: str, source: str = "<memory>") -> Any:
         raise ConfigError(f"{source}: 字段 {field} 不满足约束: {exc.message}") from exc
     if kind == "case":
         _validate_case_cross_fields(data, source)
+    if kind == "run":
+        _validate_run_cross_fields(data, source)
     return data
+
+
+def _validate_run_cross_fields(run: dict[str, Any], source: str) -> None:
+    if run["channel"] == "replay" and not run.get("recording"):
+        raise ConfigError(f"{source}: channel=replay 时必须提供 recording 字段")
 
 
 def _validate_case_cross_fields(case: dict[str, Any], source: str) -> None:
