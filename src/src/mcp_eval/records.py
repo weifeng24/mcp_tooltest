@@ -27,6 +27,7 @@ class EvalRecord:
     service: str
     tool: str | None = None
     arguments: dict[str, Any] | None = None
+    model: str | None = None  # L2 记录所属模型配置；L1 为 None
     request_raw: dict[str, Any] | None = None
     response_raw: dict[str, Any] | None = None
     execution_status: str = "not_run"
