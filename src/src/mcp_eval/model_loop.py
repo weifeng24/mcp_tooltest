@@ -9,6 +9,7 @@
 from __future__ import annotations
 
 import json
+import re
 import time
 from typing import Any, Callable, Protocol
 
@@ -23,6 +24,28 @@ SYSTEM_PROMPT = (
     "只在确有必要时调用工具；参数必须符合工具的 inputSchema。"
     "任务完成后用中文简要回答结果。"
 )
+
+
+class ToolNameMapper:
+    """MCP 工具名 ↔ API 安全名的双向映射。
+
+    OpenAI 兼容 API 的函数名须满足 ^[a-zA-Z0-9_-]{1,64}$，而公司 MCP 工具名
+    形如 16777217.setTemp（含点号）。映射冲突时追加序号；证据中保留原始名。
+    """
+
+    def __init__(self, names: list[str]) -> None:
+        self.to_api: dict[str, str] = {}
+        self.to_mcp: dict[str, str] = {}
+        used: set[str] = set()
+        for original in names:
+            safe = re.sub(r"[^a-zA-Z0-9_-]", "_", original)[:64] or "tool"
+            candidate, suffix = safe, 1
+            while candidate in used:
+                suffix += 1
+                candidate = f"{safe[:60]}_{suffix}"
+            used.add(candidate)
+            self.to_api[original] = candidate
+            self.to_mcp[candidate] = original
 
 
 class ToolExecutor(Protocol):
@@ -51,7 +74,8 @@ class ModelLoop:
         self.provider = provider
         self.executor = executor
         self.tools = {t["name"]: t for t in tools}
-        self.openai_tools = OpenAICompatProvider.mcp_tools_to_openai(tools)
+        self.name_map = ToolNameMapper(list(self.tools))
+        self.openai_tools = OpenAICompatProvider.mcp_tools_to_openai(tools, self.name_map.to_api)
         self.max_rounds = max_rounds
         self.clock = clock
 
@@ -99,12 +123,14 @@ class ModelLoop:
                                     validation_errors, usage)
             messages.append(self._assistant_message(response))
             for decision in response.tool_calls:
-                result, is_validation_error = self._execute_decision(decision)
+                original_name = self.name_map.to_mcp.get(decision.name, decision.name)
+                result, is_validation_error = self._execute_decision(decision, original_name)
                 if is_validation_error:
                     validation_errors += 1
                 call_log.append(
                     {
-                        "name": decision.name,
+                        "name": original_name,
+                        "api_name": decision.name,
                         "arguments": decision.arguments,
                         "result": result,
                     }
@@ -119,21 +145,24 @@ class ModelLoop:
         return self._finish(base, call_log, None, "max_rounds", validation_errors, usage)
 
     def _execute_decision(
-        self, decision: ToolCallDecision
+        self, decision: ToolCallDecision, original_name: str
     ) -> tuple[dict[str, Any], bool]:
-        """执行一次工具调用决策；返回 (tool_result, 是否为校验类错误)。"""
+        """执行一次工具调用决策；返回 (tool_result, 是否为校验类错误)。
+
+        original_name 为映射回 MCP 侧的原始工具名（执行与证据均用原始名）。
+        """
         if decision.arguments_parse_error:
             return _tool_error(f"参数不是合法 JSON：{decision.arguments_parse_error}"), True
-        tool = self.tools.get(decision.name)
+        tool = self.tools.get(original_name)
         if tool is None:
-            return _tool_error(f"未知工具 {decision.name}；可用工具见 tools/list"), True
+            return _tool_error(f"未知工具 {original_name}；可用工具见 tools/list"), True
         schema = tool.get("inputSchema") or {"type": "object"}
         try:
             jsonschema.validate(decision.arguments, schema)
         except jsonschema.ValidationError as exc:
             return _tool_error(f"参数不满足 inputSchema: {exc.message}"), True
         try:
-            return self.executor(decision.name, decision.arguments), False
+            return self.executor(original_name, decision.arguments), False
         except Exception as exc:  # 执行器异常作为工具错误回填，不中断循环
             return _tool_error(f"工具执行异常: {exc}"), False
 

@@ -103,13 +103,20 @@ class OpenAICompatProvider:
         )
 
     @staticmethod
-    def mcp_tools_to_openai(tools: list[dict[str, Any]]) -> list[dict[str, Any]]:
-        """MCP tools/list 的工具定义 → OpenAI tools 格式。"""
+    def mcp_tools_to_openai(
+        tools: list[dict[str, Any]], name_map: dict[str, str] | None = None
+    ) -> list[dict[str, Any]]:
+        """MCP tools/list 的工具定义 → OpenAI tools 格式。
+
+        name_map: 原始工具名 → API 安全名（可选；API 限制 ^[a-zA-Z0-9_-]{1,64}$，
+        含点号等字符的 MCP 名必须映射后下发）。
+        """
+        name_map = name_map or {}
         return [
             {
                 "type": "function",
                 "function": {
-                    "name": t["name"],
+                    "name": name_map.get(t["name"], t["name"]),
                     "description": t.get("description", ""),
                     "parameters": t.get("inputSchema", {"type": "object", "properties": {}}),
                 },

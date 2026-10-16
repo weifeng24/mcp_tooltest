@@ -4,7 +4,7 @@ from __future__ import annotations
 import pytest
 
 from mcp_eval.judge import judge_record
-from mcp_eval.model_loop import ModelLoop
+from mcp_eval.model_loop import ModelLoop, ToolNameMapper
 from mcp_eval.providers.base import ProviderError, ProviderResponse, ToolCallDecision
 
 TOOLS = [
@@ -183,6 +183,41 @@ def test_executor_exception_becomes_tool_error_not_crash():
     assert record.execution_status == "completed"
     assert record.response_raw["tool_calls"][0]["result"]["isError"] is True
     assert record.response_raw["validation_errors"] == 0  # 执行异常不算校验错误
+
+
+# ---------- 工具名映射（API 安全名） ----------
+
+
+def test_name_mapper_sanitizes_dots():
+    mapper = ToolNameMapper(["16777217.setTemp", "16777217.getTemp"])
+    assert mapper.to_api["16777217.setTemp"] == "16777217_setTemp"
+    assert mapper.to_mcp["16777217_setTemp"] == "16777217.setTemp"
+
+
+def test_name_mapper_resolves_collisions():
+    mapper = ToolNameMapper(["a.b", "a-b", "a_b"])
+    safes = [mapper.to_api[n] for n in ["a.b", "a-b", "a_b"]]
+    assert len(set(safes)) == 3  # 三个原名映射后仍互不冲突
+    for original in ["a.b", "a-b", "a_b"]:
+        assert mapper.to_mcp[mapper.to_api[original]] == original
+
+
+def test_loop_maps_api_name_back_to_mcp_name():
+    """模型返回安全名时，执行器必须收到原始 MCP 名，证据也保留原始名。"""
+    executor = MockExecutor(success_executor)
+    provider = ScriptedProvider([
+        decide("16777217_setTemp", {"temperature": 22}),  # API 安全名
+        answer("已调好"),
+    ])
+    loop = ModelLoop(provider, executor, TOOLS, max_rounds=3)
+    record = loop.run_case(CASE_M01, "run1", "deepseek-chat")
+    assert executor.calls == [("16777217.setTemp", {"temperature": 22})]
+    logged = record.response_raw["tool_calls"][0]
+    assert logged["name"] == "16777217.setTemp"  # 证据保留原始名
+    assert logged["api_name"] == "16777217_setTemp"
+    # 发给 API 的工具定义必须用安全名
+    sent_tools = provider.requests[0] and loop.openai_tools
+    assert sent_tools[0]["function"]["name"] == "16777217_setTemp"
 
 
 # ---------- provider 解析与工厂 ----------
