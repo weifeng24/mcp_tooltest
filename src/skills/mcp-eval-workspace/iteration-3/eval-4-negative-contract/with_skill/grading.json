@@ -1,0 +1,112 @@
+{
+  "execution_mode": "main_context_fallback_nonindependent",
+  "grader_mode": "inline_same_context",
+  "answer_sha256": "bf2301771f95546b48df6647ea7db631a4e0ea81b62d2fc36b7579c38dfea373",
+  "expectations": [
+    {
+      "text": "A1：在题设契约和完整证据条件下判fail，不因返回成功而判pass。",
+      "passed": true,
+      "evidence": "outputs/answer.md：在题设确认的16—30度规范要求拒绝越界参数、且40度请求与成功响应的真实关联证据完整时，N02应判 `fail`。；内联语义复核。按题设和引用原文核对，不要求真实设备执行。"
+    },
+    {
+      "text": "A2：保留版本、冻结用例、请求/响应关联和状态证据；回读区分接受40/截断/未生效且不虚构结果。",
+      "passed": true,
+      "evidence": "outputs/answer.md：保留设备/服务二进制与工具定义版本、冻结用例和错误判据、请求参数40、原始请求ID、完整原始响应及日志；内联语义复核。按题设和引用原文核对，不要求真实设备执行。"
+    },
+    {
+      "text": "A3：禁止事后将预期改为成功；变更规范仅用于另行确认后的新批次。",
+      "passed": true,
+      "evidence": "outputs/answer.md：禁止看到结果后把预期从“拒绝”改成“成功”；内联语义复核。按题设和引用原文核对，不要求真实设备执行。"
+    },
+    {
+      "text": "A4：本地N02的40与error_expected引用准确，区分开发模板错误码与题设已确认的真实规范。",
+      "passed": true,
+      "evidence": "outputs/answer.md：本地模板本身不能证明真实服务必须使用 `-32602`；内联语义复核。按题设和引用原文核对，不要求真实设备执行。"
+    },
+    {
+      "text": "A5：保留N02在原计划分母中；引用真实，标明分析而非本轮真机运行或验收结论。",
+      "passed": true,
+      "evidence": "outputs/answer.md：保留N02在原manifest计划分母N中，并计入失败F，不删除该条；内联语义复核。按题设和引用原文核对，不要求真实设备执行。 引用定义、路径与行范围校验通过。"
+    }
+  ],
+  "summary": {
+    "passed": 5,
+    "failed": 0,
+    "total": 5,
+    "pass_rate": 1.0
+  },
+  "execution_metrics": {
+    "tool_calls": null,
+    "total_tool_calls": null,
+    "total_steps": null,
+    "errors_encountered": null,
+    "output_chars": 1005,
+    "transcript_chars": null
+  },
+  "timing": {
+    "executor_duration_seconds": null,
+    "grader_duration_seconds": null,
+    "total_duration_seconds": null
+  },
+  "claims": [
+    {
+      "claim": "引用编号、路径和行范围真实",
+      "type": "factual",
+      "verified": true,
+      "evidence": "引用编号、路径、行范围和文件SHA-256详见本条citation_checks。",
+      "citation_checks": {
+        "valid": true,
+        "used": [
+          "1",
+          "2",
+          "3"
+        ],
+        "references": [
+          {
+            "number": "1",
+            "path": "skills/mcp-eval/references/report-guide.md",
+            "valid": true,
+            "sha256": "634d60857e0409e2bcc5d30b3252b1d46aebd41753d15935cf68087b24b052a7"
+          },
+          {
+            "number": "2",
+            "path": "tests/cases/l1/N02_param_out_of_range.json",
+            "valid": true,
+            "sha256": "2ca3de09b76bff9f5a682edfd81e095f2c6b7e5026dfca9e1a734554c97bfd0b"
+          },
+          {
+            "number": "3",
+            "path": "docs/device-readiness.md",
+            "valid": true,
+            "sha256": "245226f401ca03532b9cd5ebc89e557e0752298ecd3d3a76874d9fe4c0f8ef03"
+          }
+        ]
+      }
+    },
+    {
+      "claim": "本输出是独立with_skill代理运行",
+      "type": "process",
+      "verified": false,
+      "evidence": "答案主动声明非独立主上下文；此处登记未满足的请求条件，不表示答案作出了该宣称。"
+    }
+  ],
+  "user_notes_summary": {
+    "uncertainties": [
+      "没有独立子代理；已知全部场景/expectations；无隔离基线。"
+    ],
+    "needs_review": [
+      "独立行为对照、用户反馈、自动触发与导师验收均未完成。"
+    ],
+    "workarounds": [
+      "仅做当前Skill主上下文检查，禁止冒充without_skill。"
+    ]
+  },
+  "eval_feedback": {
+    "suggestions": [
+      {
+        "reason": "这些场景明确给出错误线索，公共README也覆盖相同规则。必须由真正隔离的无Skill基线判断区分力；单组通过不证明增量。"
+      }
+    ],
+    "overall": "5项内容断言可复核；独立性失败单独记录，不伪造失败基线或比较统计。"
+  }
+}

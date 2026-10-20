@@ -47,6 +47,8 @@ def make_record(**overrides) -> EvalRecord:
         tool="HvacService.setTemp",
         arguments={"temperature": 22},
         execution_status="completed",
+        trace_complete=True,
+        source_type="synthetic",
         response_raw={"jsonrpc": "2.0", "result": {"success": True}, "id": 1},
     )
     return EvalRecord(**{**base, **overrides})
@@ -80,7 +82,7 @@ def test_field_equals_finds_field_under_result_wrapper():
 def test_error_expected_pass_on_protocol_error():
     record = judge_record(
         CASE_NEGATIVE,
-        make_record(case_id="N01", response_raw={"jsonrpc": "2.0", "error": {"code": -32602}, "id": 1}),
+        make_record(case_id="N01", response_raw={"jsonrpc": "2.0", "error": {"code": -32602, "message": "Unknown tool"}, "id": 1}),
     )
     assert record.verdict == "pass"
 
@@ -108,7 +110,7 @@ def test_infra_error_never_satisfies_error_expected():
                     error_category="parse_failed", response_raw=None),
     )
     assert record.verdict == "unassessed"
-    assert "基础设施错误" in record.verdict_reason
+    assert "parse_failed" in record.verdict_reason
 
 
 # ---------- 状态映射 ----------
@@ -137,7 +139,7 @@ def test_no_tool_call_pass():
     record = judge_record(
         CASE_L2_NO_CALL,
         make_record(case_id="M03", action="model_task",
-                    response_raw={"tool_calls": [], "final_answer": "好的……"}),
+                    response_raw={"tool_calls": [], "final_answer": "好的……", "stopped_reason": "final_answer"}),
     )
     assert record.verdict == "pass"
 
@@ -165,8 +167,10 @@ def test_model_selects_tool_by_substring():
         case,
         make_record(case_id="M01", action="model_task",
                     response_raw={
-                        "tool_calls": [{"name": "16777217.setTemp", "arguments": {"temperature": 22}}],
+                        "tool_calls": [{"name": "16777217.setTemp", "arguments": {"temperature": 22},
+                                        "executed": True, "execution_status": "completed", "result": {"isError": False}}],
                         "rounds": 1,
+                        "stopped_reason": "final_answer", "final_answer": "完成",
                     }),
     )
     assert record.verdict == "pass"
@@ -177,7 +181,8 @@ def test_max_rounds_exceeded_fails():
             "assertions": [{"type": "max_rounds", "value": 2}]}
     record = judge_record(
         case,
-        make_record(action="model_task", response_raw={"tool_calls": [], "rounds": 5}),
+        make_record(action="model_task", response_raw={"tool_calls": [], "rounds": 5,
+                    "stopped_reason": "final_answer", "final_answer": "完成"}),
     )
     assert record.verdict == "fail"
     assert "轮数" in record.verdict_reason
@@ -188,7 +193,8 @@ def test_max_rounds_exceeded_fails():
 
 def test_manual_review_forces_unassessed_after_auto_pass():
     case = {**CASE_L2_NO_CALL, "assertions": [{"type": "manual_review"}]}
-    record = judge_record(case, make_record(action="model_task", response_raw={}))
+    record = judge_record(case, make_record(action="model_task", response_raw={
+        "tool_calls": [], "stopped_reason": "final_answer", "final_answer": "请确认参数"}))
     assert record.verdict == "unassessed"
     assert "人工复核" in record.verdict_reason
 
@@ -196,5 +202,5 @@ def test_manual_review_forces_unassessed_after_auto_pass():
 def test_unknown_assertion_type_fails_closed():
     case = {**CASE_POSITIVE, "assertions": [{"type": "not_a_real_assertion"}]}
     record = judge_record(case, make_record())
-    assert record.verdict == "fail"
+    assert record.verdict == "unassessed"
     assert "未知断言类型" in record.verdict_reason

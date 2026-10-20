@@ -1,0 +1,26 @@
+{
+  "scope": "场景4局部复测；旧版Skill基线，不是无Skill基线",
+  "results": [
+    {
+      "configuration": "with_skill",
+      "passed": 5,
+      "failed": 0,
+      "total": 5,
+      "pass_rate": 1.0
+    },
+    {
+      "configuration": "old_skill",
+      "passed": 3,
+      "failed": 2,
+      "total": 5,
+      "pass_rate": 0.6
+    }
+  ],
+  "causal_claim": false,
+  "automatic_trigger_tested": false,
+  "limitations": [
+    "每版仅一次，不证明稳定增益",
+    "共享项目历史摘要，不是完全盲评",
+    "新版全四场景未重新运行"
+  ]
+}

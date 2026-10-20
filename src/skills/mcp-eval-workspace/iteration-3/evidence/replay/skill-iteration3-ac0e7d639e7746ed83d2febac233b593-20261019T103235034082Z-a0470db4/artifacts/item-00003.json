@@ -1,0 +1,70 @@
+{
+  "run_id": "skill-iteration3-ac0e7d639e7746ed83d2febac233b593-20261019T103235034082Z-a0470db4",
+  "case_id": "P01",
+  "channel": "replay",
+  "action": "tools_list",
+  "service": "MCPVehicleService",
+  "tool": null,
+  "arguments": null,
+  "model": null,
+  "request_raw": null,
+  "response_raw": {
+    "jsonrpc": "2.0",
+    "id": 1,
+    "result": {
+      "tools": [
+        {
+          "name": "HvacService.getTemp",
+          "inputSchema": {
+            "type": "object",
+            "properties": {}
+          }
+        },
+        {
+          "name": "HvacService.setTemp",
+          "inputSchema": {
+            "type": "object",
+            "properties": {
+              "temperature": {
+                "type": "integer",
+                "minimum": 16,
+                "maximum": 30
+              }
+            },
+            "required": [
+              "temperature"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "execution_status": "completed",
+  "error_category": null,
+  "latency_ms": null,
+  "verdict": "pass",
+  "verdict_reason": "全部断言及后置条件通过",
+  "timestamp": "2026-10-19T18:32:35+08:00",
+  "stdout_tail": "",
+  "evidence": [
+    "artifacts/item-00003.json"
+  ],
+  "schema_version": 2,
+  "item_id": "item-00003",
+  "repeat_index": 0,
+  "source_type": "synthetic",
+  "trace_complete": true,
+  "stdout": "",
+  "stderr": "",
+  "events": [],
+  "provenance": {
+    "source_run_id": "synthetic-v2",
+    "source_case_id": "P01",
+    "source_timestamp": "2026-10-19T18:32:35+08:00",
+    "source_event_index": "2:0",
+    "source_model": null,
+    "primary_latency_ms": null,
+    "postconditions": [],
+    "replay_wall_ms": 0
+  }
+}

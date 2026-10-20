@@ -1,0 +1,379 @@
+{
+  "source_type": "synthetic",
+  "real_device_or_api": false,
+  "engine_sha256": {
+    "src/mcp_eval/__init__.py": "a8698b03ca6130657305718132d863fe29164bdc87858693d9ce72d984202bd0",
+    "src/mcp_eval/__main__.py": "057caab0f061b777bf97069b4356caa899c779aca7be4d8c68f25efb8e8782a5",
+    "src/mcp_eval/catalog.py": "8f0941e06714e521a4370c5d268d0e4034396bcf089cc8d1f326a86c60b6cdd2",
+    "src/mcp_eval/config.py": "968232e60efafd643feeb0d1bff859c83817695d66b50fa41c221d4808e8bf81",
+    "src/mcp_eval/device.py": "05dcc6eb74523f75d95147a4947b9be3974cebf11cf8ad36ae907c9ed25fabcc",
+    "src/mcp_eval/judge.py": "da89227402578bbcdd43ab5537ab89cf1902cc36c9b00aa80b47a72fb3f54ff3",
+    "src/mcp_eval/model_loop.py": "7df50730795aa3b658c958d5fd13571634343ad8f65f98f3670624d48e6a6217",
+    "src/mcp_eval/providers/__init__.py": "750f080c99bc03876a73cc43e2efb5373433d1119b12953a5af12202a3fb96f2",
+    "src/mcp_eval/providers/base.py": "a5ca9e7c4df4b834e604e9c67542e0801636eeff2a1ed9dec80028b1ef00f17e",
+    "src/mcp_eval/providers/openai_compat.py": "7a250b0bacbe5f8061aa53ae041eec2f8a925d5671f7ce358dc21383a9dd9a72",
+    "src/mcp_eval/records.py": "0eeb20cdb9f40b84a4586b6046f28c765f431ea3e69c4b6b39bad2a5651cab8a",
+    "src/mcp_eval/replay.py": "e8e35ad753530b6c3dfcbb0fe9d9e0eddae672ef3a5b0e7242facb076161b9f9",
+    "src/mcp_eval/report.py": "673104565d97fd16641175d99a8fcdaf36c2e32f5a9c6b7ace4f3e9ed23d0374",
+    "src/mcp_eval/runner.py": "f63164f1f84ba70373d3db44efdcbbba47c06a6349f2df18fb05bac700345728"
+  },
+  "probes": [
+    {
+      "id": "C01-primary-error",
+      "expected": "不得pass",
+      "actual": {
+        "verdict": "pass",
+        "reason": "全部断言及后置条件通过",
+        "primary": {
+          "jsonrpc": "2.0",
+          "id": 1,
+          "result": {
+            "isError": true,
+            "structuredContent": {
+              "success": true
+            }
+          }
+        },
+        "postconditions": [
+          {
+            "run_id": "probe",
+            "case_id": "P02",
+            "channel": "device",
+            "action": "tools_call",
+            "service": "auto",
+            "tool": "HvacService.getTemp",
+            "arguments": {},
+            "model": null,
+            "request_raw": {
+              "jsonrpc": "2.0",
+              "id": 1,
+              "method": "tools/call",
+              "params": {
+                "name": "HvacService.getTemp",
+                "arguments": {}
+              }
+            },
+            "response_raw": {
+              "jsonrpc": "2.0",
+              "id": 1,
+              "result": {
+                "isError": false,
+                "structuredContent": {
+                  "temperature": 22
+                }
+              }
+            },
+            "execution_status": "completed",
+            "error_category": null,
+            "latency_ms": 1,
+            "verdict": null,
+            "verdict_reason": null,
+            "timestamp": "2026-10-19T16:51:01+08:00",
+            "stdout_tail": "{\"jsonrpc\": \"2.0\", \"id\": 1, \"result\": {\"isError\": false, \"structuredContent\": {\"temperature\": 22}}}",
+            "evidence": [],
+            "schema_version": 2,
+            "item_id": "",
+            "repeat_index": 0,
+            "source_type": "synthetic",
+            "trace_complete": true,
+            "stdout": "{\"jsonrpc\": \"2.0\", \"id\": 1, \"result\": {\"isError\": false, \"structuredContent\": {\"temperature\": 22}}}",
+            "stderr": "",
+            "events": [
+              {
+                "kind": "response_candidates",
+                "frames": [
+                  {
+                    "jsonrpc": "2.0",
+                    "id": 1,
+                    "result": {
+                      "isError": false,
+                      "structuredContent": {
+                        "temperature": 22
+                      }
+                    }
+                  }
+                ]
+              },
+              {
+                "kind": "device_command",
+                "argv": [
+                  "mcp_service",
+                  "-c",
+                  "-t",
+                  "--toolscall",
+                  "HvacService.getTemp"
+                ],
+                "request": {
+                  "jsonrpc": "2.0",
+                  "id": 1,
+                  "method": "tools/call",
+                  "params": {
+                    "name": "HvacService.getTemp",
+                    "arguments": {}
+                  }
+                },
+                "returncode": 0
+              }
+            ],
+            "provenance": {}
+          }
+        ]
+      },
+      "issue_reproduced": true
+    },
+    {
+      "id": "C01-readback-error",
+      "expected": "不得pass",
+      "actual": {
+        "verdict": "pass",
+        "reason": "全部断言及后置条件通过",
+        "primary": {
+          "jsonrpc": "2.0",
+          "id": 1,
+          "result": {
+            "isError": false,
+            "structuredContent": {
+              "success": true
+            }
+          }
+        },
+        "postconditions": [
+          {
+            "run_id": "probe",
+            "case_id": "P02",
+            "channel": "device",
+            "action": "tools_call",
+            "service": "auto",
+            "tool": "HvacService.getTemp",
+            "arguments": {},
+            "model": null,
+            "request_raw": {
+              "jsonrpc": "2.0",
+              "id": 1,
+              "method": "tools/call",
+              "params": {
+                "name": "HvacService.getTemp",
+                "arguments": {}
+              }
+            },
+            "response_raw": {
+              "jsonrpc": "2.0",
+              "id": 1,
+              "result": {
+                "isError": true,
+                "structuredContent": {
+                  "temperature": 22
+                }
+              }
+            },
+            "execution_status": "completed",
+            "error_category": null,
+            "latency_ms": 1,
+            "verdict": null,
+            "verdict_reason": null,
+            "timestamp": "2026-10-19T16:51:01+08:00",
+            "stdout_tail": "{\"jsonrpc\": \"2.0\", \"id\": 1, \"result\": {\"isError\": true, \"structuredContent\": {\"temperature\": 22}}}",
+            "evidence": [],
+            "schema_version": 2,
+            "item_id": "",
+            "repeat_index": 0,
+            "source_type": "synthetic",
+            "trace_complete": true,
+            "stdout": "{\"jsonrpc\": \"2.0\", \"id\": 1, \"result\": {\"isError\": true, \"structuredContent\": {\"temperature\": 22}}}",
+            "stderr": "",
+            "events": [
+              {
+                "kind": "response_candidates",
+                "frames": [
+                  {
+                    "jsonrpc": "2.0",
+                    "id": 1,
+                    "result": {
+                      "isError": true,
+                      "structuredContent": {
+                        "temperature": 22
+                      }
+                    }
+                  }
+                ]
+              },
+              {
+                "kind": "device_command",
+                "argv": [
+                  "mcp_service",
+                  "-c",
+                  "-t",
+                  "--toolscall",
+                  "HvacService.getTemp"
+                ],
+                "request": {
+                  "jsonrpc": "2.0",
+                  "id": 1,
+                  "method": "tools/call",
+                  "params": {
+                    "name": "HvacService.getTemp",
+                    "arguments": {}
+                  }
+                },
+                "returncode": 0
+              }
+            ],
+            "provenance": {}
+          }
+        ]
+      },
+      "issue_reproduced": true
+    },
+    {
+      "id": "C02-interrupt",
+      "expected": "保留主调用与部分执行状态",
+      "actual": {
+        "calls_before_failure": [
+          "HvacService.setTemp",
+          "HvacService.getTemp"
+        ],
+        "interrupted": true,
+        "executed_counter": 0,
+        "stored_record": {
+          "run_id": "probe-20261019T085101597546Z-20d5ffe2",
+          "case_id": "P02",
+          "channel": "device",
+          "action": "tools_call",
+          "service": "auto",
+          "tool": null,
+          "arguments": null,
+          "model": null,
+          "request_raw": null,
+          "response_raw": null,
+          "execution_status": "not_run",
+          "error_category": "interrupted",
+          "latency_ms": null,
+          "verdict": "unassessed",
+          "verdict_reason": "批次中断，条目未执行",
+          "timestamp": "2026-10-19T16:51:01+08:00",
+          "stdout_tail": "",
+          "evidence": [],
+          "schema_version": 2,
+          "item_id": "item-00001",
+          "repeat_index": 0,
+          "source_type": "unknown",
+          "trace_complete": false,
+          "stdout": "",
+          "stderr": "",
+          "events": [],
+          "provenance": {}
+        }
+      },
+      "issue_reproduced": true
+    },
+    {
+      "id": "C02-oserror",
+      "expected": "保留主调用与后置错误",
+      "actual": {
+        "calls_before_failure": [
+          "HvacService.setTemp",
+          "HvacService.getTemp"
+        ],
+        "interrupted": false,
+        "executed_counter": 1,
+        "stored_record": {
+          "run_id": "probe-20261019T085101624236Z-a8248228",
+          "case_id": "P02",
+          "channel": "device",
+          "action": "tools_call",
+          "service": "auto",
+          "tool": null,
+          "arguments": null,
+          "model": null,
+          "request_raw": null,
+          "response_raw": null,
+          "execution_status": "error",
+          "error_category": "evaluation_error",
+          "latency_ms": null,
+          "verdict": "unassessed",
+          "verdict_reason": "执行或判定异常: OSError: synthetic interruption during readback",
+          "timestamp": "2026-10-19T16:51:01+08:00",
+          "stdout_tail": "",
+          "evidence": [
+            "artifacts/item-00001.json"
+          ],
+          "schema_version": 2,
+          "item_id": "item-00001",
+          "repeat_index": 0,
+          "source_type": "unknown",
+          "trace_complete": false,
+          "stdout": "",
+          "stderr": "",
+          "events": [],
+          "provenance": {}
+        }
+      },
+      "issue_reproduced": true
+    },
+    {
+      "id": "C03-numeric",
+      "expected": "pass：22与22.0为相同JSON数值",
+      "actual": {
+        "verdict": "fail",
+        "reason": "后置状态 result.structuredContent.temperature 不符合预期",
+        "expected": 22,
+        "observed": 22.0
+      },
+      "issue_reproduced": true
+    },
+    {
+      "id": "C04-malformed-calls",
+      "expected": "ProviderError或unassessed",
+      "actual": {
+        "verdict": "pass",
+        "trace_complete": true,
+        "events": [
+          {
+            "kind": "model_request",
+            "messages": [
+              {
+                "role": "system",
+                "content": "你是车载智能助手，可调用提供的工具完成任务。只在必要时调用工具，参数须符合工具约束；信息不足时先澄清。根据实际工具结果回答，不声称未完成的操作已经成功。"
+              },
+              {
+                "role": "user",
+                "content": "你好"
+              }
+            ]
+          },
+          {
+            "kind": "model_response",
+            "raw": {
+              "choices": [
+                {
+                  "finish_reason": "stop",
+                  "message": {
+                    "content": "你好",
+                    "tool_calls": {}
+                  }
+                }
+              ]
+            },
+            "content": "你好",
+            "finish_reason": "stop",
+            "decisions": []
+          }
+        ]
+      },
+      "issue_reproduced": true
+    },
+    {
+      "id": "C05-late-l1",
+      "expected": "不得pass：任务已经超过截止时间",
+      "actual": {
+        "verdict": "pass",
+        "execution_status": "completed",
+        "latency_ms": 2000,
+        "budget_ms": 1000
+      },
+      "issue_reproduced": true
+    }
+  ],
+  "reproduced": 7,
+  "total": 7
+}

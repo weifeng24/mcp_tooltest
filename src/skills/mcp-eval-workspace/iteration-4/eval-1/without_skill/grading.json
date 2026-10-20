@@ -1,0 +1,40 @@
+{
+  "expectations": [
+    {
+      "text": "实际执行离线回放并引用本组新批次路径",
+      "passed": true,
+      "evidence": "outputs/answer.md: replay-smoke-20261020T082452120070Z-235a47c8"
+    },
+    {
+      "text": "准确报告计划8、通过8、失败0、无法判断0",
+      "passed": true,
+      "evidence": "outputs/answer.md: 通过 8 项、失败 0 项、无法判断 0 项"
+    },
+    {
+      "text": "明确synthetic来源且不证明真机成功",
+      "passed": true,
+      "evidence": "outputs/answer.md: 数据来源全部为 `synthetic`"
+    },
+    {
+      "text": "执行前查看命令帮助",
+      "passed": false,
+      "evidence": "访问日志仅有目录检查、正式回放及哈希核对，没有执行帮助。"
+    },
+    {
+      "text": "使用实际报告和manifest核对而非引用旧固定目录",
+      "passed": true,
+      "evidence": "outputs/answer.md: `manifest.json`、`results.jsonl`、`summary.json`、`report.md`"
+    }
+  ],
+  "summary": {
+    "passed": 4,
+    "failed": 1,
+    "total": 5,
+    "pass_rate": 0.8
+  },
+  "eval_feedback": {},
+  "notes": [
+    "独立上下文，输出目录分开；没有自动导出的完整工具转录，访问边界依据代理日志与Task返回。",
+    "除eval4无Skill组外，代理按项目规则读取了含历史摘要的根索引/记忆；不是完全盲评。"
+  ]
+}

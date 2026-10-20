@@ -1,0 +1,16 @@
+{
+  "eval_id": 2,
+  "eval_name": "incomplete-trace",
+  "prompt": "历史记录execution_status=error、error_category=provider_error、tool_calls=[]、trace_complete=false，但verdict=pass。它能证明模型正确地没有用工具吗？",
+  "expected_output": "指出缺失证据不能证明零调用，原pass无效，应无法判断并保留计划项",
+  "original_expectations": ["否定该pass结论", "说明API错误/轨迹不完整", "使用unassessed而不删除计划项"],
+  "assertions": [
+    "A1：明确否定该pass及正确零调用结论。",
+    "A2：同时解释provider_error和trace_complete=false使空数组不能证明完整零调用。",
+    "A3：在题设未观察到独立违规的条件下建议unassessed，保留原始记录及更正依据。",
+    "A4：保留计划项和manifest分母N，不删除失败/缺证据项，不编造计划数。",
+    "A5：引用真实规则，注明仅分析题设，无伪造实际批次、执行结果或完成状态。"
+  ],
+  "execution_mode": "main_context_fallback_nonindependent",
+  "baseline_status": "not_run_no_subagent_interface"
+}

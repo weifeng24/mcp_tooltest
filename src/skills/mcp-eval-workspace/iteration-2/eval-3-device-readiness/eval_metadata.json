@@ -1,0 +1,5 @@
+{
+  "eval_id":3, "eval_name":"device-readiness",
+  "prompt":"合成回放8/8，device_serial为空、tools_file未取得。我能直接跑全部车机用例，并用--mcp all采集工具清单吗？",
+  "assertions":["区分合成与真机","明确缺设备身份和完整工具定义","拒绝将--mcp all当只读采集"]
+}

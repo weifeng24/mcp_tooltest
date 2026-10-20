@@ -1,0 +1,17 @@
+{
+  "argv": [
+    "git",
+    "rev-parse",
+    "HEAD"
+  ],
+  "cwd": "/home/tssh/文档/Works/mission/校招生ai演练任务/src",
+  "environment_overrides": {
+    "PYTHONPATH": "src",
+    "PYTHONDONTWRITEBYTECODE": "1",
+    "PATH": "/home/tssh/文档/Works/mission/校招生ai演练任务/src/tests/results/remediation-2026-10-16/.venv/bin:/home/tssh/.local/bin:/home/tssh/bin:/home/tssh/.opencode/bin:/home/tssh/bin:/home/tssh/.local/bin:/home/tssh/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/snap/bin"
+  },
+  "command": "git rev-parse HEAD",
+  "exit_code": 0,
+  "stdout": "5e10eef421602fc468b616680f2bba7da35f659e\n",
+  "stderr": ""
+}

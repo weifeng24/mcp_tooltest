@@ -38,6 +38,15 @@ class EvalRecord:
     timestamp: str = ""
     stdout_tail: str = ""
     evidence: list[str] = field(default_factory=list)
+    schema_version: int = 2
+    item_id: str = ""
+    repeat_index: int = 0
+    source_type: str = "unknown"  # live_device / synthetic / recorded_device / unknown
+    trace_complete: bool = False
+    stdout: str = ""
+    stderr: str = ""
+    events: list[dict[str, Any]] = field(default_factory=list)
+    provenance: dict[str, Any] = field(default_factory=dict)
 
     def __post_init__(self) -> None:
         if not self.timestamp:
@@ -46,6 +55,10 @@ class EvalRecord:
             raise ValueError(f"非法 execution_status: {self.execution_status}")
         if self.verdict is not None and self.verdict not in VERDICTS:
             raise ValueError(f"非法 verdict: {self.verdict}")
+        if self.channel not in ("device", "replay"):
+            raise ValueError(f"非法 channel: {self.channel}")
+        if self.source_type not in ("unknown", "live_device", "synthetic", "recorded_device"):
+            raise ValueError(f"非法 source_type: {self.source_type}")
 
     def to_dict(self) -> dict[str, Any]:
         return asdict(self)
@@ -84,7 +97,10 @@ def read_jsonl(path: str | Path) -> list[dict[str, Any]]:
         if not line:
             continue
         try:
-            records.append(json.loads(line))
+            value = json.loads(line)
+            if not isinstance(value, dict):
+                raise ValueError(f"{p}:{lineno} 记录必须为 JSON 对象")
+            records.append(value)
         except json.JSONDecodeError as exc:
             raise ValueError(f"{p}:{lineno} JSON 解析失败: {exc}") from exc
     return records

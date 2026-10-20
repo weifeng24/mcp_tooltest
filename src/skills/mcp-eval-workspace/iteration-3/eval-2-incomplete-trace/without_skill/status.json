@@ -1,0 +1,33 @@
+{
+  "status": "not_run",
+  "reason": "No subagent/isolated-context tool exposed in this session",
+  "is_old_skill": false,
+  "input_policy": "Only task prompt and necessary public README/configs; prohibit all skills/, skills-creator/, historical comparison outputs, iteration workspace and neighbouring outputs. Own output writes are the sole workspace exception.",
+  "actual_reads": [],
+  "actual_writes_by_baseline": [],
+  "actual_commands": [],
+  "assertions": [
+    {
+      "text": "A1：明确否定该pass及正确零调用结论。",
+      "status": "not_run"
+    },
+    {
+      "text": "A2：同时解释provider_error和trace_complete=false使空数组不能证明完整零调用。",
+      "status": "not_run"
+    },
+    {
+      "text": "A3：在题设未观察到独立违规的条件下建议unassessed，保留原始记录及更正依据。",
+      "status": "not_run"
+    },
+    {
+      "text": "A4：保留计划项和manifest分母N，不删除失败/缺证据项，不编造计划数。",
+      "status": "not_run"
+    },
+    {
+      "text": "A5：引用真实规则，注明仅分析题设，无伪造实际批次、执行结果或完成状态。",
+      "status": "not_run"
+    }
+  ],
+  "grading_emitted": false,
+  "answer_emitted": false
+}

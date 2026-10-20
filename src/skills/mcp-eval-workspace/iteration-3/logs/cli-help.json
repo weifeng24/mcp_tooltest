@@ -1,0 +1,18 @@
+{
+  "argv": [
+    "/home/tssh/文档/Works/mission/校招生ai演练任务/src/tests/results/remediation-2026-10-16/.venv/bin/python",
+    "-m",
+    "mcp_eval",
+    "--help"
+  ],
+  "cwd": "/home/tssh/文档/Works/mission/校招生ai演练任务/src",
+  "environment_overrides": {
+    "PYTHONPATH": "src",
+    "PYTHONDONTWRITEBYTECODE": "1",
+    "PATH": "/home/tssh/文档/Works/mission/校招生ai演练任务/src/tests/results/remediation-2026-10-16/.venv/bin:/home/tssh/.local/bin:/home/tssh/bin:/home/tssh/.opencode/bin:/home/tssh/bin:/home/tssh/.local/bin:/home/tssh/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/snap/bin"
+  },
+  "command": "'/home/tssh/文档/Works/mission/校招生ai演练任务/src/tests/results/remediation-2026-10-16/.venv/bin/python' -m mcp_eval --help",
+  "exit_code": 0,
+  "stdout": "usage: mcp_eval [-h]\n                {run,gen-config,checklist,show-call,rebuild,capture-catalog}\n                ...\n\n车载 MCP 评测：独立批次、离线回放、报告重建与上机预检\n\npositional arguments:\n  {run,gen-config,checklist,show-call,rebuild,capture-catalog}\n    run                 按 run 配置执行评测\n    gen-config          历史配置格式参考（不由当前设备通道消费）\n    checklist           输出上机日检查清单\n    show-call           显示单工具调用 argv，不连接设备\n    rebuild             依据批次 manifest 重建报告，不执行工具或模型\n    capture-catalog     只读采集已有注册定义dump，不执行工具或实时tools/list\n\noptions:\n  -h, --help            show this help message and exit\n",
+  "stderr": ""
+}

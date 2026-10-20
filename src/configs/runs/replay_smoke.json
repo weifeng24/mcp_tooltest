@@ -4,9 +4,9 @@
     "server_ref": "configs/servers/ark_mcp_service.json",
     "model_refs": [],
     "case_glob": "tests/cases/l1/*.json",
-    "recording": "recordings/DEV_SYNTHETIC_NOT_REAL.jsonl",
+    "recording": "recordings/DEV_SYNTHETIC_V2_NOT_REAL.jsonl",
     "repeat": 1,
     "timeout_seconds": 30,
     "output_dir": "tests/results",
-    "notes": "离线回放冒烟：仅验证配置→执行→判定→报告链路。录制文件为手工构造的开发样本（非真机数据），报告结论不得引用。"
+    "notes": "整改后的离线合成冒烟：6条正向+2条负面及独立状态回读，只验证评测器，不作为车机成果。旧录制与报告保留为历史。"
 }

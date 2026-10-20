@@ -1,0 +1,1 @@
+{"eval_id":2,"eval_name":"missing-evidence","prompt":"历史记录execution_status=error、error_category=provider_error、tool_calls=[]、trace_complete=false，但verdict=pass。它能证明模型正确地没有用工具吗？","expectations":["明确不能证明正确不调用","否定该pass结论","指出provider_error或轨迹不完整的证据边界","应为unassessed而不是业务通过或失败","保留计划分母且不删除或篡改原始历史证据"]}

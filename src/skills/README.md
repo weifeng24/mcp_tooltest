@@ -15,3 +15,5 @@ mcp-eval/
 ```
 
 整改记录见 [../skills-creator/fix-log.md](../skills-creator/fix-log.md)。
+
+2026-10-16 已根据审查修订：加入帮助接口、关键证据规则、自由度与独立批次说明。有限行为复测及可视化见 [iteration-2](mcp-eval-workspace/iteration-2/README.md)。结构检查和两场景通过不代表自动触发、全部行为或导师验收完成。

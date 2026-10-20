@@ -1,0 +1,6 @@
+{
+  "eval-1-offline-replay/with_skill/outputs/answer.md": "ed56db967a39c620bcf15ead31b35e9e0e620db3ce9e68defbb4fbca4fa19155",
+  "eval-2-incomplete-trace/with_skill/outputs/answer.md": "d0e9c3c3f1d6675c75a71da4a689aba9773b2d413d99d9877fb03e60d6d4435e",
+  "eval-3-device-readiness/with_skill/outputs/answer.md": "d77d200f9077d8be494f4bdb5570081819cb3eeeb54fe4ebed71afbfe9e30c89",
+  "eval-4-negative-contract/with_skill/outputs/answer.md": "bf2301771f95546b48df6647ea7db631a4e0ea81b62d2fc36b7579c38dfea373"
+}

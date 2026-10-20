@@ -1,0 +1,27 @@
+{
+  "files": [
+    {
+      "service": "MCPVehicleService",
+      "kind": "tools",
+      "filename": "tools_MCPVehicleService.json",
+      "remote": "/data/mcp/dump/tools_MCPVehicleService.json",
+      "argv": [
+        "shell",
+        "cat /data/mcp/dump/tools_MCPVehicleService.json"
+      ]
+    },
+    {
+      "service": "MCPVehicleService",
+      "kind": "resources",
+      "filename": "resources_MCPVehicleService.json",
+      "remote": "/data/mcp/dump/resources_MCPVehicleService.json",
+      "argv": [
+        "shell",
+        "cat /data/mcp/dump/resources_MCPVehicleService.json"
+      ]
+    }
+  ],
+  "executed": 0,
+  "device_configured": false,
+  "runtime_tools_list_tested": false
+}

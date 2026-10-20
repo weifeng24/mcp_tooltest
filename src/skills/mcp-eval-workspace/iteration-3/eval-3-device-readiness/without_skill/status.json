@@ -1,0 +1,33 @@
+{
+  "status": "not_run",
+  "reason": "No subagent/isolated-context tool exposed in this session",
+  "is_old_skill": false,
+  "input_policy": "Only task prompt and necessary public README/configs; prohibit all skills/, skills-creator/, historical comparison outputs, iteration workspace and neighbouring outputs. Own output writes are the sole workspace exception.",
+  "actual_reads": [],
+  "actual_writes_by_baseline": [],
+  "actual_commands": [],
+  "assertions": [
+    {
+      "text": "A1：否定直接跑全部用例，8/8合成通过不等于真机就绪或真实5+2通过。",
+      "status": "not_run"
+    },
+    {
+      "text": "A2：明确缺device_serial及完整tools_file，并要求二进制契约、冻结预期和状态恢复条件。",
+      "status": "not_run"
+    },
+    {
+      "text": "A3：明确--mcp all可能执行车窗/空调等既有测试，拒绝当只读采集。",
+      "status": "not_run"
+    },
+    {
+      "text": "A4：未支持/未执行项保留blocked或unassessed及分母；仅配置或离线预检不能证明设备能力。",
+      "status": "not_run"
+    },
+    {
+      "text": "A5：引用路径编号真实，分析与实际操作分清，不执行设备/API，不声称已采集工具清单。",
+      "status": "not_run"
+    }
+  ],
+  "grading_emitted": false,
+  "answer_emitted": false
+}

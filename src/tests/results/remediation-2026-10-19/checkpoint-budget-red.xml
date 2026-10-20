@@ -1,0 +1,115 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="3" skipped="0" tests="3" time="0.134" timestamp="2026-10-19T18:22:43.837393+08:00" hostname="tssh-OptiPlex-7080"><testcase classname="src.tests.test_execution_checkpoints" name="test_l1_checkpoint_time_is_charged_before_dispatch" time="0.001"><failure message="AssertionError: 预算耗尽后不得下发">monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x7afc384fe2c0&gt;
+
+    def test_l1_checkpoint_time_is_charged_before_dispatch(monkeypatch):
+        clock = [0.0]
+    
+        class Channel:
+            name = "device"
+    
+            def execute_case(self, *args):
+                raise AssertionError("预算耗尽后不得下发")
+    
+        def checkpoint(record):
+            clock[0] = 2.0
+    
+        monkeypatch.setattr("mcp_eval.runner.time.monotonic", lambda: clock[0])
+&gt;       result = _execute_item({}, {**CASE, "timeout_seconds": 1}, {"run_id": "r"}, Channel(), [], {}, checkpoint=checkpoint)
+
+src/tests/test_execution_checkpoints.py:167: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+src/mcp_eval/runner.py:151: in _execute_item
+    record = channel.execute_case(case, run["run_id"], timeout)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = &lt;test_execution_checkpoints.test_l1_checkpoint_time_is_charged_before_dispatch.&lt;locals&gt;.Channel object at 0x7afc384fe140&gt;
+args = ({'case_id': 'P02', 'level': 'L1', 'category': 'positive', 'action': 'tools_call', ...}, 'r', 1)
+
+    def execute_case(self, *args):
+&gt;       raise AssertionError("预算耗尽后不得下发")
+E       AssertionError: 预算耗尽后不得下发
+
+src/tests/test_execution_checkpoints.py:161: AssertionError</failure></testcase><testcase classname="src.tests.test_execution_checkpoints" name="test_model_checkpoint_time_is_charged_before_dispatch[model_request]" time="0.001"><failure message="AssertionError: 检查点耗尽预算后不得请求模型&#10;assert 'model_request' != 'model_request'">expire_before = 'model_request'
+
+    @pytest.mark.parametrize("expire_before", ["model_request", "tool_execution"])
+    def test_model_checkpoint_time_is_charged_before_dispatch(expire_before):
+        clock = [0.0]
+    
+        def checkpoint(record):
+            if expire_before == "model_request" and record.events:
+                clock[0] = 2.0
+            if expire_before == "tool_execution" and record.response_raw["tool_calls"]:
+                clock[0] = 2.0
+    
+        class Provider:
+            def chat(self, *args, **kwargs):
+                assert expire_before != "model_request", "检查点耗尽预算后不得请求模型"
+                return ProviderResponse(tool_calls=[ToolCallDecision("a", "s_set", {})])
+    
+        class Executor:
+            channel = "device"
+            source_type = "synthetic"
+    
+            def __call__(self, *args, **kwargs):
+                raise AssertionError("检查点耗尽预算后不得下发工具")
+    
+        case = {"case_id": "M01", "service": "auto", "task": "设置"}
+&gt;       row = ModelLoop(Provider(), Executor(), [{"name": "s.set", "inputSchema": {"type": "object"}}],
+                        clock=lambda: clock[0]).run_case(case, "r", "mock", 1, checkpoint=checkpoint)
+
+src/tests/test_execution_checkpoints.py:194: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+src/mcp_eval/model_loop.py:100: in run_case
+    response = self.provider.chat(messages, self.openai_tools, timeout=remaining)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = &lt;test_execution_checkpoints.test_model_checkpoint_time_is_charged_before_dispatch.&lt;locals&gt;.Provider object at 0x7afc37e8a0b0&gt;
+args = ([{'role': 'system', 'content': '你是车载智能助手，可调用提供的工具完成任务。只在必要时调用工具，参数须符合工具约束；信息不足时先澄清。根据实际工具结果回答，不声称未完成的操作已经成功。'}, {'rol...t': '设置'}], [{'type': 'function', 'function': {'name': 's_set', 'description': '', 'parameters': {'type': 'object'}}}])
+kwargs = {'timeout': 1.0}
+
+    def chat(self, *args, **kwargs):
+&gt;       assert expire_before != "model_request", "检查点耗尽预算后不得请求模型"
+E       AssertionError: 检查点耗尽预算后不得请求模型
+E       assert 'model_request' != 'model_request'
+
+src/tests/test_execution_checkpoints.py:183: AssertionError</failure></testcase><testcase classname="src.tests.test_execution_checkpoints" name="test_model_checkpoint_time_is_charged_before_dispatch[tool_execution]" time="0.001"><failure message="AssertionError: 检查点耗尽预算后不得下发工具">expire_before = 'tool_execution'
+
+    @pytest.mark.parametrize("expire_before", ["model_request", "tool_execution"])
+    def test_model_checkpoint_time_is_charged_before_dispatch(expire_before):
+        clock = [0.0]
+    
+        def checkpoint(record):
+            if expire_before == "model_request" and record.events:
+                clock[0] = 2.0
+            if expire_before == "tool_execution" and record.response_raw["tool_calls"]:
+                clock[0] = 2.0
+    
+        class Provider:
+            def chat(self, *args, **kwargs):
+                assert expire_before != "model_request", "检查点耗尽预算后不得请求模型"
+                return ProviderResponse(tool_calls=[ToolCallDecision("a", "s_set", {})])
+    
+        class Executor:
+            channel = "device"
+            source_type = "synthetic"
+    
+            def __call__(self, *args, **kwargs):
+                raise AssertionError("检查点耗尽预算后不得下发工具")
+    
+        case = {"case_id": "M01", "service": "auto", "task": "设置"}
+&gt;       row = ModelLoop(Provider(), Executor(), [{"name": "s.set", "inputSchema": {"type": "object"}}],
+                        clock=lambda: clock[0]).run_case(case, "r", "mock", 1, checkpoint=checkpoint)
+
+src/tests/test_execution_checkpoints.py:194: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+src/mcp_eval/model_loop.py:165: in run_case
+    executed = self.executor(name, decision.arguments, timeout=deadline - self.clock())
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = &lt;test_execution_checkpoints.test_model_checkpoint_time_is_charged_before_dispatch.&lt;locals&gt;.Executor object at 0x7afc37e799f0&gt;
+args = ('s.set', {}), kwargs = {'timeout': -1.0}
+
+    def __call__(self, *args, **kwargs):
+&gt;       raise AssertionError("检查点耗尽预算后不得下发工具")
+E       AssertionError: 检查点耗尽预算后不得下发工具
+
+src/tests/test_execution_checkpoints.py:191: AssertionError</failure></testcase></testsuite></testsuites>

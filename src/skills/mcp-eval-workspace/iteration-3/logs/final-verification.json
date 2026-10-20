@@ -1,0 +1,27 @@
+{
+  "checks": {
+    "answers_unchanged": true,
+    "four_fallbacks_only": true,
+    "unknown_tokens_times_null": true,
+    "no_delta": true,
+    "eval_1_grading_schema": true,
+    "eval_1_baseline_not_fabricated": true,
+    "eval_1_output_files": true,
+    "eval_2_grading_schema": true,
+    "eval_2_baseline_not_fabricated": true,
+    "eval_2_output_files": true,
+    "eval_3_grading_schema": true,
+    "eval_3_baseline_not_fabricated": true,
+    "eval_3_output_files": true,
+    "eval_4_grading_schema": true,
+    "eval_4_baseline_not_fabricated": true,
+    "eval_4_output_files": true,
+    "viewer_four_original_outputs": true,
+    "viewer_has_no_history": true,
+    "viewer_missing_stats_not_zero": true,
+    "outside_files_unchanged": true,
+    "all_replay_artifact_checks": true
+  },
+  "passed": true,
+  "scope": "JSON shape, actual replay, references, retained answers, write boundary and static embedded data; not browser runtime, independent evaluation or acceptance"
+}

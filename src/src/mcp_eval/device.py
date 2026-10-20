@@ -1,18 +1,16 @@
-"""adb 设备通道：在车机上执行用例并采集输出。
+"""经 adb 调用已核对的 --toolscall 入口；不覆盖车端系统配置。
 
-IO 与解析分离：AdbRunner 封装 subprocess 调用（真机才用到）；
-DeviceChannel 接受可替换的 runner，解析与状态映射为纯函数，离线可测。
-
-注意：自带测试客户端的输出格式待首次上机校准，解析策略以
-extract_jsonrpc 的容错提取为起点，校准后收紧。
+当前车端 CLI 的单次 ToolsCall 请求 id 固定为 1。每次 adb 进程独立采集，
+只接受该 id 的完整响应。工具发现/资源读取需另有经过验证的采集入口，
+不使用会执行既有状态修改的 --mcp all 来代替只读发现。
 """
 from __future__ import annotations
 
 import json
+import shlex
 import subprocess
 import time
 from dataclasses import dataclass
-from pathlib import Path
 from typing import Any, Callable
 
 from .records import EvalRecord
@@ -27,173 +25,127 @@ class AdbResult:
     timed_out: bool = False
 
 
+def _text(value):
+    return value.decode("utf-8", errors="replace") if isinstance(value, bytes) else value or ""
+
+
 class AdbRunner:
-    """真实的 adb 调用封装。无设备环境下不实例化使用。"""
+    def __init__(self, adb_bin: str = "adb", serial: str = ""):
+        self.adb_bin, self.serial = adb_bin, serial
 
-    def __init__(self, adb_bin: str = "adb", serial: str = "") -> None:
-        self.adb_bin = adb_bin
-        self.serial = serial
-
-    def __call__(self, args: list[str], timeout: int) -> AdbResult:
-        cmd = [self.adb_bin]
-        if self.serial:
-            cmd += ["-s", self.serial]
-        cmd += args
+    def __call__(self, args: list[str], timeout: float) -> AdbResult:
+        if not self.serial:
+            return AdbResult(2, "", "未指定 device_serial", 0)
+        command = [self.adb_bin, "-s", self.serial, *args]
         start = time.monotonic()
         try:
-            proc = subprocess.run(
-                cmd, capture_output=True, text=True, timeout=timeout
-            )
-            return AdbResult(
-                returncode=proc.returncode,
-                stdout=proc.stdout,
-                stderr=proc.stderr,
-                latency_ms=int((time.monotonic() - start) * 1000),
-            )
+            proc = subprocess.run(command, capture_output=True, text=True, encoding="utf-8",
+                                  errors="replace", timeout=max(timeout, 0.001))
+            return AdbResult(proc.returncode, proc.stdout, proc.stderr, int((time.monotonic() - start) * 1000))
         except subprocess.TimeoutExpired as exc:
-            return AdbResult(
-                returncode=-1,
-                stdout=(exc.stdout or "") if isinstance(exc.stdout, str) else "",
-                stderr=(exc.stderr or "") if isinstance(exc.stderr, str) else "",
-                latency_ms=int((time.monotonic() - start) * 1000),
-                timed_out=True,
-            )
+            return AdbResult(-1, _text(exc.stdout), _text(exc.stderr),
+                             int((time.monotonic() - start) * 1000), True)
+        except OSError as exc:
+            return AdbResult(127, "", str(exc), int((time.monotonic() - start) * 1000))
 
 
-def extract_jsonrpc(stdout: str) -> list[dict[str, Any]]:
-    """从混杂 stdout/logcat 文本中提取 JSON-RPC 对象。
-
-    策略：逐行截取最外层 {} 片段尝试解析，保留含 jsonrpc/result/error
-    键的对象。容忍日志行内嵌 JSON。
-    """
-    found: list[dict[str, Any]] = []
-    for line in stdout.splitlines():
-        line = line.strip()
-        start = line.find("{")
-        end = line.rfind("}")
-        if start == -1 or end <= start:
-            continue
+def extract_jsonrpc(text: str) -> list[dict[str, Any]]:
+    """从日志中解码完整 JSON 对象；只保留响应，不接受请求回显。"""
+    decoder, found, position = json.JSONDecoder(), [], 0
+    while position < len(text):
+        start = text.find("{", position)
+        if start < 0:
+            break
         try:
-            obj = json.loads(line[start : end + 1])
+            obj, end = decoder.raw_decode(text, start)
+            position = end
         except json.JSONDecodeError:
+            position = start + 1
             continue
-        if isinstance(obj, dict) and {"jsonrpc", "result", "error"} & obj.keys():
-            found.append(obj)
+        if not isinstance(obj, dict) or obj.get("jsonrpc") != "2.0" or "id" not in obj or "method" in obj:
+            continue
+        if ("result" in obj) == ("error" in obj):
+            continue
+        if "result" in obj and not isinstance(obj["result"], dict):
+            continue
+        if "error" in obj:
+            error = obj["error"]
+            if not isinstance(error, dict) or type(error.get("code")) is not int or not isinstance(error.get("message"), str):
+                continue
+        found.append(obj)
     return found
 
 
-def build_test_config(case: dict[str, Any]) -> dict[str, Any]:
-    """由单条用例生成车机 test_config 片段（参照 test_config_ark.json 结构）。
+def command_for_case(case: dict[str, Any], service_bin: str = "mcp_service") -> list[str]:
+    if case["action"] != "tools_call":
+        raise ValueError(f"当前车端适配不支持 {case['action']}")
+    tool, arguments = case.get("tool"), case.get("arguments", {})
+    if not isinstance(tool, str) or not tool or not isinstance(arguments, dict):
+        raise ValueError("tools_call 需要完整工具名及对象参数")
+    command = [service_bin, "-c", "-t", "--toolscall", tool]
+    # 车端 TestToolsCall 的空 JSON 参数会触发 arg0 回退；无参工具不传 ARGS。
+    if arguments:
+        command.append(json.dumps(arguments, ensure_ascii=False, separators=(",", ":")))
+    return command
 
-    覆盖 mcp_interface 的 tools_list / tools_call / resources_read；
-    实际字段名待首次上机按自带客户端行为校准。
-    """
+
+def build_test_config(case: dict[str, Any]) -> dict[str, Any]:
+    """历史配置格式参考；DeviceChannel 不消费此文件，不可直接用于上机。"""
     interface: dict[str, Any] = {"service_name": case["service"]}
     action = case["action"]
     if action == "tools_list":
-        interface["test_tools_list"] = True
-        interface["test_resources_list"] = True
+        interface.update(test_tools_list=True, test_resources_list=True)
     elif action == "tools_call":
-        interface["test_tools_call"] = {
-            "name": case["tool"],
-            "arguments": case.get("arguments") or {},
-        }
+        interface["test_tools_call"] = {"name": case["tool"], "arguments": case.get("arguments", {})}
     elif action in ("resources_list", "resources_read"):
         interface["test_resources_list"] = True
-        if case.get("tool"):
-            interface["test_resources_read"] = [case["tool"]]
+        if action == "resources_read":
+            interface["test_resources_read"] = [case.get("resource_uri", case.get("tool"))]
     else:
         raise ValueError(f"build_test_config 不支持 action={action}")
     return {"client_tests": {"mcp_interface": interface}}
 
 
-def command_for_case(case: dict[str, Any], service_bin: str = "/data/local/tmp/mcp_eval/mcp_service") -> list[str]:
-    """生成车机端执行命令。tools/call 经 -c -t --mcp <service> 触发配置中的用例。"""
-    service = case["service"]
-    return [service_bin, "-c", "-t", "--mcp", service]
-
-
-RunnerFn = Callable[[list[str], int], AdbResult]
-
-
 class DeviceChannel:
-    """device 通道：经 adb 在车机执行用例，产出标准记录。"""
-
     name = "device"
+    source_type = "live_device"
 
-    def __init__(
-        self,
-        runner: RunnerFn,
-        workdir: str = "/data/local/tmp/mcp_eval",
-        config_target: str = "/aios/etc/test_config_ark.json",
-    ) -> None:
-        self.runner = runner
-        self.workdir = workdir
-        self.config_target = config_target
+    def __init__(self, runner: Callable[[list[str], float], AdbResult], *, service_bin: str = "mcp_service"):
+        self.runner, self.service_bin = runner, service_bin
 
-    def execute_case(
-        self, case: dict[str, Any], run_id: str, timeout: int = 30
-    ) -> EvalRecord:
-        base = dict(
-            run_id=run_id,
-            case_id=case["case_id"],
-            channel="device",
-            action=case["action"],
-            service=case["service"],
-            tool=case.get("tool"),
-            arguments=case.get("arguments"),
-        )
-        config = build_test_config(case)
-        config_json = json.dumps(config, ensure_ascii=False)
-        command = command_for_case(case)
-        request_raw = {"command": command, "test_config": config}
-        # 配置经 stdin 写入临时文件后执行；校准前不覆盖目标路径原件
-        setup = (
-            f"mkdir -p {self.workdir} && "
-            f"cat > {self.workdir}/case_config.json <<'MCPEVAL_EOF'\n{config_json}\nMCPEVAL_EOF"
-        )
-        result = self.runner(["shell", setup], timeout)
-        if result.timed_out or result.returncode != 0:
-            return self._failure(base, result, "adb_setup_failed", request_raw)
-        result = self.runner(["shell", " ".join(command)], timeout)
-        return self.record_from_result(base, result, request_raw)
+    def execute_case(self, case: dict[str, Any], run_id: str, timeout: float = 30) -> EvalRecord:
+        base = dict(run_id=run_id, case_id=case["case_id"], channel=self.name, action=case["action"],
+                    service=case["service"], tool=case.get("tool"), arguments=case.get("arguments"),
+                    source_type=self.source_type)
+        if case["action"] != "tools_call":
+            return EvalRecord(**base, execution_status="blocked", error_category="unsupported_action")
+        command = command_for_case(case, self.service_bin)
+        request = {"jsonrpc": "2.0", "id": 1, "method": "tools/call",
+                   "params": {"name": case["tool"], "arguments": case.get("arguments", {})}}
+        result = self.runner(["shell", shlex.join(command)], min(timeout, case.get("timeout_seconds", timeout)))
+        record = self.record_from_result(base, result, request)
+        record.events.append({"kind": "device_command", "argv": command, "request": request,
+                              "returncode": result.returncode})
+        return record
 
-    def record_from_result(
-        self, base: dict[str, Any], result: AdbResult, request_raw: dict[str, Any]
-    ) -> EvalRecord:
-        """把 adb 执行结果映射为标准记录（纯函数，离线可测）。"""
+    def record_from_result(self, base: dict[str, Any], result: AdbResult, request_raw: dict[str, Any]) -> EvalRecord:
+        record = EvalRecord(**base, request_raw=request_raw, latency_ms=result.latency_ms,
+                            stdout=result.stdout, stderr=result.stderr, stdout_tail=result.stdout[-2000:])
+        frames = extract_jsonrpc(result.stdout + "\n" + result.stderr)
+        expected_id = request_raw.get("id", 1)
+        matching = {json.dumps(frame, sort_keys=True, ensure_ascii=False): frame for frame in frames
+                    if frame["id"] == expected_id and type(frame["id"]) is type(expected_id)}
+        record.events.append({"kind": "response_candidates", "frames": frames})
+        if len(matching) == 1:
+            record.response_raw = next(iter(matching.values()))
         if result.timed_out:
-            return self._failure(base, result, "timeout", request_raw)
-        records = extract_jsonrpc(result.stdout)
-        response = records[-1] if records else None
-        if result.returncode != 0:
-            return self._failure(base, result, "exit_nonzero", request_raw, response)
-        if response is None:
-            return self._failure(base, result, "parse_failed", request_raw)
-        return EvalRecord(
-            **base,
-            request_raw=request_raw,
-            response_raw=response,
-            execution_status="completed",
-            latency_ms=result.latency_ms,
-            stdout_tail=result.stdout[-2000:],
-        )
-
-    def _failure(
-        self,
-        base: dict[str, Any],
-        result: AdbResult,
-        category: str,
-        request_raw: dict[str, Any] | None = None,
-        response: dict[str, Any] | None = None,
-    ) -> EvalRecord:
-        status = "timeout" if category == "timeout" else "error"
-        return EvalRecord(
-            **base,
-            request_raw=request_raw,
-            response_raw=response,
-            execution_status=status,
-            error_category=category,
-            latency_ms=result.latency_ms,
-            stdout_tail=(result.stdout or "")[-2000:],
-        )
+            record.execution_status, record.error_category = "timeout", "adb_timeout_remote_state_unknown"
+        elif result.returncode:
+            record.execution_status, record.error_category = "error", "exit_nonzero"
+        elif not matching:
+            record.execution_status, record.error_category = "error", "response_missing"
+        elif len(matching) != 1:
+            record.execution_status, record.error_category = "error", "response_ambiguous"
+        else:
+            record.execution_status, record.trace_complete = "completed", True
+        return record

@@ -1,0 +1,346 @@
+{
+  "schema_version": 2,
+  "run_id": "replay-smoke-20261016T103648142224Z-23ffec00",
+  "requested_run_id": "replay-smoke",
+  "state": "finished",
+  "planned_items": [
+    {
+      "item_id": "item-00001",
+      "case_id": "N01",
+      "level": "L1",
+      "category": "negative",
+      "action": "tools_call",
+      "channel": "replay",
+      "model": null,
+      "repeat_index": 0
+    },
+    {
+      "item_id": "item-00002",
+      "case_id": "N02",
+      "level": "L1",
+      "category": "negative",
+      "action": "tools_call",
+      "channel": "replay",
+      "model": null,
+      "repeat_index": 0
+    },
+    {
+      "item_id": "item-00003",
+      "case_id": "P01",
+      "level": "L1",
+      "category": "positive",
+      "action": "tools_list",
+      "channel": "replay",
+      "model": null,
+      "repeat_index": 0
+    },
+    {
+      "item_id": "item-00004",
+      "case_id": "P02",
+      "level": "L1",
+      "category": "positive",
+      "action": "tools_call",
+      "channel": "replay",
+      "model": null,
+      "repeat_index": 0
+    },
+    {
+      "item_id": "item-00005",
+      "case_id": "P03",
+      "level": "L1",
+      "category": "positive",
+      "action": "tools_call",
+      "channel": "replay",
+      "model": null,
+      "repeat_index": 0
+    },
+    {
+      "item_id": "item-00006",
+      "case_id": "P04",
+      "level": "L1",
+      "category": "positive",
+      "action": "tools_call",
+      "channel": "replay",
+      "model": null,
+      "repeat_index": 0
+    },
+    {
+      "item_id": "item-00007",
+      "case_id": "P05",
+      "level": "L1",
+      "category": "positive",
+      "action": "resources_read",
+      "channel": "replay",
+      "model": null,
+      "repeat_index": 0
+    },
+    {
+      "item_id": "item-00008",
+      "case_id": "P06",
+      "level": "L1",
+      "category": "positive",
+      "action": "tools_call",
+      "channel": "replay",
+      "model": null,
+      "repeat_index": 0
+    }
+  ],
+  "warnings": [],
+  "inputs": {
+    "run": {
+      "run_id": "replay-smoke-20261016T103648142224Z-23ffec00",
+      "channel": "replay",
+      "server_ref": "configs/servers/ark_mcp_service.json",
+      "model_refs": [],
+      "case_glob": "tests/cases/l1/*.json",
+      "recording": "recordings/DEV_SYNTHETIC_V2_NOT_REAL.jsonl",
+      "repeat": 1,
+      "timeout_seconds": 30,
+      "output_dir": "tests/results",
+      "notes": "整改后的离线合成冒烟：6条正向+2条负面及独立状态回读，只验证评测器，不作为车机成果。旧录制与报告保留为历史。"
+    },
+    "server": {
+      "server_id": "ark_mcp_service",
+      "baseline_tree": "/data/AIOS_Ark_2026-dev/lagvm/LINUX/android/vendor/mcp",
+      "baseline_commit": "f152ba865b433b0769af18c4ab03db501d24bbef",
+      "device_serial": "",
+      "service_bin": "mcp_service",
+      "services": [
+        "MCPVehicleService",
+        "MCPVoiceService",
+        "MCPMapService",
+        "MCPVGuiService",
+        "MCPKanziService",
+        "MCPGuideService",
+        "AndroidCameraProxy",
+        "NVCameraProxy"
+      ],
+      "notes": "Ark 树车端 mcp_service；device_serial 上机时填写。基线 commit 为 2026-10-13 记录的 HEAD（2026-09-11 合入）。"
+    },
+    "cases": [
+      {
+        "case_id": "N01",
+        "level": "L1",
+        "category": "negative",
+        "service": "MCPVehicleService",
+        "action": "tools_call",
+        "tool": "MCPVehicleService.noSuchTool",
+        "arguments": {},
+        "timeout_seconds": 30,
+        "assertions": [
+          {
+            "type": "error_expected",
+            "codes": [
+              -32602
+            ],
+            "message_pattern": "(?i)unknown tool.*noSuchTool"
+          }
+        ],
+        "expected_source": "MCP 协议：未知工具应返回协议错误；实际错误格式待真机校准",
+        "notes": "开发模板，仅匹配未知工具的预期错误，不接受服务不存在等其他错误；服务健康回读需随实际环境补充。"
+      },
+      {
+        "case_id": "N02",
+        "level": "L1",
+        "category": "negative",
+        "service": "auto",
+        "action": "tools_call",
+        "tool": "HvacService.setTemp",
+        "arguments": {
+          "temperature": 40
+        },
+        "timeout_seconds": 30,
+        "assertions": [
+          {
+            "type": "error_expected",
+            "codes": [
+              -32602
+            ],
+            "message_pattern": "(?i)temperature.*(out of range|maximum|range)"
+          }
+        ],
+        "expected_source": "示例schema maximum=30；错误码/信息为开发判据，须在正式运行前由接口契约确认，禁止事后按实测改判为通过",
+        "notes": "参数越界：检验服务端是否落实 schema 约束。"
+      },
+      {
+        "case_id": "P01",
+        "level": "L1",
+        "category": "positive",
+        "service": "MCPVehicleService",
+        "action": "tools_list",
+        "timeout_seconds": 30,
+        "assertions": [
+          {
+            "type": "list_non_empty"
+          },
+          {
+            "type": "tools_have_schema"
+          },
+          {
+            "type": "tool_name_prefixed"
+          },
+          {
+            "type": "list_contains_tool",
+            "name": "HvacService.setTemp"
+          },
+          {
+            "type": "list_contains_tool",
+            "name": "HvacService.getTemp"
+          }
+        ],
+        "expected_source": "MCP_Agent.md §9.3（Client 端格式带 serviceId 前缀）",
+        "notes": "开发模板，示例名称须由实际工具目录替换。校验inputSchema及存在时的outputSchema；不将两项关键工具存在等同于完整8服务覆盖。device发现入口待接入，该条不得冒充真机调用。"
+      },
+      {
+        "case_id": "P02",
+        "level": "L1",
+        "category": "positive",
+        "service": "auto",
+        "action": "tools_call",
+        "tool": "HvacService.setTemp",
+        "arguments": {
+          "temperature": 22
+        },
+        "timeout_seconds": 30,
+        "assertions": [
+          {
+            "type": "field_equals",
+            "path": "result.structuredContent.success",
+            "value": true
+          }
+        ],
+        "postconditions": [
+          {
+            "tool": "HvacService.getTemp",
+            "arguments": {},
+            "path": "result.structuredContent.temperature",
+            "value": 22
+          }
+        ],
+        "expected_source": "MCP_Agent.md §9.4 响应格式；工具所属服务待 tools/list 采集后校准（Ark 树映射与 Chery 命名可能不同）",
+        "notes": "开发模板，工具名与回读字段须在真机前核实。执行层直接传递完整 tool，不再将 auto 作为车端服务名。"
+      },
+      {
+        "case_id": "P03",
+        "level": "L1",
+        "category": "positive",
+        "service": "auto",
+        "action": "tools_call",
+        "tool": "HvacService.setTemp",
+        "arguments": {
+          "temperature": 16
+        },
+        "timeout_seconds": 30,
+        "assertions": [
+          {
+            "type": "field_equals",
+            "path": "result.structuredContent.success",
+            "value": true
+          }
+        ],
+        "postconditions": [
+          {
+            "tool": "HvacService.getTemp",
+            "arguments": {},
+            "path": "result.structuredContent.temperature",
+            "value": 16
+          }
+        ],
+        "expected_source": "MCP_Agent.md §9.3 inputSchema（minimum=16, maximum=30）；下边界值应被接受，待真机校准",
+        "notes": "开发模板：下边界16；上边界30由独立P06覆盖，repeat不会改变参数。"
+      },
+      {
+        "case_id": "P04",
+        "level": "L1",
+        "category": "positive",
+        "service": "MCPVoiceService",
+        "action": "tools_call",
+        "tool": "MCPVoiceService.setAcSwitch",
+        "arguments": {
+          "value": 1
+        },
+        "timeout_seconds": 30,
+        "assertions": [
+          {
+            "type": "field_equals",
+            "path": "result.structuredContent.success",
+            "value": true
+          }
+        ],
+        "expected_source": "test_config_ark.json mcp_interface.test_tools_call；待真机校准实际响应字段",
+        "notes": "单工具调用模板；不声称已验证跨服务路由隔离，返回字段须由实际契约确认。"
+      },
+      {
+        "case_id": "P05",
+        "level": "L1",
+        "category": "positive",
+        "service": "MCPVoiceService",
+        "action": "resources_read",
+        "resource_uri": "dds://Hvac_Status_topic",
+        "timeout_seconds": 30,
+        "assertions": [
+          {
+            "type": "list_non_empty"
+          },
+          {
+            "type": "field_equals",
+            "path": "result.contents.0.uri",
+            "value": "dds://Hvac_Status_topic"
+          }
+        ],
+        "expected_source": "test_config_ark.json mcp_interface.test_resources_read；响应结构待真机校准",
+        "notes": "开发模板，只验证目标资源读取；现有device适配没有只读资源入口，真机该条明确blocked。"
+      },
+      {
+        "case_id": "P06",
+        "level": "L1",
+        "category": "positive",
+        "service": "auto",
+        "action": "tools_call",
+        "tool": "HvacService.setTemp",
+        "arguments": {
+          "temperature": 30
+        },
+        "timeout_seconds": 30,
+        "assertions": [
+          {
+            "type": "field_equals",
+            "path": "result.structuredContent.success",
+            "value": true
+          }
+        ],
+        "postconditions": [
+          {
+            "tool": "HvacService.getTemp",
+            "arguments": {},
+            "path": "result.structuredContent.temperature",
+            "value": 30
+          }
+        ],
+        "expected_source": "协议文档示例的上边界30；真实工具定义与字段尚待确认",
+        "notes": "开发模板，不能把合成回放作为真机验收。"
+      }
+    ],
+    "models": [],
+    "tools": []
+  },
+  "python": "3.10.12",
+  "engine_sources": {
+    "__init__.py": "a8698b03ca6130657305718132d863fe29164bdc87858693d9ce72d984202bd0",
+    "__main__.py": "aa86df99e6a065dff4e4ea763f4cc616bcc5a56391d2143ff18be2f422e3c97c",
+    "config.py": "a6bc2341f735f899b955dd10ca106cd9d9045322cd65cce6a9b26eba658e16da",
+    "device.py": "05dcc6eb74523f75d95147a4947b9be3974cebf11cf8ad36ae907c9ed25fabcc",
+    "judge.py": "b32f025f5f498c38b5df5376012fa16b955ced575e13f6764823514ae499ee54",
+    "model_loop.py": "7df50730795aa3b658c958d5fd13571634343ad8f65f98f3670624d48e6a6217",
+    "providers/__init__.py": "750f080c99bc03876a73cc43e2efb5373433d1119b12953a5af12202a3fb96f2",
+    "providers/base.py": "a5ca9e7c4df4b834e604e9c67542e0801636eeff2a1ed9dec80028b1ef00f17e",
+    "providers/openai_compat.py": "909ee7d3d8961ba13138d4e93aa2b5ba58b6792eecfb969e27a7df143bd25ec2",
+    "records.py": "0eeb20cdb9f40b84a4586b6046f28c765f431ea3e69c4b6b39bad2a5651cab8a",
+    "replay.py": "e8e35ad753530b6c3dfcbb0fe9d9e0eddae672ef3a5b0e7242facb076161b9f9",
+    "report.py": "673104565d97fd16641175d99a8fcdaf36c2e32f5a9c6b7ace4f3e9ed23d0374",
+    "runner.py": "8ee75d612630239e8bd24a43c278cdaa53693a11ed1fbe158ebf24f8f814e55a"
+  },
+  "recording_sha256": "0a18cffdb92afe1d683d88177f3821f27240bbcac5506d57457ce588e8bcc848",
+  "recorded_items": 8,
+  "attempted_items": 8
+}

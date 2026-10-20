@@ -1,0 +1,12 @@
+{
+  "run_id": "skill-iteration3-ac0e7d639e7746ed83d2febac233b593",
+  "channel": "replay",
+  "server_ref": "configs/servers/ark_mcp_service.json",
+  "model_refs": [],
+  "case_glob": "tests/cases/l1/*.json",
+  "recording": "recordings/DEV_SYNTHETIC_V2_NOT_REAL.jsonl",
+  "repeat": 1,
+  "timeout_seconds": 30,
+  "output_dir": "skills/mcp-eval-workspace/iteration-3/evidence/replay",
+  "notes": "整改后的离线合成冒烟：6条正向+2条负面及独立状态回读，只验证评测器，不作为车机成果。旧录制与报告保留为历史。"
+}

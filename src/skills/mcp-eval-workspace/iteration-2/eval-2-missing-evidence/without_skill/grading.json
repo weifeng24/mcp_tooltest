@@ -1,0 +1,29 @@
+{
+  "expectations": [
+    {
+      "text": "否定该pass结论",
+      "passed": true,
+      "evidence": "outputs/answer.md: 不能证明模型正确地没有使用工具"
+    },
+    {
+      "text": "说明API错误/轨迹不完整",
+      "passed": true,
+      "evidence": "outputs/answer.md: 调用轨迹不完整"
+    },
+    {
+      "text": "使用unassessed而不删除计划项",
+      "passed": true,
+      "evidence": "outputs/answer.md: 避免隐去失败执行"
+    }
+  ],
+  "summary": {
+    "passed": 3,
+    "failed": 0,
+    "total": 3,
+    "pass_rate": 1.0
+  },
+  "notes": [
+    "有限行为语义检查；不是自动触发率或设备/API验证。",
+    "baseline 的不可判定按 unassessed 等效语义评分。"
+  ]
+}

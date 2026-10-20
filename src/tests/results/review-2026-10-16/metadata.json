@@ -1,0 +1,11 @@
+{
+  "repo": "mcp_tooltest",
+  "module": "mcp_eval（代码可靠性；需求覆盖另见 requirements-review.md）",
+  "branch": "main",
+  "commit": "5e10eef421602fc468b616680f2bba7da35f659e",
+  "timestamp": "2026-10-16（UTC+08:00）",
+  "reviewer": "OpenCode AI 审查；非公司正式审批",
+  "scan_mode": "src/ 全量静态检查及隔离离线反例；无真机/API 调用；修复片段仅为设计示意，未应用",
+  "applied_rules": ["AGENTS.md", "code-review Common 9 维度", "code-review-and-quality"],
+  "na_dimensions": [2, 8]
+}

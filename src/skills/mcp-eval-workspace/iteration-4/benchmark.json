@@ -1,0 +1,447 @@
+{
+  "metadata": {
+    "skill_name": "mcp-eval",
+    "timestamp": "2026-10-20T08:51:04.262641+00:00",
+    "evals_run": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "runs_per_configuration": 1,
+    "completed_independent_runs": 8,
+    "executor_model": "openai/gpt-6-astra",
+    "comparison_scope": "有限共享上下文条件下的观察性对照，非完全盲评"
+  },
+  "runs": [
+    {
+      "eval_id": 1,
+      "eval_name": "offline-replay",
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "passed": 5,
+        "failed": 0,
+        "total": 5,
+        "pass_rate": 1.0,
+        "time_seconds": null,
+        "tokens": null,
+        "tool_calls": null,
+        "errors": null
+      },
+      "expectations": [
+        {
+          "text": "实际执行离线回放并引用本组新批次路径",
+          "passed": true,
+          "evidence": "outputs/answer.md: replay-smoke-20261020T082342228588Z-d64d2f10"
+        },
+        {
+          "text": "准确报告计划8、通过8、失败0、无法判断0",
+          "passed": true,
+          "evidence": "outputs/answer.md: 计划 8 项，执行 8 项，通过 8 项，失败 0 项，无法判断 0 项"
+        },
+        {
+          "text": "明确synthetic来源且不证明真机成功",
+          "passed": true,
+          "evidence": "outputs/answer.md: 数据全部为 `synthetic`"
+        },
+        {
+          "text": "执行前查看命令帮助",
+          "passed": true,
+          "evidence": "outputs/answer.md: 先执行环境脚本帮助"
+        },
+        {
+          "text": "使用实际报告和manifest核对而非引用旧固定目录",
+          "passed": true,
+          "evidence": "outputs/answer.md: manifest、逐项结果、汇总、报告"
+        }
+      ],
+      "notes": [
+        "独立上下文，输出目录分开；没有自动导出的完整工具转录，访问边界依据代理日志与Task返回。",
+        "除eval4无Skill组外，代理按项目规则读取了含历史摘要的根索引/记忆；不是完全盲评。"
+      ]
+    },
+    {
+      "eval_id": 1,
+      "eval_name": "offline-replay",
+      "configuration": "without_skill",
+      "run_number": 1,
+      "result": {
+        "passed": 4,
+        "failed": 1,
+        "total": 5,
+        "pass_rate": 0.8,
+        "time_seconds": null,
+        "tokens": null,
+        "tool_calls": null,
+        "errors": null
+      },
+      "expectations": [
+        {
+          "text": "实际执行离线回放并引用本组新批次路径",
+          "passed": true,
+          "evidence": "outputs/answer.md: replay-smoke-20261020T082452120070Z-235a47c8"
+        },
+        {
+          "text": "准确报告计划8、通过8、失败0、无法判断0",
+          "passed": true,
+          "evidence": "outputs/answer.md: 通过 8 项、失败 0 项、无法判断 0 项"
+        },
+        {
+          "text": "明确synthetic来源且不证明真机成功",
+          "passed": true,
+          "evidence": "outputs/answer.md: 数据来源全部为 `synthetic`"
+        },
+        {
+          "text": "执行前查看命令帮助",
+          "passed": false,
+          "evidence": "访问日志仅有目录检查、正式回放及哈希核对，没有执行帮助。"
+        },
+        {
+          "text": "使用实际报告和manifest核对而非引用旧固定目录",
+          "passed": true,
+          "evidence": "outputs/answer.md: `manifest.json`、`results.jsonl`、`summary.json`、`report.md`"
+        }
+      ],
+      "notes": [
+        "独立上下文，输出目录分开；没有自动导出的完整工具转录，访问边界依据代理日志与Task返回。",
+        "除eval4无Skill组外，代理按项目规则读取了含历史摘要的根索引/记忆；不是完全盲评。"
+      ]
+    },
+    {
+      "eval_id": 2,
+      "eval_name": "missing-evidence",
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "passed": 5,
+        "failed": 0,
+        "total": 5,
+        "pass_rate": 1.0,
+        "time_seconds": null,
+        "tokens": null,
+        "tool_calls": null,
+        "errors": null
+      },
+      "expectations": [
+        {
+          "text": "明确不能证明正确不调用",
+          "passed": true,
+          "evidence": "outputs/answer.md: 不能证明模型正确地没有使用工具"
+        },
+        {
+          "text": "否定该pass结论",
+          "passed": true,
+          "evidence": "outputs/answer.md: 历史 `verdict=pass` 缺乏证据支持"
+        },
+        {
+          "text": "指出provider_error或轨迹不完整的证据边界",
+          "passed": true,
+          "evidence": "outputs/answer.md: 轨迹不完整"
+        },
+        {
+          "text": "应为unassessed而不是业务通过或失败",
+          "passed": true,
+          "evidence": "outputs/answer.md: `unassessed`（无法判断）"
+        },
+        {
+          "text": "保留计划分母且不删除或篡改原始历史证据",
+          "passed": true,
+          "evidence": "outputs/answer.md: 无法判断项不能从计划分母中删除"
+        }
+      ],
+      "notes": [
+        "独立上下文，输出目录分开；没有自动导出的完整工具转录，访问边界依据代理日志与Task返回。",
+        "除eval4无Skill组外，代理按项目规则读取了含历史摘要的根索引/记忆；不是完全盲评。"
+      ]
+    },
+    {
+      "eval_id": 2,
+      "eval_name": "missing-evidence",
+      "configuration": "without_skill",
+      "run_number": 1,
+      "result": {
+        "passed": 4,
+        "failed": 1,
+        "total": 5,
+        "pass_rate": 0.8,
+        "time_seconds": null,
+        "tokens": null,
+        "tool_calls": null,
+        "errors": null
+      },
+      "expectations": [
+        {
+          "text": "明确不能证明正确不调用",
+          "passed": true,
+          "evidence": "outputs/answer.md: 不能证明模型正确地没有使用工具"
+        },
+        {
+          "text": "否定该pass结论",
+          "passed": true,
+          "evidence": "outputs/answer.md: 不能直接采信或计为模型行为成功"
+        },
+        {
+          "text": "指出provider_error或轨迹不完整的证据边界",
+          "passed": true,
+          "evidence": "outputs/answer.md: 证据不完整"
+        },
+        {
+          "text": "应为unassessed而不是业务通过或失败",
+          "passed": true,
+          "evidence": "outputs/answer.md: `unassessed`（无法判断）"
+        },
+        {
+          "text": "保留计划分母且不删除或篡改原始历史证据",
+          "passed": false,
+          "evidence": "保留原始记录已有明确说明，但未说明无法判断项保留计划分母；本条合取断言不满足。"
+        }
+      ],
+      "notes": [
+        "独立上下文，输出目录分开；没有自动导出的完整工具转录，访问边界依据代理日志与Task返回。",
+        "除eval4无Skill组外，代理按项目规则读取了含历史摘要的根索引/记忆；不是完全盲评。"
+      ]
+    },
+    {
+      "eval_id": 3,
+      "eval_name": "device-readiness",
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "passed": 5,
+        "failed": 0,
+        "total": 5,
+        "pass_rate": 1.0,
+        "time_seconds": null,
+        "tokens": null,
+        "tool_calls": null,
+        "errors": null
+      },
+      "expectations": [
+        {
+          "text": "明确当前不能直接运行全部真机用例",
+          "passed": true,
+          "evidence": "outputs/answer.md: 目前不能直接运行全部车机用例"
+        },
+        {
+          "text": "明确缺设备身份和完整真实工具定义",
+          "passed": true,
+          "evidence": "outputs/answer.md: device_serial"
+        },
+        {
+          "text": "说明合成回放不能证明真机就绪",
+          "passed": true,
+          "evidence": "outputs/answer.md: 合成回放 8/8 只支持人工构造样本"
+        },
+        {
+          "text": "拒绝把--mcp all当只读采集并解释有执行行为",
+          "passed": true,
+          "evidence": "outputs/answer.md: 不要执行 `--mcp all`"
+        },
+        {
+          "text": "给出核对项目/二进制/工具契约及最小调用的顺序，未把目录快照等同实时发现",
+          "passed": true,
+          "evidence": "outputs/answer.md: 先核对一条只读调用"
+        }
+      ],
+      "notes": [
+        "独立上下文，输出目录分开；没有自动导出的完整工具转录，访问边界依据代理日志与Task返回。",
+        "除eval4无Skill组外，代理按项目规则读取了含历史摘要的根索引/记忆；不是完全盲评。"
+      ]
+    },
+    {
+      "eval_id": 3,
+      "eval_name": "device-readiness",
+      "configuration": "without_skill",
+      "run_number": 1,
+      "result": {
+        "passed": 5,
+        "failed": 0,
+        "total": 5,
+        "pass_rate": 1.0,
+        "time_seconds": null,
+        "tokens": null,
+        "tool_calls": null,
+        "errors": null
+      },
+      "expectations": [
+        {
+          "text": "明确当前不能直接运行全部真机用例",
+          "passed": true,
+          "evidence": "outputs/answer.md: 当前不能直接运行全部车机用例"
+        },
+        {
+          "text": "明确缺设备身份和完整真实工具定义",
+          "passed": true,
+          "evidence": "outputs/answer.md: device_serial"
+        },
+        {
+          "text": "说明合成回放不能证明真机就绪",
+          "passed": true,
+          "evidence": "outputs/answer.md: 不能证明真实设备"
+        },
+        {
+          "text": "拒绝把--mcp all当只读采集并解释有执行行为",
+          "passed": true,
+          "evidence": "outputs/answer.md: 可能包含空调、车窗等状态修改"
+        },
+        {
+          "text": "给出核对项目/二进制/工具契约及最小调用的顺序，未把目录快照等同实时发现",
+          "passed": true,
+          "evidence": "outputs/answer.md: 先验证一个已核实的读取工具"
+        }
+      ],
+      "notes": [
+        "独立上下文，输出目录分开；没有自动导出的完整工具转录，访问边界依据代理日志与Task返回。",
+        "除eval4无Skill组外，代理按项目规则读取了含历史摘要的根索引/记忆；不是完全盲评。"
+      ]
+    },
+    {
+      "eval_id": 4,
+      "eval_name": "out-of-range-accepted",
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "passed": 4,
+        "failed": 1,
+        "total": 5,
+        "pass_rate": 0.8,
+        "time_seconds": null,
+        "tokens": null,
+        "tool_calls": null,
+        "errors": null
+      },
+      "expectations": [
+        {
+          "text": "在给定前提下判fail",
+          "passed": true,
+          "evidence": "outputs/answer.md: N02 应判为 `fail`"
+        },
+        {
+          "text": "解释负面用例预期错误未出现",
+          "passed": true,
+          "evidence": "outputs/answer.md: 收到成功响应不满足该预期"
+        },
+        {
+          "text": "保留版本和请求响应证据",
+          "passed": true,
+          "evidence": "outputs/answer.md: 引用原有规范版本、N02 输入、关联标识及成功响应"
+        },
+        {
+          "text": "建议回读状态区分接受/截断并按现场办法恢复",
+          "passed": false,
+          "evidence": "指出无法据成功响应推断设备状态，但没有建议独立回读区分接受/截断及按现场办法恢复。"
+        },
+        {
+          "text": "不倒改预期且不把缺少关联的其他错误当作预期错误",
+          "passed": true,
+          "evidence": "outputs/answer.md: 不能根据实际结果倒改业务预期"
+        }
+      ],
+      "notes": [
+        "独立上下文，输出目录分开；没有自动导出的完整工具转录，访问边界依据代理日志与Task返回。",
+        "除eval4无Skill组外，代理按项目规则读取了含历史摘要的根索引/记忆；不是完全盲评。"
+      ]
+    },
+    {
+      "eval_id": 4,
+      "eval_name": "out-of-range-accepted",
+      "configuration": "without_skill",
+      "run_number": 1,
+      "result": {
+        "passed": 4,
+        "failed": 1,
+        "total": 5,
+        "pass_rate": 0.8,
+        "time_seconds": null,
+        "tokens": null,
+        "tool_calls": null,
+        "errors": null
+      },
+      "expectations": [
+        {
+          "text": "在给定前提下判fail",
+          "passed": true,
+          "evidence": "outputs/answer.md: N02 应判为 `fail`"
+        },
+        {
+          "text": "解释负面用例预期错误未出现",
+          "passed": true,
+          "evidence": "outputs/answer.md: 预期错误未出现"
+        },
+        {
+          "text": "保留版本和请求响应证据",
+          "passed": true,
+          "evidence": "outputs/answer.md: 应保留原版本、变更依据及旧结果"
+        },
+        {
+          "text": "建议回读状态区分接受/截断并按现场办法恢复",
+          "passed": false,
+          "evidence": "保留失败和复测建议明确，但没有建议状态回读及现场恢复。"
+        },
+        {
+          "text": "不倒改预期且不把缺少关联的其他错误当作预期错误",
+          "passed": true,
+          "evidence": "outputs/answer.md: 不能将任意错误都当作负面用例通过"
+        }
+      ],
+      "notes": [
+        "独立上下文，输出目录分开；没有自动导出的完整工具转录，访问边界依据代理日志与Task返回。",
+        "除eval4无Skill组外，代理按项目规则读取了含历史摘要的根索引/记忆；不是完全盲评。"
+      ]
+    }
+  ],
+  "run_summary": {
+    "with_skill": {
+      "pass_rate": {
+        "mean": 0.95,
+        "stddev": 0.08660254037844384,
+        "min": 0.8,
+        "max": 1.0
+      },
+      "time_seconds": {
+        "mean": null,
+        "stddev": null,
+        "min": null,
+        "max": null
+      },
+      "tokens": {
+        "mean": null,
+        "stddev": null,
+        "min": null,
+        "max": null
+      }
+    },
+    "without_skill": {
+      "pass_rate": {
+        "mean": 0.8500000000000001,
+        "stddev": 0.08660254037844384,
+        "min": 0.8,
+        "max": 1.0
+      },
+      "time_seconds": {
+        "mean": null,
+        "stddev": null,
+        "min": null,
+        "max": null
+      },
+      "tokens": {
+        "mean": null,
+        "stddev": null,
+        "min": null,
+        "max": null
+      }
+    },
+    "delta": {
+      "pass_rate": "+0.10",
+      "time_seconds": null,
+      "tokens": null
+    }
+  },
+  "notes": [
+    "有Skill19/20，无Skill17/20；不是显著性结论。",
+    "双方N02场景均漏掉状态回读/恢复，保留失败原文。",
+    "无Skill组没有读取目标Skill；根记忆历史摘要的影响无法剥离。",
+    "标准差跨不同任务计算，不是重复运行稳定性；耗时/token未知。"
+  ]
+}

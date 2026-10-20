@@ -1,47 +1,49 @@
 #!/usr/bin/env bash
-# mcp-eval 环境检查：确认评测运行所需条件，不打印密钥内容。
-# 用法：在交付区根目录执行 bash skills/mcp-eval/scripts/check_env.sh
+# 检查本机离线依赖；不读取凭据值、不连接设备或模型。
 set -u
-ok=0
-
-check() {  # $1=名称 $2=通过条件（0 为通过）$3=失败提示
-  if [ "$2" -eq 0 ]; then
-    echo "[OK]   $1"
-  else
-    echo "[FAIL] $1 —— $3"
-    ok=1
-  fi
-}
-
-python3 --version >/dev/null 2>&1
-check "Python3 可用" $? "需要 Python >= 3.10"
-
-python3 -c "import sys; sys.exit(0 if sys.version_info >= (3, 10) else 1)" 2>/dev/null
-check "Python >= 3.10" $? "当前版本过低"
-
-python3 -c "import jsonschema, pytest" >/dev/null 2>&1
-check "依赖 jsonschema/pytest" $? "pip install -r requirements.txt"
-
-[ -f "src/mcp_eval/runner.py" ]
-check "位于交付区根目录" $? "请 cd 到交付区 src/ 再执行（应能看到 src/mcp_eval/）"
-
-if command -v adb >/dev/null 2>&1; then
-  echo "[OK]   adb 可用（$(adb version | head -1)）"
-else
-  echo "[WARN] adb 不可用 —— 仅真机模式需要，回放模式可忽略"
+if [ "${1:-}" = "--help" ] || [ "${1:-}" = "-h" ]; then
+  echo "用法：在交付根目录执行 bash skills/mcp-eval/scripts/check_env.sh"
+  echo "可用 MCP_EVAL_PYTHON 指定解释器路径，例如 .venv/bin/python。"
+  echo "仅检查本机环境；密钥只检查是否设置，不打印值。此脚本不证明设备或API可用。"
+  exit 0
 fi
-
+if [ "$#" -ne 0 ]; then
+  echo "未知参数，请先使用 --help" >&2
+  exit 2
+fi
+PYTHON="${MCP_EVAL_PYTHON:-python3}"
+failed=0
+if "$PYTHON" -c 'import sys; raise SystemExit(0 if sys.version_info >= (3, 10) else 1)' >/dev/null 2>&1; then
+  echo "[OK] Python >= 3.10"
+else
+  echo "[FAIL] Python >= 3.10 不可用"
+  failed=1
+fi
+if "$PYTHON" -c 'import jsonschema, pytest' >/dev/null 2>&1; then
+  echo "[OK] jsonschema / pytest 可导入"
+else
+  echo "[FAIL] 依赖未就绪，按 README 安装到项目虚拟环境"
+  failed=1
+fi
+if [ -f src/mcp_eval/runner.py ] && [ -f requirements.txt ]; then
+  echo "[OK] 当前目录为交付根目录"
+else
+  echo "[FAIL] 请进入交付根目录（应有 src/mcp_eval/ 与 requirements.txt）"
+  failed=1
+fi
+if command -v adb >/dev/null 2>&1; then
+  echo "[OK] adb 命令存在；未验证设备连接和版本"
+else
+  echo "[WARN] adb 不存在，仅真机模式需要"
+fi
 for var in DEEPSEEK_API_KEY KIMI_API_KEY; do
   if [ -n "${!var:-}" ]; then
-    echo "[OK]   $var 已设置（值不显示）"
+    echo "[INFO] $var 已设置（未验证权益，值不显示）"
   else
-    echo "[WARN] $var 未设置 —— 仅 L2 模型批次需要：export $var=<你的key>"
+    echo "[INFO] $var 未设置（离线回放不需要）"
   fi
 done
-
-if [ "$ok" -eq 0 ]; then
-  echo "环境就绪：可运行回放冒烟 PYTHONPATH=src python3 -m mcp_eval run configs/runs/replay_smoke.json"
-else
-  echo "存在未通过项，按上述提示处理后再运行"
+if [ "$failed" -eq 0 ]; then
+  echo "离线基础环境检查通过；设备、工具绑定、模型和完整发现能力仍需分别验证。"
 fi
-exit $ok
+exit "$failed"

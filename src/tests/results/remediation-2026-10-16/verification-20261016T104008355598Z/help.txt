@@ -1,0 +1,14 @@
+usage: mcp_eval [-h] {run,gen-config,checklist,show-call,rebuild} ...
+
+车载 MCP 评测：独立批次、离线回放、报告重建与上机预检
+
+positional arguments:
+  {run,gen-config,checklist,show-call,rebuild}
+    run                 按 run 配置执行评测
+    gen-config          历史配置格式参考（不由当前设备通道消费）
+    checklist           输出上机日检查清单
+    show-call           显示单工具调用 argv，不连接设备
+    rebuild             依据批次 manifest 重建报告，不执行工具或模型
+
+options:
+  -h, --help            show this help message and exit

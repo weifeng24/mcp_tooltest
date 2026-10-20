@@ -1,0 +1,190 @@
+{
+  "baseline": {
+    "returncode": 0,
+    "isolated": true
+  },
+  "observations": [
+    {
+      "id": "R01-config-not-consumed",
+      "expected": "车端执行指定用例配置并解析服务归属",
+      "observed": [
+        [
+          "shell",
+          "mkdir -p /data/local/tmp/mcp_eval && cat > /data/local/tmp/mcp_eval/case_config.json <<'MCPEVAL_EOF'\n{\"client_tests\": {\"mcp_interface\": {\"service_name\": \"auto\", \"test_tools_call\": {\"name\": \"HvacService.setTemp\", \"arguments\": {\"temperature\": 22}}}}}\nMCPEVAL_EOF"
+        ],
+        [
+          "shell",
+          "/data/local/tmp/mcp_eval/mcp_service -c -t --mcp auto"
+        ]
+      ],
+      "reproduced": true
+    },
+    {
+      "id": "R02-unrelated-response",
+      "expected": "选择该请求 id=1 的响应",
+      "observed": {
+        "jsonrpc": "2.0",
+        "id": 1001,
+        "result": {
+          "success": true
+        }
+      },
+      "reproduced": true
+    },
+    {
+      "id": "R02-multiline",
+      "expected": "完整识别多行 JSON-RPC",
+      "observed": [],
+      "reproduced": true
+    },
+    {
+      "id": "R02-request-as-response",
+      "expected": "只有请求回显时判为未取得响应",
+      "observed": "completed",
+      "reproduced": true
+    },
+    {
+      "id": "R03-rejected-call-pass",
+      "expected": "参数错误且未下发，M01 不应通过",
+      "observed": {
+        "verdict": "pass",
+        "validation_errors": 1,
+        "executed_calls": []
+      },
+      "reproduced": true
+    },
+    {
+      "id": "R03-no-final-pass",
+      "expected": "达到硬上限且无最终回答，不应通过",
+      "observed": {
+        "verdict": "pass",
+        "stopped_reason": "max_rounds",
+        "final_answer": null
+      },
+      "reproduced": true
+    },
+    {
+      "id": "R04-provider-error-pass",
+      "expected": "模型请求失败应无法判断，不是正确不调用",
+      "observed": {
+        "execution_status": "error",
+        "verdict": "pass"
+      },
+      "reproduced": true
+    },
+    {
+      "id": "R04-missing-evidence-pass",
+      "expected": "没有完整调用记录应无法判断",
+      "observed": "pass",
+      "reproduced": true
+    },
+    {
+      "id": "R05-after-deadline-call",
+      "expected": "超时后不再调用执行器，记录 timeout",
+      "observed": {
+        "time": 999.0,
+        "execution_status": "completed",
+        "calls": [
+          [
+            "HvacService.setTemp",
+            {
+              "temperature": 22
+            }
+          ]
+        ]
+      },
+      "reproduced": true
+    },
+    {
+      "id": "R10-empty-assertion",
+      "expected": "缺少工具选择判据时加载报错",
+      "observed": "pass",
+      "reproduced": true
+    },
+    {
+      "id": "R08-tools-list-envelope",
+      "expected": "能够读取约定 tools/list 原始响应",
+      "observed": "tools_file 格式错误（期望工具数组）: tools.json",
+      "reproduced": true
+    },
+    {
+      "id": "R07-replay-case-id",
+      "expected": "回放输出关联当前用例 P09",
+      "observed": "P02",
+      "reproduced": true
+    },
+    {
+      "id": "R07-replay-loses-sequence",
+      "expected": "保留失败、成功两次录制，或拒绝歧义",
+      "observed": [
+        {
+          "result": {
+            "success": true
+          }
+        },
+        {
+          "result": {
+            "success": true
+          }
+        }
+      ],
+      "reproduced": true
+    },
+    {
+      "id": "R06-denominator-shrinks",
+      "expected": "固定计划 2 项，缺失项进入 unassessed",
+      "observed": {
+        "planned": 1,
+        "pass": 1,
+        "fail": 0,
+        "unassessed": 0,
+        "pass_rate_planned": 1.0,
+        "judge_coverage": 1.0,
+        "pass_rate_judged": 1.0,
+        "latency_ms": {
+          "median": null,
+          "min": null,
+          "max": null,
+          "samples": 0
+        }
+      },
+      "reproduced": true
+    },
+    {
+      "id": "R11-markdown-columns",
+      "expected": "表头与数据均为 7 列",
+      "observed": {
+        "row": "| replay|L1|positive|- | 1 | 1 | 0 | 0 | 100.0% | 100.0% |",
+        "cells": 10
+      },
+      "reproduced": true
+    },
+    {
+      "id": "R06-interrupted-run",
+      "expected": "保留旧批次及未完成项并生成部分报告",
+      "observed": {
+        "old_evidence_preserved": false,
+        "saved_records": 1,
+        "report_exists": false
+      },
+      "reproduced": true
+    },
+    {
+      "id": "R08-dry-run-incomplete",
+      "expected": "dry-run 应校验引用的模型配置存在",
+      "observed": {
+        "plan": {
+          "run_id": "review",
+          "channel": "device",
+          "l1_cases": 2,
+          "l2_cases": 0,
+          "models": 0,
+          "repeat": 1,
+          "total_planned": 2
+        },
+        "executed": 0
+      },
+      "reproduced": true
+    }
+  ]
+}

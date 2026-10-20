@@ -1,0 +1,23 @@
+{
+  "argv": [
+    "/home/tssh/文档/Works/mission/校招生ai演练任务/src/tests/results/remediation-2026-10-16/.venv/bin/python",
+    "/home/tssh/.config/opencode/anthropic-skills/skills/skill-creator/eval-viewer/generate_review.py",
+    "/home/tssh/文档/Works/mission/校招生ai演练任务/src/skills/mcp-eval-workspace/iteration-3",
+    "--skill-name",
+    "mcp-eval：主上下文检查，非独立对照",
+    "--benchmark",
+    "/home/tssh/文档/Works/mission/校招生ai演练任务/src/skills/mcp-eval-workspace/iteration-3/benchmark-viewer.json",
+    "--static",
+    "/home/tssh/文档/Works/mission/校招生ai演练任务/src/skills/mcp-eval-workspace/iteration-3/review.html"
+  ],
+  "cwd": "/home/tssh/文档/Works/mission/校招生ai演练任务/src",
+  "environment_overrides": {
+    "PYTHONPATH": "src",
+    "PYTHONDONTWRITEBYTECODE": "1",
+    "PATH": "/home/tssh/文档/Works/mission/校招生ai演练任务/src/tests/results/remediation-2026-10-16/.venv/bin:/home/tssh/.local/bin:/home/tssh/bin:/home/tssh/.opencode/bin:/home/tssh/bin:/home/tssh/.local/bin:/home/tssh/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/snap/bin"
+  },
+  "command": "'/home/tssh/文档/Works/mission/校招生ai演练任务/src/tests/results/remediation-2026-10-16/.venv/bin/python' /home/tssh/.config/opencode/anthropic-skills/skills/skill-creator/eval-viewer/generate_review.py '/home/tssh/文档/Works/mission/校招生ai演练任务/src/skills/mcp-eval-workspace/iteration-3' --skill-name 'mcp-eval：主上下文检查，非独立对照' --benchmark '/home/tssh/文档/Works/mission/校招生ai演练任务/src/skills/mcp-eval-workspace/iteration-3/benchmark-viewer.json' --static '/home/tssh/文档/Works/mission/校招生ai演练任务/src/skills/mcp-eval-workspace/iteration-3/review.html'",
+  "exit_code": 0,
+  "stdout": "\n  Static viewer written to: /home/tssh/文档/Works/mission/校招生ai演练任务/src/skills/mcp-eval-workspace/iteration-3/review.html\n\n",
+  "stderr": ""
+}

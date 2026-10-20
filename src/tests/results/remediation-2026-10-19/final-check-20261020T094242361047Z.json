@@ -1,0 +1,65 @@
+{
+  "date": "2026-10-20T09:42:42.878236+00:00",
+  "product_source_matches_160_tests": true,
+  "product_source_matches_7_fixed_probes": true,
+  "standalone_counts": {
+    "pass": 8,
+    "fail": 0,
+    "unassessed": 0
+  },
+  "standalone_rebuild_identical": true,
+  "standalone_has_no_memory": true,
+  "standalone_scope": "最小离线运行副本，复用现有依赖解释器；不是正式交付包或重新安装验证",
+  "standalone_directory": "tests/results/remediation-2026-10-19/standalone-20261020T094242361047Z",
+  "commands": [
+    {
+      "argv": [
+        "/home/tssh/文档/Works/mission/校招生ai演练任务/src/tests/results/remediation-2026-10-16/.venv/bin/python",
+        "-B",
+        "-m",
+        "mcp_eval",
+        "run",
+        "configs/runs/replay_smoke.json",
+        "--dry-run"
+      ],
+      "cwd": "/home/tssh/文档/Works/mission/校招生ai演练任务/src/tests/results/remediation-2026-10-19/standalone-20261020T094242361047Z",
+      "returncode": 0,
+      "stdout": "{\n  \"plan\": {\n    \"run_id\": \"replay-smoke\",\n    \"channel\": \"replay\",\n    \"l1_cases\": 8,\n    \"l2_cases\": 0,\n    \"models\": 0,\n    \"repeat\": 1,\n    \"total_planned\": 8,\n    \"planned_items\": [\n      {\n        \"item_id\": \"item-00001\",\n        \"case_id\": \"N01\",\n        \"level\": \"L1\",\n        \"category\": \"negative\",\n        \"action\": \"tools_call\",\n        \"channel\": \"replay\",\n        \"model\": null,\n        \"repeat_index\": 0\n      },\n      {\n        \"item_id\": \"item-00002\",\n        \"case_id\": \"N02\",\n        \"level\": \"L1\",\n        \"category\": \"negative\",\n        \"action\": \"tools_call\",\n        \"channel\": \"replay\",\n        \"model\": null,\n        \"repeat_index\": 0\n      },\n      {\n        \"item_id\": \"item-00003\",\n        \"case_id\": \"P01\",\n        \"level\": \"L1\",\n        \"category\": \"positive\",\n        \"action\": \"tools_list\",\n        \"channel\": \"replay\",\n        \"model\": null,\n        \"repeat_index\": 0\n      },\n      {\n        \"item_id\": \"item-00004\",\n        \"case_id\": \"P02\",\n        \"level\": \"L1\",\n        \"category\": \"positive\",\n        \"action\": \"tools_call\",\n        \"channel\": \"replay\",\n        \"model\": null,\n        \"repeat_index\": 0\n      },\n      {\n        \"item_id\": \"item-00005\",\n        \"case_id\": \"P03\",\n        \"level\": \"L1\",\n        \"category\": \"positive\",\n        \"action\": \"tools_call\",\n        \"channel\": \"replay\",\n        \"model\": null,\n        \"repeat_index\": 0\n      },\n      {\n        \"item_id\": \"item-00006\",\n        \"case_id\": \"P04\",\n        \"level\": \"L1\",\n        \"category\": \"positive\",\n        \"action\": \"tools_call\",\n        \"channel\": \"replay\",\n        \"model\": null,\n        \"repeat_index\": 0\n      },\n      {\n        \"item_id\": \"item-00007\",\n        \"case_id\": \"P05\",\n        \"level\": \"L1\",\n        \"category\": \"positive\",\n        \"action\": \"resources_read\",\n        \"channel\": \"replay\",\n        \"model\": null,\n        \"repeat_index\": 0\n      },\n      {\n        \"item_id\": \"item-00008\",\n        \"case_id\": \"P06\",\n        \"level\": \"L1\",\n        \"category\": \"positive\",\n        \"action\": \"tools_call\",\n        \"channel\": \"replay\",\n        \"model\": null,\n        \"repeat_index\": 0\n      }\n    ]\n  },\n  \"executed\": 0,\n  \"warnings\": [],\n  \"device_verified\": false\n}\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/home/tssh/文档/Works/mission/校招生ai演练任务/src/tests/results/remediation-2026-10-16/.venv/bin/python",
+        "-B",
+        "-m",
+        "mcp_eval",
+        "run",
+        "configs/runs/replay_smoke.json"
+      ],
+      "cwd": "/home/tssh/文档/Works/mission/校招生ai演练任务/src/tests/results/remediation-2026-10-19/standalone-20261020T094242361047Z",
+      "returncode": 0,
+      "stdout": "{\n  \"plan\": {\n    \"run_id\": \"replay-smoke\",\n    \"channel\": \"replay\",\n    \"l1_cases\": 8,\n    \"l2_cases\": 0,\n    \"models\": 0,\n    \"repeat\": 1,\n    \"total_planned\": 8,\n    \"planned_items\": [\n      {\n        \"item_id\": \"item-00001\",\n        \"case_id\": \"N01\",\n        \"level\": \"L1\",\n        \"category\": \"negative\",\n        \"action\": \"tools_call\",\n        \"channel\": \"replay\",\n        \"model\": null,\n        \"repeat_index\": 0\n      },\n      {\n        \"item_id\": \"item-00002\",\n        \"case_id\": \"N02\",\n        \"level\": \"L1\",\n        \"category\": \"negative\",\n        \"action\": \"tools_call\",\n        \"channel\": \"replay\",\n        \"model\": null,\n        \"repeat_index\": 0\n      },\n      {\n        \"item_id\": \"item-00003\",\n        \"case_id\": \"P01\",\n        \"level\": \"L1\",\n        \"category\": \"positive\",\n        \"action\": \"tools_list\",\n        \"channel\": \"replay\",\n        \"model\": null,\n        \"repeat_index\": 0\n      },\n      {\n        \"item_id\": \"item-00004\",\n        \"case_id\": \"P02\",\n        \"level\": \"L1\",\n        \"category\": \"positive\",\n        \"action\": \"tools_call\",\n        \"channel\": \"replay\",\n        \"model\": null,\n        \"repeat_index\": 0\n      },\n      {\n        \"item_id\": \"item-00005\",\n        \"case_id\": \"P03\",\n        \"level\": \"L1\",\n        \"category\": \"positive\",\n        \"action\": \"tools_call\",\n        \"channel\": \"replay\",\n        \"model\": null,\n        \"repeat_index\": 0\n      },\n      {\n        \"item_id\": \"item-00006\",\n        \"case_id\": \"P04\",\n        \"level\": \"L1\",\n        \"category\": \"positive\",\n        \"action\": \"tools_call\",\n        \"channel\": \"replay\",\n        \"model\": null,\n        \"repeat_index\": 0\n      },\n      {\n        \"item_id\": \"item-00007\",\n        \"case_id\": \"P05\",\n        \"level\": \"L1\",\n        \"category\": \"positive\",\n        \"action\": \"resources_read\",\n        \"channel\": \"replay\",\n        \"model\": null,\n        \"repeat_index\": 0\n      },\n      {\n        \"item_id\": \"item-00008\",\n        \"case_id\": \"P06\",\n        \"level\": \"L1\",\n        \"category\": \"positive\",\n        \"action\": \"tools_call\",\n        \"channel\": \"replay\",\n        \"model\": null,\n        \"repeat_index\": 0\n      }\n    ]\n  },\n  \"run_id\": \"replay-smoke-20261020T094242722319Z-89fcb91b\",\n  \"executed\": 8,\n  \"interrupted\": false,\n  \"counts\": {\n    \"pass\": 8,\n    \"fail\": 0,\n    \"unassessed\": 0\n  },\n  \"results\": \"/home/tssh/文档/Works/mission/校招生ai演练任务/src/tests/results/remediation-2026-10-19/standalone-20261020T094242361047Z/tests/results/replay-smoke-20261020T094242722319Z-89fcb91b/results.jsonl\",\n  \"summary\": \"/home/tssh/文档/Works/mission/校招生ai演练任务/src/tests/results/remediation-2026-10-19/standalone-20261020T094242361047Z/tests/results/replay-smoke-20261020T094242722319Z-89fcb91b/summary.json\",\n  \"report\": \"/home/tssh/文档/Works/mission/校招生ai演练任务/src/tests/results/remediation-2026-10-19/standalone-20261020T094242361047Z/tests/results/replay-smoke-20261020T094242722319Z-89fcb91b/report.md\",\n  \"manifest\": \"/home/tssh/文档/Works/mission/校招生ai演练任务/src/tests/results/remediation-2026-10-19/standalone-20261020T094242361047Z/tests/results/replay-smoke-20261020T094242722319Z-89fcb91b/manifest.json\",\n  \"warnings\": []\n}\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "/home/tssh/文档/Works/mission/校招生ai演练任务/src/tests/results/remediation-2026-10-16/.venv/bin/python",
+        "-B",
+        "-m",
+        "mcp_eval",
+        "rebuild",
+        "tests/results/replay-smoke-20261020T094242722319Z-89fcb91b"
+      ],
+      "cwd": "/home/tssh/文档/Works/mission/校招生ai演练任务/src/tests/results/remediation-2026-10-19/standalone-20261020T094242361047Z",
+      "returncode": 0,
+      "stdout": "{\"summary\": \"/home/tssh/文档/Works/mission/校招生ai演练任务/src/tests/results/remediation-2026-10-19/standalone-20261020T094242361047Z/tests/results/replay-smoke-20261020T094242722319Z-89fcb91b/summary.json\", \"report\": \"/home/tssh/文档/Works/mission/校招生ai演练任务/src/tests/results/remediation-2026-10-19/standalone-20261020T094242361047Z/tests/results/replay-smoke-20261020T094242722319Z-89fcb91b/report.md\"}\n",
+      "stderr": ""
+    }
+  ],
+  "markdown_files": 21,
+  "local_links": 127,
+  "broken_links": [],
+  "skill_viewers_contain_both_groups": true,
+  "git_diff_check_returncode": 0,
+  "git_diff_check_output": ""
+}

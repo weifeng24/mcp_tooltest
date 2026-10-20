@@ -1,46 +1,70 @@
 ---
 name: mcp-eval
-description: 运行与解读车载 MCP 服务（mcp_service）的工具可用性评测。当用户要求"跑 MCP 评测""测试工具是否好用""验证 tools/list 或 tools/call""准备上机""解读评测报告""对比模型工具调用表现"时使用本 Skill，即使用户没有明确说出 mcp-eval。也用于上机日按清单执行 adb 采集与评测批次。不要用于：修改评测工具自身源码（普通开发任务）、与公司车载 MCP 无关的通用 MCP 咨询、真实车机以外的 MCP server 评测。
+description: 执行本项目的车载 MCP 评测与解读批次报告。用户要求运行 mcp_eval、离线回放、检查本项目真机准备、核对 manifest/results/report 或分析模型工具调用结果时使用。仅在任务属于本项目已有评测流程时触发；通用 MCP 概念问答、编写其他 MCP 服务、修改评测器源码、一般 adb 故障排查、只需修改 README 文句时不要触发。
 ---
 
-# MCP 评测执行与解读
+# MCP 评测执行与证据解读
 
-面向公司车载 `mcp_service` 的可用性评测。工具位于交付区 `src/`（下称交付区根目录），源码 `src/mcp_eval/`，全部命令在交付区根目录执行。
+以交付根目录（有 `configs/`、`src/mcp_eval/`、`requirements.txt`）为工作目录。根据 README 选择实际 Python 解释器；命令中的 `python3` 可替换为该项目虚拟环境的解释器。
 
-## 核心原则
+## 关键规则与自由度
 
-- **回放（replay）数据只证明工具链路可用，不能作为"工具好用"的结论**；结论只引用 device（真机）通道数据。报告中两通道分组统计，解读时先看通道。
-- **unassessed（无法判断）不是失败**：证据不足（adb 失败、输出解析失败、录制缺失）时如实标注，不猜结果。
-- **密钥只经环境变量使用**（`DEEPSEEK_API_KEY`、`KIMI_API_KEY`），不写入文件、不打印、不提交。
-- 真机操作后**恢复车况**（如空调温度）并记录。
+- **CRITICAL：证据不完整不能推断通过。** API 失败、调用轨迹缺失、unsupported_action、no_recording 应结合记录解释，不能把“没看到调用”当作“正确不调用”。
+- **CRITICAL：合成数据不支持真机结论。** 先核对 `source_type`、执行通道、版本及原始证据；`channel=device` 标签本身不是真实性证明。
+- 执行步骤、目录、来源及指标口径采用低自由度：遵循工具帮助及冻结的 manifest，不凭经验改参数/预期，不覆盖旧批次。
+- 原因解释采用中等自由度：可以提出可验证假设，分别标出证据与推测；不编造设备能力、额外测试或验收结论。
+- 真实模型请求使用现有环境变量，不收集或显示密钥。真实设备操作按用户已确认的任务及状态恢复办法执行。
 
-## 前置检查
+## 1. 先确认输入与能力
 
-运行 `scripts/check_env.sh`（在交付区根目录执行 `bash skills/mcp-eval/scripts/check_env.sh`）。它检查 Python、pytest、adb、PYTHONPATH 与密钥环境变量是否就绪，并说明缺什么；不会打印密钥内容。
+识别用户要执行回放、实际设备、模型验证还是解释已有报告。用户给出批次路径时读取该批次 `manifest.json`、`results.jsonl` 和 `summary.json`，不沿用旧的固定 `replay-smoke/` 目录。
 
-## 三种运行模式
+先看脚本帮助，再将脚本作为黑盒运行；只有脚本失败需要诊断时才读实现：
 
-| 模式 | 命令（交付区根目录） | 用途与结论效力 |
-|---|---|---|
-| 回放冒烟 | `PYTHONPATH=src python3 -m mcp_eval run configs/runs/replay_smoke.json` | 离线验证链路；合成样本，不作结论 |
-| 真机批次 | `PYTHONPATH=src python3 -m mcp_eval run configs/runs/l1_device.json`（L1）/ `l2_device.json`（L2） | 正式结论数据；需 adb 连接车机并在 server 配置填 device_serial |
-| API 冒烟 | `PYTHONPATH=src python3 scripts/api_smoke.py configs/models/deepseek.json` | 验证模型密钥与工具调用链路；mock 执行，不动车机 |
+```bash
+bash skills/mcp-eval/scripts/check_env.sh --help
+bash skills/mcp-eval/scripts/check_env.sh
+PYTHONPATH=src python3 -m mcp_eval --help
+```
 
-执行前可用 `--dry-run` 只校验配置与计划。上机日完整步骤用 `PYTHONPATH=src python3 -m mcp_eval checklist` 生成，按其逐项执行并留档。
+环境自检只能证明本机基础依赖，不验证设备或模型额度。`--dry-run` 验证本地引用文件并显示未验证事项，不连接车机/API。
 
-## 报告解读
+## 2. 根据已实现的模式执行
 
-报告在 `tests/results/<run-id>/report.md`。解读规则见 [references/report-guide.md](references/report-guide.md)；常见报错与处理见 [references/troubleshooting.md](references/troubleshooting.md)。
+### 离线回放
 
-要点：
+```bash
+PYTHONPATH=src python3 -m mcp_eval run configs/runs/replay_smoke.json --dry-run
+PYTHONPATH=src python3 -m mcp_eval run configs/runs/replay_smoke.json
+```
 
-1. 先确认通道：回答"工具是否好用"只能用 `device|...` 分组。
-2. 看三个数：计划内通过率（保守）、判定覆盖率（证据充分度）、失败/无法判断明细。
-3. 负面用例 fail 且原因为"预期错误未出现"是**有效评测发现**（服务端未落实约束），不是评测工具出错。
-4. 引用数据时保留 run_id 与证据路径，不复述无来源的数字。
+从输出获取实际新批次目录，查看全部计划项的判定及来源。当前开发样本明确为 synthetic；按实际输出报告数量，不在答复中写死 7/7 或 8/8。
 
-## 边界
+### 真机准备
 
-- 不修改被测车机源码与 baseline 树（`/data/AIOS_*` 只读引用）。
-- 不承诺真实客户端（IDE）结论：首版范围不含 IDE 直连，被问及时说明自研传输限制并指向 docs/design.md。
-- 评测工具本身的代码修改不属于本 Skill，按普通开发流程处理。
+先读 `docs/device-readiness.md` 并生成 `checklist`。当前适配仅验证到 `--toolscall` 的离线命令契约；设备二进制、真实工具和输出仍待现场核对。
+
+工具发现/资源操作当前没有受验证的 machine-readable 入口，返回 `blocked`。禁止将会运行旧测试的 `--mcp all` 当作只读工具采集。缺少完整工具目录时，说明尚不能开展依赖它的 L2 批次，保留阻塞与下一步所需信息。
+
+可按 `docs/catalog-capture.md` 使用 `capture-catalog --dry-run` 检查注册定义文件的只读采集计划。真实采集前确认项目、序列号和dump目录。此入口读取现有文件，`registration_dump`不能表述为实时tools/list或资源读取通过；保留新鲜度未知、名称别名未验证等标记。
+
+### 模型验证
+
+只有用户要求真实 API 验证且实际凭据已就绪时，运行 `scripts/api_smoke.py`。它的模型请求可能收费，工具执行为本地状态模拟。Kimi Coding Plan 的接入配置与能力未核实，不声称双模型已通。
+
+## 3. 解读与输出
+
+按需读取 [报告规则](references/report-guide.md) 与 [故障处理](references/troubleshooting.md)。输出固定包含：
+
+1. 实际执行/读取内容与批次路径。
+2. 计划数、通过/失败/无法判断数量，以及未执行项。
+3. 数据来源与结论边界。
+4. 有证据的问题和下一步；未做的验证明确标记。
+
+涉及状态修改的调用出现失败、异常成功或中断时，判定结论与设备状态分开说明：保留失败证据，建议通过已核实的只读工具回读，区分接受、截断或未生效，再按现场已确认方法恢复。响应“成功”不能证明状态已变为请求值；情景分析只提出核对步骤，不擅自发起恢复或重试。
+
+`results` 不全时按 manifest 保留缺失项，不缩小分母。需要重建时使用 `rebuild`，不用当前用例替换批次中冻结的版本。
+
+## 4. 完成判据
+
+命令执行、产物读取及来源核对完成后，才报告本次操作结果。离线验证完成不等于真机准备完成；Skill 结构校验不等于行为/触发评测或导师验收通过。IDE 首版范围差异按需求文档保留，不把模型切换当作 IDE 适配证据。

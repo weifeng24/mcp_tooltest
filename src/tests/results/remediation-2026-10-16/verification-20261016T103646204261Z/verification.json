@@ -1,0 +1,196 @@
+{
+  "python": "3.10.12 (main, Aug 31 2026, 10:18:17) [GCC 11.4.0]",
+  "prefix": "/home/tssh/文档/Works/mission/校招生ai演练任务/src/tests/results/remediation-2026-10-16/.venv",
+  "base_prefix": "/usr",
+  "isolated_venv": true,
+  "dependencies": {
+    "typing_extensions": "4.16.0",
+    "rpds-py": "0.30.0",
+    "exceptiongroup": "1.3.1",
+    "tomli": "2.5.0",
+    "attrs": "26.1.0",
+    "packaging": "26.3",
+    "jsonschema": "4.26.0",
+    "pytest": "9.1.1",
+    "jsonschema-specifications": "2025.9.1",
+    "iniconfig": "2.3.1",
+    "referencing": "0.37.0",
+    "pluggy": "1.7.0",
+    "Pygments": "2.21.0"
+  },
+  "commands": {
+    "pytest": {
+      "args": [
+        "-m",
+        "pytest",
+        "-q",
+        "-p",
+        "no:cacheprovider",
+        "--junitxml",
+        "/home/tssh/文档/Works/mission/校招生ai演练任务/src/tests/results/remediation-2026-10-16/verification-20261016T103646204261Z/pytest.xml"
+      ],
+      "returncode": 0
+    },
+    "help": {
+      "args": [
+        "-m",
+        "mcp_eval",
+        "--help"
+      ],
+      "returncode": 0
+    },
+    "dry-run": {
+      "args": [
+        "-m",
+        "mcp_eval",
+        "run",
+        "configs/runs/replay_smoke.json",
+        "--dry-run"
+      ],
+      "returncode": 0
+    },
+    "show-call": {
+      "args": [
+        "-m",
+        "mcp_eval",
+        "show-call",
+        "tests/cases/l1/P02_set_temp_valid.json"
+      ],
+      "returncode": 0
+    },
+    "checklist": {
+      "args": [
+        "-m",
+        "mcp_eval",
+        "checklist"
+      ],
+      "returncode": 0
+    },
+    "smoke": {
+      "args": [
+        "-m",
+        "mcp_eval",
+        "run",
+        "configs/runs/replay_smoke.json"
+      ],
+      "returncode": 0
+    },
+    "rebuild": {
+      "args": [
+        "-m",
+        "mcp_eval",
+        "rebuild",
+        "tests/results/replay-smoke-20261016T103648142224Z-23ffec00"
+      ],
+      "returncode": 0
+    }
+  },
+  "rebuild_identical": true,
+  "smoke": {
+    "plan": {
+      "run_id": "replay-smoke",
+      "channel": "replay",
+      "l1_cases": 8,
+      "l2_cases": 0,
+      "models": 0,
+      "repeat": 1,
+      "total_planned": 8,
+      "planned_items": [
+        {
+          "item_id": "item-00001",
+          "case_id": "N01",
+          "level": "L1",
+          "category": "negative",
+          "action": "tools_call",
+          "channel": "replay",
+          "model": null,
+          "repeat_index": 0
+        },
+        {
+          "item_id": "item-00002",
+          "case_id": "N02",
+          "level": "L1",
+          "category": "negative",
+          "action": "tools_call",
+          "channel": "replay",
+          "model": null,
+          "repeat_index": 0
+        },
+        {
+          "item_id": "item-00003",
+          "case_id": "P01",
+          "level": "L1",
+          "category": "positive",
+          "action": "tools_list",
+          "channel": "replay",
+          "model": null,
+          "repeat_index": 0
+        },
+        {
+          "item_id": "item-00004",
+          "case_id": "P02",
+          "level": "L1",
+          "category": "positive",
+          "action": "tools_call",
+          "channel": "replay",
+          "model": null,
+          "repeat_index": 0
+        },
+        {
+          "item_id": "item-00005",
+          "case_id": "P03",
+          "level": "L1",
+          "category": "positive",
+          "action": "tools_call",
+          "channel": "replay",
+          "model": null,
+          "repeat_index": 0
+        },
+        {
+          "item_id": "item-00006",
+          "case_id": "P04",
+          "level": "L1",
+          "category": "positive",
+          "action": "tools_call",
+          "channel": "replay",
+          "model": null,
+          "repeat_index": 0
+        },
+        {
+          "item_id": "item-00007",
+          "case_id": "P05",
+          "level": "L1",
+          "category": "positive",
+          "action": "resources_read",
+          "channel": "replay",
+          "model": null,
+          "repeat_index": 0
+        },
+        {
+          "item_id": "item-00008",
+          "case_id": "P06",
+          "level": "L1",
+          "category": "positive",
+          "action": "tools_call",
+          "channel": "replay",
+          "model": null,
+          "repeat_index": 0
+        }
+      ]
+    },
+    "run_id": "replay-smoke-20261016T103648142224Z-23ffec00",
+    "executed": 8,
+    "interrupted": false,
+    "counts": {
+      "pass": 8,
+      "fail": 0,
+      "unassessed": 0
+    },
+    "results": "/home/tssh/文档/Works/mission/校招生ai演练任务/src/tests/results/replay-smoke-20261016T103648142224Z-23ffec00/results.jsonl",
+    "summary": "/home/tssh/文档/Works/mission/校招生ai演练任务/src/tests/results/replay-smoke-20261016T103648142224Z-23ffec00/summary.json",
+    "report": "/home/tssh/文档/Works/mission/校招生ai演练任务/src/tests/results/replay-smoke-20261016T103648142224Z-23ffec00/report.md",
+    "manifest": "/home/tssh/文档/Works/mission/校招生ai演练任务/src/tests/results/replay-smoke-20261016T103648142224Z-23ffec00/manifest.json",
+    "warnings": []
+  },
+  "status": "passed"
+}

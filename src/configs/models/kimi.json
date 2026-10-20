@@ -8,5 +8,5 @@
         "temperature": 0.0,
         "max_tokens": 1024
     },
-    "notes": "Kimi coding plan 以 API key 接入；具体可用模型名与工具调用能力以开通时官方文档为准，使用前核实。"
+    "notes": "未验证的通用Moonshot示例配置，不代表Kimi Coding Plan可用。须按实际套餐官方说明核对端点、模型及接口协议后修改，不能直接宣称双模型就绪。"
 }

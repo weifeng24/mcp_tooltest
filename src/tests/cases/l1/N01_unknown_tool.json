@@ -8,8 +8,8 @@
     "arguments": {},
     "timeout_seconds": 30,
     "assertions": [
-        {"type": "error_expected"}
+        {"type": "error_expected", "codes": [-32602], "message_pattern": "(?i)unknown tool.*noSuchTool"}
     ],
     "expected_source": "MCP 协议：未知工具应返回协议错误；实际错误格式待真机校准",
-    "notes": "未知工具名：应返回明确错误且不使服务崩溃；执行后追加一次正常调用确认服务可用。"
+    "notes": "开发模板，仅匹配未知工具的预期错误，不接受服务不存在等其他错误；服务健康回读需随实际环境补充。"
 }

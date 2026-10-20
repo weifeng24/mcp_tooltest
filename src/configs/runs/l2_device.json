@@ -11,5 +11,5 @@
     "repeat": 1,
     "timeout_seconds": 120,
     "output_dir": "tests/results",
-    "notes": "L2 双模型真机批次。tools_file 由上机清单第 2 步的 tools/list 采集生成；API 密钥经环境变量提供。"
+    "notes": "L2候选双模型批次，尚未真机验证。tools_file是待替换的路径：按docs/catalog-capture.md采集并核对完整定义后填写实际catalog路径；快照不代表实时tools/list通过。DeepSeek/Kimi分别核对端点、权限与密钥环境变量，未验证模型保留未执行。"
 }

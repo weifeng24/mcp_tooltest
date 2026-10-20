@@ -8,8 +8,9 @@
     "arguments": {"temperature": 22},
     "timeout_seconds": 30,
     "assertions": [
-        {"type": "field_equals", "path": "success", "value": true}
+        {"type": "field_equals", "path": "result.structuredContent.success", "value": true}
     ],
+    "postconditions": [{"tool": "HvacService.getTemp", "arguments": {}, "path": "result.structuredContent.temperature", "value": 22}],
     "expected_source": "MCP_Agent.md §9.4 响应格式；工具所属服务待 tools/list 采集后校准（Ark 树映射与 Chery 命名可能不同）",
-    "notes": "合法参数调用；如工具实际归属其他服务，service=auto 由执行层按 svcmap 解析。"
+    "notes": "开发模板，工具名与回读字段须在真机前核实。执行层直接传递完整 tool，不再将 auto 作为车端服务名。"
 }

@@ -1,0 +1,472 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<title>Code Review Report · {{REPO}}/{{MODULE}}</title>
+<meta name="generator" content="ThunderSoft code-review skill" />
+<style>
+:root {
+  --wine-dark: #6B0F1A; --wine-primary: #8B1A2B; --wine-mid: #A0303F;
+  --wine-light: #C76070; --wine-pale: #F2D5DA; --wine-bg: #FDF5F6;
+  --text-primary: #2D2D2D; --text-secondary: #5A5A5A;
+  --white: #FFFFFF; --gray-100: #F7F7F7; --gray-200: #E8E8E8; --gray-300: #D1D1D1;
+  --critical: #c0392b; --major: #e67e22; --minor: #27ae60; --question: #2980b9;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: 'Segoe UI', 'Microsoft YaHei', 'PingFang SC', sans-serif;
+  background: var(--gray-100); color: var(--text-primary); line-height: 1.6;
+}
+body::before {
+  content: 'Confidential'; position: fixed; top: 50%; left: 50%;
+  transform: translate(-50%, -50%) rotate(-35deg); font-size: 120px;
+  font-weight: 900; color: rgba(139,26,43,0.04); pointer-events: none; z-index: 9999;
+  white-space: nowrap; letter-spacing: 20px;
+}
+.watermark-grid { position: fixed; top:0; left:0; right:0; bottom:0; pointer-events: none; z-index: 9998; overflow: hidden; }
+.watermark-grid span { position: absolute; font-size: 14px; font-weight: 600; color: rgba(139,26,43,0.035); transform: rotate(-35deg); white-space: nowrap; }
+.cover {
+  background: linear-gradient(135deg, var(--wine-dark) 0%, var(--wine-primary) 40%, var(--wine-mid) 100%);
+  color: var(--white); padding: 60px 40px; text-align: center; position: relative;
+}
+.cover h1 { font-size: 36px; font-weight: 700; margin-bottom: 8px; }
+.cover .subtitle { font-size: 18px; opacity: 0.85; margin-bottom: 24px; }
+.cover .meta { display: flex; justify-content: center; gap: 40px; font-size: 14px; opacity: 0.85; flex-wrap: wrap; }
+.cover .meta span { display: flex; align-items: center; gap: 6px; }
+.cover .logo { position: absolute; top: 20px; right: 30px; font-size: 12px; opacity: 0.6; letter-spacing: 2px; }
+.cover .applied-rules { margin-top: 20px; font-size: 12px; opacity: 0.75; }
+.container { max-width: 1200px; margin: 0 auto; padding: 30px 20px; position: relative; z-index: 1; }
+.section-title {
+  font-size: 22px; font-weight: 700; color: var(--wine-primary);
+  margin: 30px 0 16px; padding-left: 12px; border-left: 4px solid var(--wine-primary);
+}
+.section-title .num { color: var(--wine-mid); margin-right: 6px; }
+.summary { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 16px; margin-bottom: 30px; }
+.summary-card {
+  background: var(--white); border-radius: 12px; padding: 20px; text-align: center;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06); border-top: 4px solid var(--wine-primary);
+  transition: transform 0.2s;
+}
+.summary-card:hover { transform: translateY(-2px); }
+.summary-card .label { font-size: 12px; color: var(--text-secondary); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 1px; }
+.summary-card .value { font-size: 32px; font-weight: 700; color: var(--wine-primary); }
+.summary-card .value.grade { font-size: 42px; color: var(--question); }
+.summary-card .value.grade-A { color: var(--minor); }
+.summary-card .value.grade-B { color: var(--question); }
+.summary-card .value.grade-C { color: var(--major); }
+.summary-card .value.grade-D { color: var(--critical); }
+.summary-card .value.critical { color: var(--critical); }
+.summary-card .value.major { color: var(--major); }
+.summary-card .value.minor { color: var(--minor); }
+.summary-card .sub { font-size: 11px; color: var(--text-secondary); margin-top: 4px; }
+.charts { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 30px; }
+.chart-box { background: var(--white); border-radius: 12px; padding: 24px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+.chart-box h3 { font-size: 16px; color: var(--wine-primary); margin-bottom: 16px; padding-bottom: 8px; border-bottom: 2px solid var(--wine-pale); }
+.chart-box canvas { max-height: 320px !important; }
+.dim-card { background: var(--white); border-radius: 10px; margin-bottom: 12px; box-shadow: 0 2px 6px rgba(0,0,0,0.05); overflow: hidden; }
+.dim-card.na { opacity: 0.65; }
+.dim-header { display: flex; justify-content: space-between; align-items: center; padding: 16px 20px; cursor: pointer; transition: background 0.2s; flex-wrap: wrap; gap: 8px; }
+.dim-header:hover { background: var(--wine-bg); }
+.dim-title { font-weight: 600; font-size: 16px; display: flex; align-items: center; gap: 10px; }
+.expand-icon { font-size: 12px; transition: transform 0.3s; display: inline-block; color: var(--wine-mid); }
+.dim-header.expanded .expand-icon { transform: rotate(90deg); }
+.dim-meta { display: flex; gap: 16px; font-size: 13px; align-items: center; flex-wrap: wrap; }
+.score-good { color: var(--minor); font-weight: 700; font-size: 18px; }
+.score-warn { color: var(--major); font-weight: 700; font-size: 18px; }
+.score-bad  { color: var(--critical); font-weight: 700; font-size: 18px; }
+.score-na   { color: var(--text-secondary); font-weight: 600; font-size: 14px; font-style: italic; }
+.issue-count, .check-info, .weight-info { color: var(--text-secondary); }
+.dim-body { padding: 0 20px 16px; }
+.issue-item { padding: 12px 16px; margin-bottom: 8px; border-radius: 8px; background: var(--gray-100); border-left: 4px solid var(--gray-300); font-size: 14px; }
+.issue-item.sev-critical-l { border-left-color: var(--critical); }
+.issue-item.sev-major-l    { border-left-color: var(--major); }
+.issue-item.sev-minor-l    { border-left-color: var(--minor); }
+.issue-item .issue-desc { font-size: 13px; color: var(--text-secondary); margin: 6px 0; }
+.issue-item .code-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 8px 0; }
+.issue-item .code-pair > div > .lbl { font-size: 11px; color: var(--text-secondary); margin-bottom: 2px; text-transform: uppercase; letter-spacing: 1px; }
+.issue-item .code-block { padding: 8px 12px; background: #2D2D2D; color: #E8E8E8; border-radius: 6px; font-family: 'Consolas','Courier New',monospace; font-size: 12px; overflow-x: auto; white-space: pre; line-height: 1.5; }
+.issue-item .code-block.before { border-left: 3px solid var(--critical); }
+.issue-item .code-block.after  { border-left: 3px solid var(--minor); }
+.issue-item .fix-hint { font-size: 12px; color: var(--wine-mid); margin-top: 6px; font-style: italic; }
+.severity-badge { display: inline-block; padding: 2px 10px; border-radius: 12px; font-size: 11px; font-weight: 700; text-transform: uppercase; }
+.sev-critical { background: #FDECEA; color: var(--critical); }
+.sev-major    { background: #FFF3E0; color: var(--major); }
+.sev-minor    { background: #E8F5E9; color: var(--minor); }
+.sev-question { background: #E3F2FD; color: var(--question); }
+.table-controls { display: flex; gap: 12px; margin-bottom: 12px; flex-wrap: wrap; }
+.table-controls select, .table-controls input { padding: 8px 14px; border: 1px solid var(--gray-300); border-radius: 8px; font-size: 13px; background: var(--white); }
+.table-container { background: var(--white); border-radius: 12px; padding: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; font-size: 13px; }
+th { background: var(--wine-primary); color: var(--white); padding: 12px 14px; text-align: left; cursor: pointer; user-select: none; white-space: nowrap; }
+th:hover { background: var(--wine-dark); }
+td { padding: 10px 14px; border-bottom: 1px solid var(--gray-200); vertical-align: top; }
+tr:hover td { background: var(--wine-bg); }
+code { font-family: 'Consolas','Courier New',monospace; font-size: 12px; }
+.snippet { display: inline-block; max-width: 320px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.roadmap { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+.roadmap-card { background: var(--white); border-radius: 12px; padding: 18px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+.roadmap-card h3 { font-size: 15px; color: var(--wine-primary); margin-bottom: 10px; }
+.roadmap-card ul { padding-left: 18px; font-size: 13px; }
+.roadmap-card li { margin-bottom: 6px; color: var(--text-secondary); }
+.roadmap-card .eta { margin-top: 12px; font-size: 12px; color: var(--wine-mid); font-weight: 600; }
+.boundary-banner { background: var(--wine-bg); border-left: 4px solid var(--wine-primary); padding: 14px 18px; border-radius: 8px; margin: 16px 0; font-size: 13px; color: var(--text-secondary); }
+.boundary-banner strong { color: var(--wine-primary); }
+.no-issues { color: var(--minor); font-style: italic; padding: 12px 0; }
+.footer { text-align: center; padding: 30px; color: var(--text-secondary); font-size: 12px; margin-top: 40px; border-top: 1px solid var(--gray-200); position: relative; z-index: 1; }
+.footer .conf { color: var(--wine-primary); font-weight: 700; letter-spacing: 2px; }
+@media (max-width: 768px) {
+  .charts { grid-template-columns: 1fr; }
+  .summary { grid-template-columns: repeat(2, 1fr); }
+  .roadmap { grid-template-columns: 1fr; }
+  .cover h1 { font-size: 24px; }
+  .issue-item .code-pair { grid-template-columns: 1fr; }
+}
+@media print {
+  body::before { font-size: 80px; }
+  .dim-body { display: block !important; }
+  .expand-icon { display: none; }
+}
+</style>
+<script src="./chart.min.js"></script>
+<script>
+if (typeof Chart === 'undefined') {
+  document.write('<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"><\/script>');
+}
+</script>
+</head>
+<body>
+
+<div class="watermark-grid" id="watermarkGrid"></div>
+
+<!-- 封面 -->
+<div class="cover">
+  <div class="logo">THUNDERSOFT &middot; CONFIDENTIAL</div>
+  <h1>Code Review 质量审查报告</h1>
+  <div class="subtitle">{{REPO}} / {{MODULE}}</div>
+  <div class="meta">
+    <span>📅 审查时间：{{TIMESTAMP}}</span>
+    <span>🌿 分支：{{BRANCH}}</span>
+    <span>🔖 Commit：{{COMMIT}}</span>
+    <span>👤 审查人：{{REVIEWER}}</span>
+    <span>🔍 扫描模式：{{SCAN_MODE}}</span>
+  </div>
+  <div class="applied-rules">应用规则集：{{APPLIED_RULES}}</div>
+</div>
+
+<div class="container">
+
+<!-- §1 项目概览 + 边界提示 -->
+<h2 class="section-title"><span class="num">§1</span>项目概览</h2>
+<div class="boundary-banner">
+  <strong>评审边界</strong> · 本报告只覆盖 <strong>编码规范 / 设计规范 / 历史 Bug Root Cause 逻辑检查</strong>；
+  不覆盖架构设计 / Bug Fix / 功能验收。
+</div>
+<p><strong>审查结论：Request changes。</strong>存在 P0 阻塞。模板评分不是公司演练评分或验收结论。修复后代码均为未应用的设计片段，只做了语法核对，不代表完整补丁已验证。<a href="requirements-review.md">任务与设计对照审查</a></p><h2 class="section-title"><span class="num">§2</span>总体评分与雷达图</h2>
+<div class="summary">
+  <div class="summary-card"><div class="label">综合评分</div><div class="value">{{TOTAL_SCORE}}</div><div class="sub">/ 10</div></div>
+  <div class="summary-card"><div class="label">评级</div><div class="value grade grade-{{GRADE}}">{{GRADE}}</div><div class="sub">CL 评分 {{CL_LABEL}}</div></div>
+  <div class="summary-card"><div class="label">Critical</div><div class="value critical">{{COUNT_CRITICAL}}</div><div class="sub">🔴 Must Fix · P0</div></div>
+  <div class="summary-card"><div class="label">Major</div><div class="value major">{{COUNT_MAJOR}}</div><div class="sub">🟡 Suggestion · P1</div></div>
+  <div class="summary-card"><div class="label">Minor</div><div class="value minor">{{COUNT_MINOR}}</div><div class="sub">🟢 Nice to have · P2</div></div>
+  <div class="summary-card"><div class="label">Q / Praise</div><div class="value">{{COUNT_QUESTION}}</div><div class="sub">💡 👍 · P3</div></div>
+</div>
+
+<!-- §2 总体评分与雷达图 (4 图) -->
+
+<div class="charts">
+  <div class="chart-box"><h3>九大维度雷达图</h3><canvas id="radarChart"></canvas></div>
+  <div class="chart-box"><h3>维度得分 &amp; 问题数对比</h3><canvas id="barChart"></canvas></div>
+
+  <div class="chart-box"><h3>维度权重占比</h3><canvas id="weightChart"></canvas></div>
+</div>
+
+<!-- §3 各维度详细分析 -->
+<h2 class="section-title"><span class="num">§3</span>九大维度详细分析</h2>
+{{DIMENSION_CARDS}}
+
+<p>N/A：维度二无多线程共享锁模型；维度八不涉及 AIDL/Binder 实现，adb 子进程契约在维度四检查。雷达图 N/A 的零位仅作显示，不计入评分。</p><h2 class="section-title"><span class="num">§4</span>严重等级分布</h2>
+<div class="charts">  <div class="chart-box"><h3>问题严重等级分布</h3><canvas id="pieChart"></canvas></div></div>
+<!-- §5 问题汇总表 -->
+<h2 class="section-title"><span class="num">§5</span>问题汇总表</h2>
+<div class="table-controls">
+  <select id="filterSeverity" onchange="filterTable()">
+    <option value="">全部严重等级</option>
+    <option value="Critical">Critical</option>
+    <option value="Major">Major</option>
+    <option value="Minor">Minor</option>
+    <option value="Question">Question/Praise</option>
+  </select>
+  <select id="filterDimension" onchange="filterTable()">
+    <option value="">全部维度</option>
+    {{DIMENSION_OPTIONS}}
+  </select>
+  <input type="text" id="searchInput" placeholder="搜索文件/规则..." oninput="filterTable()" />
+</div>
+<div class="table-container">
+  <table id="issueTable"><thead><tr>
+    <th onclick="sortTable(0)">严重等级</th>
+    <th onclick="sortTable(1)">规则</th>
+    <th onclick="sortTable(2)">维度</th>
+    <th onclick="sortTable(3)">检查项</th>
+    <th onclick="sortTable(4)">位置</th>
+    <th onclick="sortTable(5)">代码片段</th>
+    <th>修复建议</th>
+  </tr></thead><tbody>
+{{ISSUE_TABLE_ROWS}}
+  </tbody></table>
+</div>
+
+<h2 class="section-title"><span class="num">§6</span>问题详情与修复方向</h2>
+<div class="issue-item"><h3>R01 · 用例配置未接入车端客户端实际读取及执行路径</h3><p><a href="../../../src/mcp_eval/device.py">src/src/mcp_eval/device.py:146</a></p><p>execute_case 只写 workdir/case_config.json，随后执行固定路径 mcp_service -c -t --mcp &lt;service&gt;。config_target 完全未使用，service=auto 直接发给客户端。对照车端 TestConfig.cpp:111-137，Android 默认读 /system/etc/test_config_ark.json；test_mcp_interface.cpp:147-175 的带服务名重载读 specific_services，而生成器写 mcp_interface。即使临时文件成功生成，也不能证明指定工具和参数被执行。见反例 R01-config-not-consumed。另缺少固定二进制路径的安装/发现步骤。</p><pre class="code-block">--- 原代码摘录
++++ 修复设计示意（未应用）
+@@ -1,3 +1,4 @@
+-command = command_for_case(case)
+-setup = f&quot;cat &gt; {self.workdir}/case_config.json ...&quot;
+-result = self.runner([&quot;shell&quot;, &quot; &quot;.join(command)], timeout)
++# 修复设计示意：已核实目标二进制支持 --toolscall 后，显式传递单次请求。
++command = [service_bin, &#x27;-c&#x27;, &#x27;-t&#x27;, &#x27;--toolscall&#x27;, resolved_tool, json.dumps(arguments)]
++remote_command = shlex.join(command)
++result = runner([&#x27;shell&#x27;, remote_command], remaining_timeout)</pre><p>修复说明：P0，上机前必须修。先核实设备二进制版本与支持命令；本地基线源码 main.cpp:161-166 已有 --toolscall，可评估复用。若保留配置方式，须对齐加载路径、配置节点并备份恢复。以独立契约测试核对实际请求，而非让 FakeRunner 无条件返回成功。示意代码未应用，不构成完整修复。</p></div>
+<div class="issue-item"><h3>R02 · 把最后一个 JSON 对象或请求回显当作目标响应</h3><p><a href="../../../src/mcp_eval/device.py">src/src/mcp_eval/device.py:167</a></p><p>extract_jsonrpc 按行解析且接受任意含 jsonrpc/result/error 的字典，record_from_result 直接取 records[-1]。复现了 id=1 的错误响应被 id=1001 的成功响应覆盖、仅请求回显被标 completed、多行 JSON 无法提取。车端 --mcp 本身会执行多种调用；TestCommon.cpp:15-103 对工具清单仅输出摘要且完整 JSON 输出被注释，当前采集方案也不能保证获得完整工具定义。</p><pre class="code-block">--- 原代码摘录
++++ 修复设计示意（未应用）
+@@ -1,2 +1,5 @@
+-records = extract_jsonrpc(result.stdout)
+-response = records[-1] if records else None
++# 示意：先获取完整结构化帧，再严格匹配请求。
++candidates = [msg for msg in frames if msg.get(&#x27;id&#x27;) == expected_id and (&#x27;result&#x27; in msg or &#x27;error&#x27; in msg)]
++if len(candidates) != 1:
++    raise ValueError(&#x27;响应缺失或关联不唯一&#x27;)
++response = candidates[0]</pre><p>修复说明：P1，上机前修。保存完整原文，明确事件类型与 request id，支持真实日志输出格式。没有目标响应时记为无法判断，不能从其他 RPC 的成功推导本用例成功。</p></div>
+<div class="issue-item"><h3>R03 · 模型只尝试了目标工具就被当作任务完成</h3><p><a href="../../../src/mcp_eval/judge.py">src/src/mcp_eval/judge.py:149</a></p><p>M01 仅检查工具名包含 setTemp 及调用数上限，不检查 temperature=22、是否真实执行、工具结果、回读状态或最终回答。复现：模型给出 40，参数校验拦截、executor 调用次数为零，仍 verdict=pass；硬轮数上限终止且 final_answer=null 也通过。模型调用意图不能替代执行与业务结果。</p><pre class="code-block">--- 原代码摘录
++++ 修复设计示意（未应用）
+@@ -1,3 +1,3 @@
+-names = [str(c.get(&#x27;name&#x27;, &#x27;&#x27;)) for c in _tool_calls(record)]
+-if any(needle in n for n in names):
+-    return True, &#x27;&#x27;
++# 修复契约示意：将工具选择、参数语义、执行结果和任务完成分别断言。
++required_checks = [&#x27;exact_tool&#x27;, &#x27;temperature_equals_22&#x27;, &#x27;call_executed&#x27;, &#x27;tool_succeeded&#x27;, &#x27;state_readback&#x27;, &#x27;final_answer_consistent&#x27;]
++completion_required = True</pre><p>修复说明：P0，正式评测前必须修。保存模型决策、校验拒绝、执行尝试三个不同事件。用实际工具定义冻结断言；增加错误参数、执行失败、无限调用及缺最终回答的反例。报告可单列选工具率，但不得将其命名为任务完成率。</p></div>
+<div class="issue-item"><h3>R04 · 模型 API 失败及缺失调用证据被负面控制误判通过</h3><p><a href="../../../src/mcp_eval/judge.py">src/src/mcp_eval/judge.py:86</a></p><p>_tool_calls 将缺失/非法 tool_calls 转为空数组；INFRA_ERROR_CATEGORIES 未包含 provider_error。复现 M03 遇 ProviderError 后 execution_status=error 却 verdict=pass，response_raw=None 也 pass。没有记录不能证明没有调用。同时 timeout 被无条件称为跟踪完整，违背设计中的证据前提。</p><pre class="code-block">--- 原代码摘录
++++ 修复设计示意（未应用）
+@@ -1,2 +1,7 @@
+-calls = response.get(&#x27;tool_calls&#x27;)
+-return calls if isinstance(calls, list) else []
++# 修复设计示意：先验证证据完备性，再评价是否应调用。
++if record.error_category == &#x27;provider_error&#x27; or not trace_complete:
++    verdict = &#x27;unassessed&#x27;
++elif not isinstance(response.get(&#x27;tool_calls&#x27;), list):
++    verdict = &#x27;unassessed&#x27;
++else:
++    verdict = &#x27;pass&#x27; if not response[&#x27;tool_calls&#x27;] else &#x27;fail&#x27;</pre><p>修复说明：P0，正式评测前必须修。用明确的 trace_complete/终止状态区分零调用和缺失证据；未知错误及判定器错误不得计为被测对象通过或失败；保留可信证据已证实违规的优先级。</p></div>
+<div class="issue-item"><h3>R05 · 总超时未约束模型等待和后续工具执行</h3><p><a href="../../../src/mcp_eval/model_loop.py">src/src/mcp_eval/model_loop.py:106</a></p><p>仅在每轮开始检查时钟；provider 固定单次超时，executor 无剩余预算参数。复现任务时限 1 秒、provider 返回时模拟时钟为 999 秒，仍执行工具并记 completed。每轮可包含多个工具，调用总数未单列上限；case.timeout_seconds 也被 runner 的全局 timeout 覆盖。</p><pre class="code-block">--- 原代码摘录
++++ 修复设计示意（未应用）
+@@ -1,5 +1,5 @@
+-if self.clock() - start &gt; timeout_seconds:
+-    return self._finish(...)
+-response = self.provider.chat(messages, self.openai_tools)
+-for decision in response.tool_calls:
+-    result, is_validation_error = self._execute_decision(decision, original_name)
++# 示意：统一截止时间，所有阻塞边界及下发前检查剩余时间。
++remaining = deadline - clock()
++if remaining &lt;= 0:
++    raise TimeoutError(&#x27;任务总预算已耗尽&#x27;)
++response = provider.chat(messages, tools, timeout=remaining)</pre><p>修复说明：P1，上机前修。总时限传递到 provider/adb；响应返回后及每次工具执行前重检；区分模型轮数与工具调用数。明确远端任务超时取消/恢复，不把终止本机 adb 等同于车端操作停止。</p></div>
+<div class="issue-item"><h3>R06 · 重跑删除历史结果，中断丢计划项并导致分母缩小</h3><p><a href="../../../src/mcp_eval/runner.py">src/src/mcp_eval/runner.py:114</a></p><p>同 run_id 会 unlink results.jsonl，循环中异常未收敛为逐项记录，只有全部结束才生成报告。summarize 的 planned 实际来自 len(records)，未读取固定运行计划。复现旧证据被覆盖，第二项中断后只剩一条结果且无新报告；两项计划只传入一条成功记录时报告显示 planned=1、覆盖率=100%。</p><pre class="code-block">--- 原代码摘录
++++ 修复设计示意（未应用）
+@@ -1,4 +1,4 @@
+-if results_path.exists():
+-    results_path.unlink()
+-# ...
+-group[&#x27;planned&#x27;] += 1
++# 修复契约示意：独立批次目录、固定计划和终止收尾。
++manifest = {&#x27;run_id&#x27;: unique_run_id, &#x27;planned_items&#x27;: planned_items}
++missing_items = set(planned_item_ids) - set(recorded_item_ids)
++# missing_items 在报告中保留为 not_run/unassessed；禁止删除旧批次。</pre><p>修复说明：P1，上机前修。用不可覆盖的批次 ID、完整 manifest 和逐项异常记录；中断也可重建部分报告。计划项身份应含 case/model/repeat，统计分母来自 manifest。测试必须覆盖中断与重复运行。</p></div>
+<div class="issue-item"><h3>R07 · 回放折叠重复录制且沿用旧 case_id</h3><p><a href="../../../src/mcp_eval/replay.py">src/src/mcp_eval/replay.py:25</a></p><p>同请求指纹只保留最后一条，无法重放失败→成功序列或状态读取变化；命中后只更新 run_id/channel/timestamp，不更新 case_id。复现源记录 P02 被另一用例 P09 命中，输出仍为 P02；两次重复录制均回放最后的成功结果，污染分组与回归结论。</p><pre class="code-block">--- 原代码摘录
++++ 修复设计示意（未应用）
+@@ -1,4 +1,4 @@
+-self._index[sig] = raw
+-# ...
+-record.run_id = run_id
+-record.channel = &#x27;replay&#x27;
++# 修复设计示意：使用逐请求序列，并保留来源身份。
++self._index.setdefault(sig, []).append(raw)
++record.case_id = case[&#x27;case_id&#x27;]
++source_identity = {&#x27;run_id&#x27;: source_run_id, &#x27;case_id&#x27;: source_case_id, &#x27;event_index&#x27;: event_index}</pre><p>修复说明：P1。明确回放是按事件序列还是固定样本查询；重复命中不得默默丢失败历史。保留源时间、源用例和当前运行身份，增加同请求多次及跨用例复用测试。</p></div>
+<div class="issue-item"><h3>R08 · dry-run 提前返回且工具采集输入与上机清单不一致</h3><p><a href="../../../src/mcp_eval/runner.py">src/src/mcp_eval/runner.py:100</a></p><p>dry-run 在加载模型、tools_file、recording 前返回，引用不存在的模型配置仍通过；load_tools 不支持原始 JSON-RPC result.tools 包装。清单却让用户从 --mcp all 采集完整工具列表：该命令执行已有测试调用，且 ToolsList 日志是摘要。清单中的 cd 基线树还改变后续 PYTHONPATH=src 命令的工作目录。</p><pre class="code-block">--- 原代码摘录
++++ 修复设计示意（未应用）
+@@ -1,3 +1,5 @@
+-info = plan(run, cases, root)
++# 修复设计示意：无副作用预检全部本地引用及适用契约。
++models = [load_config(root / ref, &#x27;model&#x27;) for ref in run.get(&#x27;model_refs&#x27;, [])]
++tools = parse_tools_capture(capture_data)
+ if dry_run:
+-    return {&#x27;plan&#x27;: info, &#x27;executed&#x27;: 0}
++    outcome = {&#x27;plan&#x27;: info, &#x27;executed&#x27;: 0, &#x27;unverified&#x27;: device_checks_not_run}</pre><p>修复说明：P1，上机前修。区分配置语法预检和设备可用性；建立只读发现及规范工具导出路径。清单使用 git -C 查询版本，保持交付区工作目录；提供真实二进制位置/依赖核查，不把打印清单视为实测。</p></div>
+<div class="issue-item"><h3>R09 · 记录缺少设计承诺的原始证据、版本与准确资源统计</h3><p><a href="../../../src/mcp_eval/model_loop.py">src/src/mcp_eval/model_loop.py:119</a></p><p>usage 每轮覆盖而不累计，rounds=len(call_log) 实为调用数；L2 未填 latency_ms/request_raw，未保存完整对话/工具定义快照。ChannelExecutor 丢弃底层 EvalRecord 的错误类别、耗时与证据；device 仅保存 stdout 最后 2000 字符，stderr 未保存、evidence 通常为空。原 API 冒烟记录的 442 tokens 只是最后一轮 usage，不能当作整个任务开销。</p><pre class="code-block">--- 原代码摘录
++++ 修复设计示意（未应用）
+@@ -1,4 +1,5 @@
+-if response.usage:
+-    usage = response.usage
+-# ...
+-&#x27;rounds&#x27;: len(call_log)
++# 修复契约示意：分开保留逐轮资源与执行事件，再汇总。
++usage_by_round.append(response.usage)
++round_count += 1
++call_count = len(call_log)
++latency_ms = int((clock() - start) * 1000)</pre><p>修复说明：P1，正式采集前补。保存逐轮原始输入输出、实际请求 ID、配置/源码/Schema 版本、完整 stdout/stderr 与证据相对路径；未知用量不填零，mock 与真机标明来源。依据完整用量和费率再核算成本。</p></div>
+<div class="issue-item"><h3>R10 · 断言参数未验证，缺失字段会退化为永真条件</h3><p><a href="../../../src/mcp_eval/config.py">src/src/mcp_eval/config.py:96</a></p><p>assertions.items 仅验证 type，未按类型要求 path/value/name_contains 等字段。缺少 name_contains 的 model_selects_tool 能通过加载，随后空字符串匹配任意工具，复现 wrong_tool 也 pass。tools_have_schema 也只检查 dict，不验证 JSON Schema 合法性；field_equals 使用 Python 的宽松相等（例如 True==1）。</p><pre class="code-block">--- 原代码摘录
++++ 修复设计示意（未应用）
+@@ -1,2 +1,5 @@
+-&#x27;required&#x27;: [&#x27;type&#x27;],
+-&#x27;properties&#x27;: {&#x27;type&#x27;: {&#x27;enum&#x27;: ASSERTION_TYPES}}
++# 修复契约示意：各类型有独立必填字段与适用动作。
++required_by_type = {&#x27;field_equals&#x27;: [&#x27;path&#x27;, &#x27;value&#x27;], &#x27;model_selects_tool&#x27;: [&#x27;name_contains&#x27;], &#x27;max_rounds&#x27;: [&#x27;value&#x27;]}
++missing = [key for key in required_by_type.get(assertion[&#x27;type&#x27;], []) if key not in assertion]
++if missing:
++    raise ConfigError(f&#x27;断言缺少字段: {missing}&#x27;)</pre><p>修复说明：P1。按断言类型使用 oneOf/独立校验，拒绝空选择器、错误值类型和不适用动作；Schema 验证使用明确草案版本的 check_schema。错误判据属于配置/评测器错误，不应归为被测工具失败。</p></div>
+<div class="issue-item"><h3>R11 · 分组键未转义导致 Markdown 指标表错列</h3><p><a href="../../../src/mcp_eval/report.py">src/src/mcp_eval/report.py:94</a></p><p>分组键含三个管道符，直接插入 Markdown 单元格。复现表头为 7 列，数据行为 10 列；数字与列标题错位，影响报告阅读。现有测试仅搜索字符串，未验证表格结构。</p><pre class="code-block">--- 原代码摘录
++++ 修复设计示意（未应用）
+@@ -1 +1,2 @@
+-lines.append(f&#x27;| {key} | {g[&quot;planned&quot;]} | ... |&#x27;)
++escaped_key = key.replace(&#x27;|&#x27;, &#x27;\\|&#x27;).replace(&#x27;\n&#x27;, &#x27; &#x27;)
++lines.append(f&#x27;| {escaped_key} | {g[&quot;planned&quot;]} | ... |&#x27;)</pre><p>修复说明：P2。对所有表格文本统一转义，或将维度拆成独立列；增加 Markdown 表格列数检查。只影响展示不改变 summary.json 数值。</p></div><!-- §7 改进路线图 -->
+<h2 class="section-title"><span class="num">§7</span>改进路线图</h2>
+<div class="roadmap">
+  <div class="roadmap-card">
+    <h3><span class="severity-badge sev-critical">Critical</span> 必修 (合入前)</h3>
+    <ul>{{ROADMAP_CRITICAL}}</ul>
+    <div class="eta">预估工时：待入口核实后分解，不按问题数估算</div>
+  </div>
+  <div class="roadmap-card">
+    <h3><span class="severity-badge sev-major">Major</span> 强烈建议</h3>
+    <ul>{{ROADMAP_MAJOR}}</ul>
+    <div class="eta">预估工时：待入口核实后分解，不按问题数估算</div>
+  </div>
+  <div class="roadmap-card">
+    <h3><span class="severity-badge sev-minor">Minor</span> 可协商</h3>
+    <ul>{{ROADMAP_MINOR}}</ul>
+    <div class="eta">预估工时：待入口核实后分解，不按问题数估算</div>
+  </div>
+</div>
+
+</div>
+
+<div class="footer">
+  <p class="conf">CONFIDENTIAL</p>
+  <p>Thundersoft &middot; Code Review Skill &middot; 本报告由 code-review skill 自动生成</p>
+  <p>生成时间：{{TIMESTAMP}}</p>
+</div>
+
+<script>
+(function(){
+  var g = document.getElementById('watermarkGrid');
+  for (var y = 0; y < (window.innerHeight || 2000) + 400; y += 180) {
+    for (var x = -200; x < (window.innerWidth || 2000) + 200; x += 320) {
+      var s = document.createElement('span');
+      s.textContent = 'Confidential';
+      s.style.left = x + 'px';
+      s.style.top = y + 'px';
+      g.appendChild(s);
+    }
+  }
+})();
+
+function toggleCard(h) {
+  var b = h.nextElementSibling;
+  var v = b.style.display !== 'none';
+  b.style.display = v ? 'none' : 'block';
+  h.classList.toggle('expanded', !v);
+}
+
+function filterTable() {
+  var sev = document.getElementById('filterSeverity').value.toLowerCase();
+  var dim = document.getElementById('filterDimension').value;
+  var q   = document.getElementById('searchInput').value.toLowerCase();
+  var rows = document.querySelectorAll('#issueTable tbody tr.issue-row');
+  rows.forEach(function (r) {
+    var s = (r.getAttribute('data-severity') || '').toLowerCase();
+    var d = r.getAttribute('data-dimension') || '';
+    var text = r.innerText.toLowerCase();
+    var ok = (!sev || s === sev) && (!dim || d === dim) && (!q || text.indexOf(q) !== -1);
+    r.style.display = ok ? '' : 'none';
+  });
+}
+
+function sortTable(col) {
+  var tbody = document.querySelector('#issueTable tbody');
+  var rows = Array.from(tbody.querySelectorAll('tr.issue-row'));
+  var asc = tbody.getAttribute('data-sort-col') == col ? tbody.getAttribute('data-sort-asc') !== '1' : true;
+  rows.sort(function (a, b) {
+    var av = a.children[col].innerText.trim();
+    var bv = b.children[col].innerText.trim();
+    return asc ? av.localeCompare(bv, 'zh') : bv.localeCompare(av, 'zh');
+  });
+  rows.forEach(function (r) { tbody.appendChild(r); });
+  tbody.setAttribute('data-sort-col', col);
+  tbody.setAttribute('data-sort-asc', asc ? '1' : '0');
+}
+
+window.addEventListener('load', function () {
+  if (typeof Chart === 'undefined') {
+    console.warn('Chart.js failed to load. Charts will not render.');
+    return;
+  }
+  Chart.defaults.color = '#5A5A5A';
+  Chart.defaults.borderColor = '#E8E8E8';
+  var wine = ['#8B1A2B','#A0303F','#C76070','#F2D5DA','#6B0F1A','#2980b9','#27ae60','#e67e22','#c0392b'];
+
+  var dimNames  = {{RADAR_LABELS_JSON}};
+  var dimScores = {{RADAR_DATA_JSON}};
+  var dimIssueCounts = {{DIM_ISSUE_COUNTS_JSON}};
+  var dimWeights = {{DIM_WEIGHTS_JSON}};
+
+  new Chart(document.getElementById('radarChart'), {
+    type: 'radar',
+    data: { labels: dimNames, datasets: [{
+      label: '维度得分', data: dimScores,
+      backgroundColor: 'rgba(139,26,43,0.15)', borderColor: '#8B1A2B', borderWidth: 2,
+      pointBackgroundColor: '#8B1A2B', pointBorderColor: '#fff', pointBorderWidth: 2, pointRadius: 5
+    }]},
+    options: { responsive: true, scales: { r: { beginAtZero: true, max: 10, ticks: { stepSize: 2 } } }, plugins: { legend: { display: false } } }
+  });
+
+  new Chart(document.getElementById('barChart'), {
+    type: 'bar',
+    data: { labels: dimNames, datasets: [
+      { label: '得分(满分10)', data: dimScores, backgroundColor: 'rgba(139,26,43,0.7)', borderRadius: 6, yAxisID: 'y' },
+      { label: '问题数',       data: dimIssueCounts, backgroundColor: 'rgba(199,96,112,0.5)', borderRadius: 6, yAxisID: 'y1' }
+    ]},
+    options: {
+      responsive: true,
+      scales: {
+        y: { beginAtZero: true, max: 10, position: 'left', title: { display: true, text: '得分' } },
+        y1: { beginAtZero: true, position: 'right', grid: { drawOnChartArea: false }, title: { display: true, text: '问题数' } }
+      },
+      plugins: { legend: { position: 'bottom' } }
+    }
+  });
+
+  new Chart(document.getElementById('pieChart'), {
+    type: 'doughnut',
+    data: { labels: ['Critical', 'Major', 'Minor', 'Q/Praise'], datasets: [{
+      data: [{{COUNT_CRITICAL}}, {{COUNT_MAJOR}}, {{COUNT_MINOR}}, {{COUNT_QUESTION}}],
+      backgroundColor: ['#c0392b', '#e67e22', '#27ae60', '#2980b9'], borderWidth: 0
+    }]},
+    options: { responsive: true, plugins: { legend: { position: 'bottom' } } }
+  });
+
+  new Chart(document.getElementById('weightChart'), {
+    type: 'polarArea',
+    data: { labels: dimNames, datasets: [{
+      data: dimWeights,
+      backgroundColor: wine.map(function (c) { return c + '99'; }),
+      borderColor: wine, borderWidth: 2
+    }]},
+    options: { responsive: true, plugins: { legend: { position: 'bottom', labels: { font: { size: 11 } } } }, scales: { r: { beginAtZero: true, ticks: { display: false } } } }
+  });
+});
+</script>
+
+</body>
+</html>

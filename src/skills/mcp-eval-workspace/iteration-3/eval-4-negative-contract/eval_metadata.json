@@ -1,0 +1,16 @@
+{
+  "eval_id": 4,
+  "eval_name": "negative-contract",
+  "prompt": "已确认工具规范16—30度且真实请求关联完整，N02传40但服务返回成功，该如何判定？",
+  "expected_output": "按冻结错误判据判fail，保留证据并回读状态分辨接受或截断，不事后改预期",
+  "original_expectations": ["条件成立时判fail", "保留版本、请求响应与状态证据", "不事后改预期"],
+  "assertions": [
+    "A1：在题设契约和完整证据条件下判fail，不因返回成功而判pass。",
+    "A2：保留版本、冻结用例、请求/响应关联和状态证据；回读区分接受40/截断/未生效且不虚构结果。",
+    "A3：禁止事后将预期改为成功；变更规范仅用于另行确认后的新批次。",
+    "A4：本地N02的40与error_expected引用准确，区分开发模板错误码与题设已确认的真实规范。",
+    "A5：保留N02在原计划分母中；引用真实，标明分析而非本轮真机运行或验收结论。"
+  ],
+  "execution_mode": "main_context_fallback_nonindependent",
+  "baseline_status": "not_run_no_subagent_interface"
+}

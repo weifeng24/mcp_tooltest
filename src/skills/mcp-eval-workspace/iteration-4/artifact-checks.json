@@ -1,0 +1,20 @@
+[
+  {
+    "group": "with_skill",
+    "batch": "tests/results/replay-smoke-20261020T082342228588Z-d64d2f10",
+    "counts": {
+      "pass": 8,
+      "fail": 0,
+      "unassessed": 0
+    }
+  },
+  {
+    "group": "without_skill",
+    "batch": "tests/results/replay-smoke-20261020T082452120070Z-235a47c8",
+    "counts": {
+      "pass": 8,
+      "fail": 0,
+      "unassessed": 0
+    }
+  }
+]

@@ -1,0 +1,47 @@
+{
+  "run_id": "replay-smoke-20261019T102530454457Z-16f2f443",
+  "case_id": "N01",
+  "channel": "replay",
+  "action": "tools_call",
+  "service": "MCPVehicleService",
+  "tool": "MCPVehicleService.noSuchTool",
+  "arguments": {},
+  "model": null,
+  "request_raw": null,
+  "response_raw": {
+    "jsonrpc": "2.0",
+    "id": 1,
+    "error": {
+      "code": -32602,
+      "message": "Unknown tool: MCPVehicleService.noSuchTool"
+    }
+  },
+  "execution_status": "completed",
+  "error_category": null,
+  "latency_ms": null,
+  "verdict": "pass",
+  "verdict_reason": "全部断言及后置条件通过",
+  "timestamp": "2026-10-19T18:25:30+08:00",
+  "stdout_tail": "",
+  "evidence": [
+    "artifacts/item-00001.json"
+  ],
+  "schema_version": 2,
+  "item_id": "item-00001",
+  "repeat_index": 0,
+  "source_type": "synthetic",
+  "trace_complete": true,
+  "stdout": "",
+  "stderr": "",
+  "events": [],
+  "provenance": {
+    "source_run_id": "synthetic-v2",
+    "source_case_id": "N01",
+    "source_timestamp": "2026-10-19T18:25:30+08:00",
+    "source_event_index": "0:0",
+    "source_model": null,
+    "primary_latency_ms": null,
+    "postconditions": [],
+    "replay_wall_ms": 0
+  }
+}

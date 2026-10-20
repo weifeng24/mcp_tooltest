@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="18" skipped="0" tests="26" time="0.165" timestamp="2026-10-19T18:17:14.316065+08:00" hostname="tssh-OptiPlex-7080"><testcase classname="src.tests.test_review_judgement" name="test_error_flag_prevents_success_despite_matching_fields[primary]" time="0.001"><failure message="AssertionError: assert 'pass' == 'fail'&#10;  &#10;  - fail&#10;  + pass">location = 'primary'
+
+    @pytest.mark.parametrize("location", ["primary", "readback"])
+    def test_error_flag_prevents_success_despite_matching_fields(location):
+        record = primary()
+        response = record.response_raw if location == "primary" else record.provenance["postconditions"][0]["response_raw"]
+        response["result"]["isError"] = True
+&gt;       assert judge_record(CASE, record).verdict == "fail"
+E       AssertionError: assert 'pass' == 'fail'
+E         
+E         - fail
+E         + pass
+
+src/tests/test_review_judgement.py:36: AssertionError</failure></testcase><testcase classname="src.tests.test_review_judgement" name="test_error_flag_prevents_success_despite_matching_fields[readback]" time="0.001"><failure message="AssertionError: assert 'pass' == 'fail'&#10;  &#10;  - fail&#10;  + pass">location = 'readback'
+
+    @pytest.mark.parametrize("location", ["primary", "readback"])
+    def test_error_flag_prevents_success_despite_matching_fields(location):
+        record = primary()
+        response = record.response_raw if location == "primary" else record.provenance["postconditions"][0]["response_raw"]
+        response["result"]["isError"] = True
+&gt;       assert judge_record(CASE, record).verdict == "fail"
+E       AssertionError: assert 'pass' == 'fail'
+E         
+E         - fail
+E         + pass
+
+src/tests/test_review_judgement.py:36: AssertionError</failure></testcase><testcase classname="src.tests.test_review_judgement" name="test_readback_requires_expected_call_identity_and_completed_execution[change0]" time="0.001"><failure message="AssertionError: assert 'pass' == 'unassessed'&#10;  &#10;  - unassessed&#10;  + pass">change = {'tool': 's.other'}
+
+    @pytest.mark.parametrize("change", [{"tool": "s.other"}, {"arguments": {"zone": 2}}, {"execution_status": "error"}])
+    def test_readback_requires_expected_call_identity_and_completed_execution(change):
+        record = primary()
+        record.provenance["postconditions"][0].update(change)
+&gt;       assert judge_record(CASE, record).verdict == "unassessed"
+E       AssertionError: assert 'pass' == 'unassessed'
+E         
+E         - unassessed
+E         + pass
+
+src/tests/test_review_judgement.py:43: AssertionError</failure></testcase><testcase classname="src.tests.test_review_judgement" name="test_readback_requires_expected_call_identity_and_completed_execution[change1]" time="0.001"><failure message="AssertionError: assert 'pass' == 'unassessed'&#10;  &#10;  - unassessed&#10;  + pass">change = {'arguments': {'zone': 2}}
+
+    @pytest.mark.parametrize("change", [{"tool": "s.other"}, {"arguments": {"zone": 2}}, {"execution_status": "error"}])
+    def test_readback_requires_expected_call_identity_and_completed_execution(change):
+        record = primary()
+        record.provenance["postconditions"][0].update(change)
+&gt;       assert judge_record(CASE, record).verdict == "unassessed"
+E       AssertionError: assert 'pass' == 'unassessed'
+E         
+E         - unassessed
+E         + pass
+
+src/tests/test_review_judgement.py:43: AssertionError</failure></testcase><testcase classname="src.tests.test_review_judgement" name="test_readback_requires_expected_call_identity_and_completed_execution[change2]" time="0.001"><failure message="AssertionError: assert 'pass' == 'unassessed'&#10;  &#10;  - unassessed&#10;  + pass">change = {'execution_status': 'error'}
+
+    @pytest.mark.parametrize("change", [{"tool": "s.other"}, {"arguments": {"zone": 2}}, {"execution_status": "error"}])
+    def test_readback_requires_expected_call_identity_and_completed_execution(change):
+        record = primary()
+        record.provenance["postconditions"][0].update(change)
+&gt;       assert judge_record(CASE, record).verdict == "unassessed"
+E       AssertionError: assert 'pass' == 'unassessed'
+E         
+E         - unassessed
+E         + pass
+
+src/tests/test_review_judgement.py:43: AssertionError</failure></testcase><testcase classname="src.tests.test_review_judgement" name="test_business_failure_in_readback_cannot_prove_state" time="0.001"><failure message="AssertionError: assert 'pass' == 'fail'&#10;  &#10;  - fail&#10;  + pass">def test_business_failure_in_readback_cannot_prove_state():
+        record = primary()
+        record.provenance["postconditions"][0]["response_raw"]["result"]["structuredContent"]["success"] = False
+&gt;       assert judge_record(CASE, record).verdict == "fail"
+E       AssertionError: assert 'pass' == 'fail'
+E         
+E         - fail
+E         + pass
+
+src/tests/test_review_judgement.py:49: AssertionError</failure></testcase><testcase classname="src.tests.test_review_judgement" name="test_protocol_error_remains_valid_for_negative_case" time="0.000" /><testcase classname="src.tests.test_review_judgement" name="test_invalid_error_flag_is_unknown_evidence" time="0.001"><failure message="AssertionError: assert 'pass' == 'unassessed'&#10;  &#10;  - unassessed&#10;  + pass">def test_invalid_error_flag_is_unknown_evidence():
+        record = primary()
+        record.response_raw["result"]["isError"] = "false"
+&gt;       assert judge_record(CASE, record).verdict == "unassessed"
+E       AssertionError: assert 'pass' == 'unassessed'
+E         
+E         - unassessed
+E         + pass
+
+src/tests/test_review_judgement.py:62: AssertionError</failure></testcase><testcase classname="src.tests.test_review_judgement" name="test_float_representation_of_temperature_passes_readback" time="0.001"><failure message="AssertionError: assert 'fail' == 'pass'&#10;  &#10;  - pass&#10;  + fail">def test_float_representation_of_temperature_passes_readback():
+        record = primary()
+        record.provenance["postconditions"][0]["response_raw"]["result"]["structuredContent"]["temperature"] = 22.0
+&gt;       assert judge_record(CASE, record).verdict == "pass"
+E       AssertionError: assert 'fail' == 'pass'
+E         
+E         - pass
+E         + fail
+
+src/tests/test_review_judgement.py:68: AssertionError</failure></testcase><testcase classname="src.tests.test_review_judgement" name="test_json_value_equality[22-22.0-True]" time="0.001"><failure message="assert False is True&#10; +  where False = json_equal(22, 22.0)">left = 22, right = 22.0, equal = True
+
+    @pytest.mark.parametrize("left,right,equal", [
+        (22, 22.0, True), ({"a": [22]}, {"a": [22.0]}, True),
+        (True, 1, False), ({"a": [False]}, {"a": [0.0]}, False),
+        (22, "22", False), ([22], [22, 22], False),
+        (float("inf"), float("inf"), False), (float("nan"), float("nan"), False),
+    ])
+    def test_json_value_equality(left, right, equal):
+&gt;       assert json_equal(left, right) is equal
+E       assert False is True
+E        +  where False = json_equal(22, 22.0)
+
+src/tests/test_review_judgement.py:78: AssertionError</failure></testcase><testcase classname="src.tests.test_review_judgement" name="test_json_value_equality[left1-right1-True]" time="0.001"><failure message="AssertionError: assert False is True&#10; +  where False = json_equal({'a': [22]}, {'a': [22.0]})">left = {'a': [22]}, right = {'a': [22.0]}, equal = True
+
+    @pytest.mark.parametrize("left,right,equal", [
+        (22, 22.0, True), ({"a": [22]}, {"a": [22.0]}, True),
+        (True, 1, False), ({"a": [False]}, {"a": [0.0]}, False),
+        (22, "22", False), ([22], [22, 22], False),
+        (float("inf"), float("inf"), False), (float("nan"), float("nan"), False),
+    ])
+    def test_json_value_equality(left, right, equal):
+&gt;       assert json_equal(left, right) is equal
+E       AssertionError: assert False is True
+E        +  where False = json_equal({'a': [22]}, {'a': [22.0]})
+
+src/tests/test_review_judgement.py:78: AssertionError</failure></testcase><testcase classname="src.tests.test_review_judgement" name="test_json_value_equality[True-1-False]" time="0.001" /><testcase classname="src.tests.test_review_judgement" name="test_json_value_equality[left3-right3-False]" time="0.001" /><testcase classname="src.tests.test_review_judgement" name="test_json_value_equality[22-22-False]" time="0.000" /><testcase classname="src.tests.test_review_judgement" name="test_json_value_equality[left5-right5-False]" time="0.001" /><testcase classname="src.tests.test_review_judgement" name="test_json_value_equality[inf-inf-False]" time="0.001"><failure message="assert True is False&#10; +  where True = json_equal(inf, inf)">left = inf, right = inf, equal = False
+
+    @pytest.mark.parametrize("left,right,equal", [
+        (22, 22.0, True), ({"a": [22]}, {"a": [22.0]}, True),
+        (True, 1, False), ({"a": [False]}, {"a": [0.0]}, False),
+        (22, "22", False), ([22], [22, 22], False),
+        (float("inf"), float("inf"), False), (float("nan"), float("nan"), False),
+    ])
+    def test_json_value_equality(left, right, equal):
+&gt;       assert json_equal(left, right) is equal
+E       assert True is False
+E        +  where True = json_equal(inf, inf)
+
+src/tests/test_review_judgement.py:78: AssertionError</failure></testcase><testcase classname="src.tests.test_review_judgement" name="test_json_value_equality[nan-nan-False]" time="0.001"><failure message="assert True is False&#10; +  where True = json_equal(nan, nan)">left = nan, right = nan, equal = False
+
+    @pytest.mark.parametrize("left,right,equal", [
+        (22, 22.0, True), ({"a": [22]}, {"a": [22.0]}, True),
+        (True, 1, False), ({"a": [False]}, {"a": [0.0]}, False),
+        (22, "22", False), ([22], [22, 22], False),
+        (float("inf"), float("inf"), False), (float("nan"), float("nan"), False),
+    ])
+    def test_json_value_equality(left, right, equal):
+&gt;       assert json_equal(left, right) is equal
+E       assert True is False
+E        +  where True = json_equal(nan, nan)
+
+src/tests/test_review_judgement.py:78: AssertionError</failure></testcase><testcase classname="src.tests.test_review_judgement" name="test_malformed_tool_calls_is_provider_error[calls0]" time="0.001"><failure message="Failed: DID NOT RAISE ProviderError">calls = {}
+
+    @pytest.mark.parametrize("calls", [{}, False, 0, ""])
+    def test_malformed_tool_calls_is_provider_error(calls):
+&gt;       with pytest.raises(ProviderError):
+E       Failed: DID NOT RAISE ProviderError
+
+src/tests/test_review_judgement.py:83: Failed</failure></testcase><testcase classname="src.tests.test_review_judgement" name="test_malformed_tool_calls_is_provider_error[False]" time="0.000"><failure message="Failed: DID NOT RAISE ProviderError">calls = False
+
+    @pytest.mark.parametrize("calls", [{}, False, 0, ""])
+    def test_malformed_tool_calls_is_provider_error(calls):
+&gt;       with pytest.raises(ProviderError):
+E       Failed: DID NOT RAISE ProviderError
+
+src/tests/test_review_judgement.py:83: Failed</failure></testcase><testcase classname="src.tests.test_review_judgement" name="test_malformed_tool_calls_is_provider_error[0]" time="0.000"><failure message="Failed: DID NOT RAISE ProviderError">calls = 0
+
+    @pytest.mark.parametrize("calls", [{}, False, 0, ""])
+    def test_malformed_tool_calls_is_provider_error(calls):
+&gt;       with pytest.raises(ProviderError):
+E       Failed: DID NOT RAISE ProviderError
+
+src/tests/test_review_judgement.py:83: Failed</failure></testcase><testcase classname="src.tests.test_review_judgement" name="test_malformed_tool_calls_is_provider_error[]" time="0.000"><failure message="Failed: DID NOT RAISE ProviderError">calls = ''
+
+    @pytest.mark.parametrize("calls", [{}, False, 0, ""])
+    def test_malformed_tool_calls_is_provider_error(calls):
+&gt;       with pytest.raises(ProviderError):
+E       Failed: DID NOT RAISE ProviderError
+
+src/tests/test_review_judgement.py:83: Failed</failure></testcase><testcase classname="src.tests.test_review_judgement" name="test_valid_no_call_responses_remain_supported[message0]" time="0.000" /><testcase classname="src.tests.test_review_judgement" name="test_valid_no_call_responses_remain_supported[message1]" time="0.000" /><testcase classname="src.tests.test_review_judgement" name="test_valid_no_call_responses_remain_supported[message2]" time="0.000" /><testcase classname="src.tests.test_review_judgement" name="test_malformed_zero_calls_cannot_pass_model_negative_control" time="0.001"><failure message="AssertionError: assert 'pass' == 'unassessed'&#10;  &#10;  - unassessed&#10;  + pass">def test_malformed_zero_calls_cannot_pass_model_negative_control():
+        class Provider:
+            def chat(self, *args, **kwargs):
+                return OpenAICompatProvider._parse({"choices": [{"message": {"content": "你好", "tool_calls": {}}}]})
+    
+        class Executor:
+            channel = "replay"
+            source_type = "synthetic"
+    
+            def __call__(self, *args, **kwargs):
+                raise AssertionError("非法模型响应不得执行工具")
+    
+        case = {"case_id": "M03", "action": "model_task", "service": "auto", "task": "你好",
+                "assertions": [{"type": "no_tool_call"}]}
+        record = ModelLoop(Provider(), Executor(), [{"name": "s.get", "inputSchema": {"type": "object"}}]).run_case(
+            case, "r", "mock")
+&gt;       assert judge_record(case, record).verdict == "unassessed"
+E       AssertionError: assert 'pass' == 'unassessed'
+E         
+E         - unassessed
+E         + pass
+
+src/tests/test_review_judgement.py:109: AssertionError</failure></testcase><testcase classname="src.tests.test_review_judgement" name="test_l2_readback_error_rejected_after_successful_model_call" time="0.001"><failure message="AssertionError: assert 'pass' == 'fail'&#10;  &#10;  - fail&#10;  + pass">def test_l2_readback_error_rejected_after_successful_model_call():
+        record = primary()
+        record.action = "model_task"
+        record.response_raw = {"tool_calls": [{"name": "s.set", "arguments": {"temperature": 22}, "executed": True,
+                               "execution_status": "completed", "result": {"isError": False}}],
+                               "stopped_reason": "final_answer", "final_answer": "已设为22"}
+        record.provenance["postconditions"][0]["response_raw"]["result"]["isError"] = True
+        case = copy.deepcopy(CASE)
+        case["assertions"] = [{"type": "tool_call_matches", "name": "s.set", "arguments": {"temperature": 22}}]
+&gt;       assert judge_record(case, record).verdict == "fail"
+E       AssertionError: assert 'pass' == 'fail'
+E         
+E         - fail
+E         + pass
+
+src/tests/test_review_judgement.py:122: AssertionError</failure></testcase></testsuite></testsuites>

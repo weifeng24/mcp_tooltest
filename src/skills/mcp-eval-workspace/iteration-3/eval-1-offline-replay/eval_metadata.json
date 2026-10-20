@@ -1,0 +1,16 @@
+{
+  "eval_id": 1,
+  "eval_name": "offline-replay",
+  "prompt": "在交付区执行一次离线回放，报告实际新批次的结果与来源。",
+  "expected_output": "先帮助/环境检查，再执行独立批次；引用实际数量与synthetic来源",
+  "original_expectations": ["引用实际批次目录", "不将合成结果当真机结论"],
+  "assertions": [
+    "A1：先检查帮助和环境，再以指定解释器、PYTHONPATH=src预检并回放；无pytest/设备/API调用。",
+    "A2：引用实际新建唯一批次，manifest/results/summary/report存在且相互对应，写入仅在iteration-3。",
+    "A3：通过/失败/unassessed/未执行数量与实际产物一致，分母来自全部manifest计划项。",
+    "A4：核对每项source_type为synthetic和录制来源，不将回放通过宣称为真机、自动触发或验收通过。",
+    "A5：引用编号、文件路径及关键数据可核实；不把用户提供的160项回归说成本轮执行。"
+  ],
+  "execution_mode": "main_context_fallback_nonindependent",
+  "baseline_status": "not_run_no_subagent_interface"
+}

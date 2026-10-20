@@ -1,0 +1,17 @@
+{
+  "argv": [
+    "/home/tssh/文档/Works/mission/校招生ai演练任务/src/tests/results/remediation-2026-10-16/.venv/bin/python",
+    "-c",
+    "import importlib.metadata,json; print(json.dumps({p:importlib.metadata.version(p) for p in ['jsonschema','pytest']}))"
+  ],
+  "cwd": "/home/tssh/文档/Works/mission/校招生ai演练任务/src",
+  "environment_overrides": {
+    "PYTHONPATH": "src",
+    "PYTHONDONTWRITEBYTECODE": "1",
+    "PATH": "/home/tssh/文档/Works/mission/校招生ai演练任务/src/tests/results/remediation-2026-10-16/.venv/bin:/home/tssh/.local/bin:/home/tssh/bin:/home/tssh/.opencode/bin:/home/tssh/bin:/home/tssh/.local/bin:/home/tssh/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/snap/bin"
+  },
+  "command": "'/home/tssh/文档/Works/mission/校招生ai演练任务/src/tests/results/remediation-2026-10-16/.venv/bin/python' -c 'import importlib.metadata,json; print(json.dumps({p:importlib.metadata.version(p) for p in ['\"'\"'jsonschema'\"'\"','\"'\"'pytest'\"'\"']}))'",
+  "exit_code": 0,
+  "stdout": "{\"jsonschema\": \"4.26.0\", \"pytest\": \"9.1.1\"}\n",
+  "stderr": ""
+}

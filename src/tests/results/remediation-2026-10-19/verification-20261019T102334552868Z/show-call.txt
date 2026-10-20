@@ -1,0 +1,11 @@
+{
+  "argv": [
+    "mcp_service",
+    "-c",
+    "-t",
+    "--toolscall",
+    "HvacService.setTemp",
+    "{\"temperature\":22}"
+  ],
+  "device_verified": false
+}

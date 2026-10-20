@@ -1,0 +1,40 @@
+{
+  "expectations": [
+    {
+      "text": "明确当前不能直接运行全部真机用例",
+      "passed": true,
+      "evidence": "outputs/answer.md: 当前不能直接运行全部车机用例"
+    },
+    {
+      "text": "明确缺设备身份和完整真实工具定义",
+      "passed": true,
+      "evidence": "outputs/answer.md: device_serial"
+    },
+    {
+      "text": "说明合成回放不能证明真机就绪",
+      "passed": true,
+      "evidence": "outputs/answer.md: 不能证明真实设备"
+    },
+    {
+      "text": "拒绝把--mcp all当只读采集并解释有执行行为",
+      "passed": true,
+      "evidence": "outputs/answer.md: 可能包含空调、车窗等状态修改"
+    },
+    {
+      "text": "给出核对项目/二进制/工具契约及最小调用的顺序，未把目录快照等同实时发现",
+      "passed": true,
+      "evidence": "outputs/answer.md: 先验证一个已核实的读取工具"
+    }
+  ],
+  "summary": {
+    "passed": 5,
+    "failed": 0,
+    "total": 5,
+    "pass_rate": 1.0
+  },
+  "eval_feedback": {},
+  "notes": [
+    "独立上下文，输出目录分开；没有自动导出的完整工具转录，访问边界依据代理日志与Task返回。",
+    "除eval4无Skill组外，代理按项目规则读取了含历史摘要的根索引/记忆；不是完全盲评。"
+  ]
+}

@@ -1,0 +1,33 @@
+{
+  "status": "not_run",
+  "reason": "No subagent/isolated-context tool exposed in this session",
+  "is_old_skill": false,
+  "input_policy": "Only task prompt and necessary public README/configs; prohibit all skills/, skills-creator/, historical comparison outputs, iteration workspace and neighbouring outputs. Own output writes are the sole workspace exception.",
+  "actual_reads": [],
+  "actual_writes_by_baseline": [],
+  "actual_commands": [],
+  "assertions": [
+    {
+      "text": "A1：先检查帮助和环境，再以指定解释器、PYTHONPATH=src预检并回放；无pytest/设备/API调用。",
+      "status": "not_run"
+    },
+    {
+      "text": "A2：引用实际新建唯一批次，manifest/results/summary/report存在且相互对应，写入仅在iteration-3。",
+      "status": "not_run"
+    },
+    {
+      "text": "A3：通过/失败/unassessed/未执行数量与实际产物一致，分母来自全部manifest计划项。",
+      "status": "not_run"
+    },
+    {
+      "text": "A4：核对每项source_type为synthetic和录制来源，不将回放通过宣称为真机、自动触发或验收通过。",
+      "status": "not_run"
+    },
+    {
+      "text": "A5：引用编号、文件路径及关键数据可核实；不把用户提供的160项回归说成本轮执行。",
+      "status": "not_run"
+    }
+  ],
+  "grading_emitted": false,
+  "answer_emitted": false
+}

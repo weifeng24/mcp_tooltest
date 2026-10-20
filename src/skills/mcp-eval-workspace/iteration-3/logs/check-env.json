@@ -1,0 +1,16 @@
+{
+  "argv": [
+    "bash",
+    "skills/mcp-eval/scripts/check_env.sh"
+  ],
+  "cwd": "/home/tssh/文档/Works/mission/校招生ai演练任务/src",
+  "environment_overrides": {
+    "PYTHONPATH": "src",
+    "PYTHONDONTWRITEBYTECODE": "1",
+    "PATH": "/home/tssh/文档/Works/mission/校招生ai演练任务/src/tests/results/remediation-2026-10-16/.venv/bin:/home/tssh/.local/bin:/home/tssh/bin:/home/tssh/.opencode/bin:/home/tssh/bin:/home/tssh/.local/bin:/home/tssh/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/games:/usr/local/games:/snap/bin:/snap/bin"
+  },
+  "command": "bash skills/mcp-eval/scripts/check_env.sh",
+  "exit_code": 0,
+  "stdout": "[OK] Python >= 3.10\n[OK] jsonschema / pytest 可导入\n[OK] 当前目录为交付根目录\n[OK] adb 命令存在；未验证设备连接和版本\n[INFO] DEEPSEEK_API_KEY 未设置（离线回放不需要）\n[INFO] KIMI_API_KEY 未设置（离线回放不需要）\n离线基础环境检查通过；设备、工具绑定、模型和完整发现能力仍需分别验证。\n",
+  "stderr": ""
+}

@@ -1,0 +1,29 @@
+{
+  "expectations": [
+    {
+      "text": "区分合成与真机",
+      "passed": true,
+      "evidence": "outputs/answer.md: 不能证明真实设备"
+    },
+    {
+      "text": "明确缺设备身份和完整工具定义",
+      "passed": true,
+      "evidence": "outputs/answer.md: `device_serial` 为空"
+    },
+    {
+      "text": "拒绝将--mcp all当只读采集",
+      "passed": true,
+      "evidence": "outputs/answer.md: 不是纯只读工具发现命令"
+    }
+  ],
+  "summary": {
+    "passed": 3,
+    "failed": 0,
+    "total": 3,
+    "pass_rate": 1.0
+  },
+  "notes": [
+    "有限行为语义检查；不是自动触发率或设备/API验证。",
+    "baseline 的不可判定按 unassessed 等效语义评分。"
+  ]
+}

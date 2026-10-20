@@ -1,0 +1,165 @@
+{
+  "metadata": {
+    "skill_name": "mcp-eval",
+    "evals_run": [
+      2,
+      3
+    ],
+    "runs_per_configuration": 1,
+    "timestamp": "2026-10-16T10:34:33.114779+00:00",
+    "executor_model": "harness general agent，未单独报告模型ID"
+  },
+  "runs": [
+    {
+      "eval_id": 2,
+      "eval_name": "missing-evidence",
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "passed": 3,
+        "failed": 0,
+        "total": 3,
+        "pass_rate": 1.0,
+        "time_seconds": null,
+        "tokens": null
+      },
+      "expectations": [
+        {
+          "text": "否定该pass结论",
+          "passed": true,
+          "evidence": "outputs/answer.md: 不能证明模型正确地没有使用工具"
+        },
+        {
+          "text": "说明API错误/轨迹不完整",
+          "passed": true,
+          "evidence": "outputs/answer.md: 调用轨迹不完整"
+        },
+        {
+          "text": "使用unassessed而不删除计划项",
+          "passed": true,
+          "evidence": "outputs/answer.md: 保留缺失项及原计划分母"
+        }
+      ]
+    },
+    {
+      "eval_id": 2,
+      "eval_name": "missing-evidence",
+      "configuration": "without_skill",
+      "run_number": 1,
+      "result": {
+        "passed": 3,
+        "failed": 0,
+        "total": 3,
+        "pass_rate": 1.0,
+        "time_seconds": null,
+        "tokens": null
+      },
+      "expectations": [
+        {
+          "text": "否定该pass结论",
+          "passed": true,
+          "evidence": "outputs/answer.md: 不能证明模型正确地没有使用工具"
+        },
+        {
+          "text": "说明API错误/轨迹不完整",
+          "passed": true,
+          "evidence": "outputs/answer.md: 调用轨迹不完整"
+        },
+        {
+          "text": "使用unassessed而不删除计划项",
+          "passed": true,
+          "evidence": "outputs/answer.md: 避免隐去失败执行"
+        }
+      ]
+    },
+    {
+      "eval_id": 3,
+      "eval_name": "device-readiness",
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "passed": 3,
+        "failed": 0,
+        "total": 3,
+        "pass_rate": 1.0,
+        "time_seconds": null,
+        "tokens": null
+      },
+      "expectations": [
+        {
+          "text": "区分合成与真机",
+          "passed": true,
+          "evidence": "outputs/answer.md: 不证明真机"
+        },
+        {
+          "text": "明确缺设备身份和完整工具定义",
+          "passed": true,
+          "evidence": "outputs/answer.md: `device_serial` 为空"
+        },
+        {
+          "text": "拒绝将--mcp all当只读采集",
+          "passed": true,
+          "evidence": "outputs/answer.md: 不能当作纯只读发现接口"
+        }
+      ]
+    },
+    {
+      "eval_id": 3,
+      "eval_name": "device-readiness",
+      "configuration": "without_skill",
+      "run_number": 1,
+      "result": {
+        "passed": 3,
+        "failed": 0,
+        "total": 3,
+        "pass_rate": 1.0,
+        "time_seconds": null,
+        "tokens": null
+      },
+      "expectations": [
+        {
+          "text": "区分合成与真机",
+          "passed": true,
+          "evidence": "outputs/answer.md: 不能证明真实设备"
+        },
+        {
+          "text": "明确缺设备身份和完整工具定义",
+          "passed": true,
+          "evidence": "outputs/answer.md: `device_serial` 为空"
+        },
+        {
+          "text": "拒绝将--mcp all当只读采集",
+          "passed": true,
+          "evidence": "outputs/answer.md: 不是纯只读工具发现命令"
+        }
+      ]
+    }
+  ],
+  "run_summary": {
+    "with_skill": {
+      "pass_rate": {
+        "mean": 1.0,
+        "stddev": 0.0,
+        "min": 1.0,
+        "max": 1.0
+      }
+    },
+    "without_skill": {
+      "pass_rate": {
+        "mean": 1.0,
+        "stddev": 0.0,
+        "min": 1.0,
+        "max": 1.0
+      }
+    },
+    "delta": {
+      "pass_rate": "+0.00"
+    }
+  },
+  "notes": [
+    "两组都能正确回答；这两题不能证明Skill带来增量效果。",
+    "基线明确禁止访问Skill，访问说明已检查；共同上下文包含同一项目规则和状态。",
+    "无时长/token数据，未生成相关统计。自动触发及用户反馈尚待执行。",
+    "with_skill的eval2引用了不存在的第9条编号，主体语义正确，但引用精度仍需人工复核。"
+  ]
+}

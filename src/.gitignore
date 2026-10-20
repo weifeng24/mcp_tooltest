@@ -1,0 +1,3 @@
+tests/results/.pytest-tmp/
+.venv/
+tests/results/remediation-2026-10-16/.venv/

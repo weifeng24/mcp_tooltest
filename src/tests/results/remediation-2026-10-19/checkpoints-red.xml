@@ -1,0 +1,215 @@
+<?xml version="1.0" encoding="utf-8"?><testsuites name="pytest tests"><testsuite name="pytest" errors="0" failures="7" skipped="0" tests="7" time="0.289" timestamp="2026-10-19T18:19:49.018739+08:00" hostname="tssh-OptiPlex-7080"><testcase classname="src.tests.test_execution_checkpoints" name="test_readback_failure_preserves_completed_primary_and_report[KeyboardInterrupt]" time="0.039"><failure message="TypeError: 'NoneType' object is not subscriptable">tmp_path = PosixPath('/home/tssh/文档/Works/mission/校招生ai演练任务/src/tests/results/.pytest-tmp/test_readback_failure_preserve0')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x7631c2b61840&gt;
+exception_type = &lt;class 'KeyboardInterrupt'&gt;
+
+    @pytest.mark.parametrize("exception_type", [KeyboardInterrupt, OSError])
+    def test_readback_failure_preserves_completed_primary_and_report(tmp_path, monkeypatch, exception_type):
+        prepare(tmp_path, [CASE, {**CASE, "case_id": "P03"}])
+    
+        class Channel:
+            name = "device"
+            source_type = "synthetic"
+    
+            def execute_case(self, case, run_id, timeout):
+                if case["tool"] == "s.get":
+                    raise exception_type("readback failed")
+                return observed(case, run_id)
+    
+        monkeypatch.setattr("mcp_eval.runner.build_channel", lambda *args: Channel())
+        outcome = run_evaluation("run.json", tmp_path)
+        rows = read_jsonl(outcome["results"])
+        first = rows[0]
+&gt;       assert first["response_raw"]["result"]["success"] is True
+E       TypeError: 'NoneType' object is not subscriptable
+
+src/tests/test_execution_checkpoints.py:61: TypeError</failure></testcase><testcase classname="src.tests.test_execution_checkpoints" name="test_readback_failure_preserves_completed_primary_and_report[OSError]" time="0.030"><failure message="TypeError: 'NoneType' object is not subscriptable">tmp_path = PosixPath('/home/tssh/文档/Works/mission/校招生ai演练任务/src/tests/results/.pytest-tmp/test_readback_failure_preserve1')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x7631c2b3c8b0&gt;
+exception_type = &lt;class 'OSError'&gt;
+
+    @pytest.mark.parametrize("exception_type", [KeyboardInterrupt, OSError])
+    def test_readback_failure_preserves_completed_primary_and_report(tmp_path, monkeypatch, exception_type):
+        prepare(tmp_path, [CASE, {**CASE, "case_id": "P03"}])
+    
+        class Channel:
+            name = "device"
+            source_type = "synthetic"
+    
+            def execute_case(self, case, run_id, timeout):
+                if case["tool"] == "s.get":
+                    raise exception_type("readback failed")
+                return observed(case, run_id)
+    
+        monkeypatch.setattr("mcp_eval.runner.build_channel", lambda *args: Channel())
+        outcome = run_evaluation("run.json", tmp_path)
+        rows = read_jsonl(outcome["results"])
+        first = rows[0]
+&gt;       assert first["response_raw"]["result"]["success"] is True
+E       TypeError: 'NoneType' object is not subscriptable
+
+src/tests/test_execution_checkpoints.py:61: TypeError</failure></testcase><testcase classname="src.tests.test_execution_checkpoints" name="test_primary_evidence_is_on_disk_before_readback" time="0.021"><failure message="AssertionError: 回读之前应已保存主调用证据&#10;assert []">tmp_path = PosixPath('/home/tssh/文档/Works/mission/校招生ai演练任务/src/tests/results/.pytest-tmp/test_primary_evidence_is_on_di0')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x7631c2b63be0&gt;
+
+    def test_primary_evidence_is_on_disk_before_readback(tmp_path, monkeypatch):
+        prepare(tmp_path, [CASE])
+    
+        class Channel:
+            name = "device"
+            source_type = "synthetic"
+    
+            def execute_case(self, case, run_id, timeout):
+                if case["tool"] == "s.get":
+                    snapshots = list((tmp_path / "results").glob("*/artifacts/item-00001.json"))
+                    assert snapshots, "回读之前应已保存主调用证据"
+                    saved = json.loads(snapshots[0].read_text())
+                    assert saved["response_raw"]["result"]["success"] is True
+                return observed(case, run_id)
+    
+        monkeypatch.setattr("mcp_eval.runner.build_channel", lambda *args: Channel())
+&gt;       assert run_evaluation("run.json", tmp_path)["counts"]["pass"] == 1
+
+src/tests/test_execution_checkpoints.py:92: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+src/mcp_eval/runner.py:200: in run_evaluation
+    record = _execute_item(item, case, run, channel, tools, by_model)
+src/mcp_eval/runner.py:154: in _execute_item
+    result = channel.execute_case(followup, run["run_id"], remaining)
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+self = &lt;test_execution_checkpoints.test_primary_evidence_is_on_disk_before_readback.&lt;locals&gt;.Channel object at 0x7631c2b61810&gt;
+case = {'case_id': 'P02', 'level': 'L1', 'category': 'positive', 'action': 'tools_call', ...}
+run_id = 'test-20261019T101949209479Z-51543d0e', timeout = 29.999970830001985
+
+    def execute_case(self, case, run_id, timeout):
+        if case["tool"] == "s.get":
+            snapshots = list((tmp_path / "results").glob("*/artifacts/item-00001.json"))
+&gt;           assert snapshots, "回读之前应已保存主调用证据"
+E           AssertionError: 回读之前应已保存主调用证据
+E           assert []
+
+src/tests/test_execution_checkpoints.py:86: AssertionError</failure></testcase><testcase classname="src.tests.test_execution_checkpoints" name="test_model_interruption_preserves_executed_tool_and_known_violation[False]" time="0.027"><failure message="TypeError: 'NoneType' object is not subscriptable">tmp_path = PosixPath('/home/tssh/文档/Works/mission/校招生ai演练任务/src/tests/results/.pytest-tmp/test_model_interruption_preser0')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x7631c2b87e50&gt;
+no_call_control = False
+
+    @pytest.mark.parametrize("no_call_control", [False, True])
+    def test_model_interruption_preserves_executed_tool_and_known_violation(tmp_path, monkeypatch, no_call_control):
+        case = {"case_id": "M01", "level": "L2", "category": "negative" if no_call_control else "positive",
+                "action": "model_task", "service": "auto", "task": "设置温度", "expected_source": "synthetic contract",
+                "assertions": [{"type": "no_tool_call"}] if no_call_control else [
+                    {"type": "tool_call_matches", "name": "s.set", "arguments": {"temperature": 22}}]}
+        prepare(tmp_path, [case], model=True)
+    
+        class Provider:
+            rounds = 0
+    
+            def chat(self, *args, **kwargs):
+                self.rounds += 1
+                if self.rounds == 2:
+                    raise KeyboardInterrupt
+                return ProviderResponse(tool_calls=[ToolCallDecision("c1", "s_set", {"temperature": 22})])
+    
+        class Channel:
+            name = "device"
+            source_type = "synthetic"
+    
+            def execute_case(self, case, run_id, timeout):
+                return observed(case, run_id)
+    
+        monkeypatch.setattr("mcp_eval.runner.create_provider", lambda *args: Provider())
+        monkeypatch.setattr("mcp_eval.runner.build_channel", lambda *args: Channel())
+        outcome = run_evaluation("run.json", tmp_path)
+        row = read_jsonl(outcome["results"])[0]
+&gt;       assert row["response_raw"]["tool_calls"][0]["record"]["response_raw"]["result"]["success"] is True
+E       TypeError: 'NoneType' object is not subscriptable
+
+src/tests/test_execution_checkpoints.py:123: TypeError</failure></testcase><testcase classname="src.tests.test_execution_checkpoints" name="test_model_interruption_preserves_executed_tool_and_known_violation[True]" time="0.027"><failure message="TypeError: 'NoneType' object is not subscriptable">tmp_path = PosixPath('/home/tssh/文档/Works/mission/校招生ai演练任务/src/tests/results/.pytest-tmp/test_model_interruption_preser1')
+monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x7631c3265180&gt;
+no_call_control = True
+
+    @pytest.mark.parametrize("no_call_control", [False, True])
+    def test_model_interruption_preserves_executed_tool_and_known_violation(tmp_path, monkeypatch, no_call_control):
+        case = {"case_id": "M01", "level": "L2", "category": "negative" if no_call_control else "positive",
+                "action": "model_task", "service": "auto", "task": "设置温度", "expected_source": "synthetic contract",
+                "assertions": [{"type": "no_tool_call"}] if no_call_control else [
+                    {"type": "tool_call_matches", "name": "s.set", "arguments": {"temperature": 22}}]}
+        prepare(tmp_path, [case], model=True)
+    
+        class Provider:
+            rounds = 0
+    
+            def chat(self, *args, **kwargs):
+                self.rounds += 1
+                if self.rounds == 2:
+                    raise KeyboardInterrupt
+                return ProviderResponse(tool_calls=[ToolCallDecision("c1", "s_set", {"temperature": 22})])
+    
+        class Channel:
+            name = "device"
+            source_type = "synthetic"
+    
+            def execute_case(self, case, run_id, timeout):
+                return observed(case, run_id)
+    
+        monkeypatch.setattr("mcp_eval.runner.create_provider", lambda *args: Provider())
+        monkeypatch.setattr("mcp_eval.runner.build_channel", lambda *args: Channel())
+        outcome = run_evaluation("run.json", tmp_path)
+        row = read_jsonl(outcome["results"])[0]
+&gt;       assert row["response_raw"]["tool_calls"][0]["record"]["response_raw"]["result"]["success"] is True
+E       TypeError: 'NoneType' object is not subscriptable
+
+src/tests/test_execution_checkpoints.py:123: TypeError</failure></testcase><testcase classname="src.tests.test_execution_checkpoints" name="test_l1_checks_deadline_after_last_return[s.set]" time="0.001"><failure message="AssertionError: assert 'completed' == 'timeout'&#10;  &#10;  - timeout&#10;  + completed">monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x7631c2b856c0&gt;
+late_at = 's.set'
+
+    @pytest.mark.parametrize("late_at", ["s.set", "s.get"])
+    def test_l1_checks_deadline_after_last_return(monkeypatch, late_at):
+        clock = [0.0]
+        calls = []
+        case = {**CASE, "timeout_seconds": 1}
+        if late_at == "s.set":
+            case["postconditions"] = []
+    
+        class Channel:
+            name = "device"
+    
+            def execute_case(self, current, run_id, timeout):
+                calls.append(current["tool"])
+                if current["tool"] == late_at:
+                    clock[0] = 2.0
+                return observed(current, run_id)
+    
+        monkeypatch.setattr("mcp_eval.runner.time.monotonic", lambda: clock[0])
+        row = _execute_item({}, case, {"run_id": "r"}, Channel(), [], {})
+&gt;       assert row.execution_status == "timeout"
+E       AssertionError: assert 'completed' == 'timeout'
+E         
+E         - timeout
+E         + completed
+
+src/tests/test_execution_checkpoints.py:148: AssertionError</failure></testcase><testcase classname="src.tests.test_execution_checkpoints" name="test_l1_checks_deadline_after_last_return[s.get]" time="0.001"><failure message="AssertionError: assert 'completed' == 'timeout'&#10;  &#10;  - timeout&#10;  + completed">monkeypatch = &lt;_pytest.monkeypatch.MonkeyPatch object at 0x7631c3266ef0&gt;
+late_at = 's.get'
+
+    @pytest.mark.parametrize("late_at", ["s.set", "s.get"])
+    def test_l1_checks_deadline_after_last_return(monkeypatch, late_at):
+        clock = [0.0]
+        calls = []
+        case = {**CASE, "timeout_seconds": 1}
+        if late_at == "s.set":
+            case["postconditions"] = []
+    
+        class Channel:
+            name = "device"
+    
+            def execute_case(self, current, run_id, timeout):
+                calls.append(current["tool"])
+                if current["tool"] == late_at:
+                    clock[0] = 2.0
+                return observed(current, run_id)
+    
+        monkeypatch.setattr("mcp_eval.runner.time.monotonic", lambda: clock[0])
+        row = _execute_item({}, case, {"run_id": "r"}, Channel(), [], {})
+&gt;       assert row.execution_status == "timeout"
+E       AssertionError: assert 'completed' == 'timeout'
+E         
+E         - timeout
+E         + completed
+
+src/tests/test_execution_checkpoints.py:148: AssertionError</failure></testcase></testsuite></testsuites>

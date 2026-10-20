@@ -1,0 +1,6 @@
+{
+  "requested_independent_run": "blocked",
+  "fallback_status": "completed",
+  "context_id": "main-session-shared",
+  "independent": false
+}

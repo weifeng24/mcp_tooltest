@@ -1,0 +1,12 @@
+{
+  "engine_unchanged": true,
+  "regression_and_probe_same_engine": true,
+  "review_sections": 7,
+  "findings": 5,
+  "reproduced_probes": 7,
+  "markdown_files_checked": 11,
+  "local_links_checked": 104,
+  "broken_links": [],
+  "git_diff_check_returncode": 0,
+  "git_diff_check_output": ""
+}

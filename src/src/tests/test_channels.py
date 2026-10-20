@@ -59,7 +59,7 @@ def test_extract_jsonrpc_ignores_plain_logs():
 
 
 def test_extract_jsonrpc_multiple_objects():
-    text = '{"jsonrpc":"2.0","result":{"tools":[]},"id":1}\n{"jsonrpc":"2.0","error":{"code":-32602},"id":2}'
+    text = '{"jsonrpc":"2.0","result":{"tools":[]},"id":1}\n{"jsonrpc":"2.0","error":{"code":-32602,"message":"Unknown tool"},"id":2}'
     assert len(extract_jsonrpc(text)) == 2
 
 
@@ -93,7 +93,7 @@ def device_with(results: list[AdbResult]) -> DeviceChannel:
 
 
 def test_device_success_path_completed():
-    ch = device_with([ok("setup done"), ok()])
+    ch = device_with([ok()])
     record = ch.execute_case(CASE, "run1")
     assert record.execution_status == "completed"
     assert record.response_raw["result"]["success"] is True
@@ -103,17 +103,16 @@ def test_device_success_path_completed():
 
 def test_device_timeout_mapped():
     ch = device_with([
-        ok("setup done"),
         AdbResult(returncode=-1, stdout="", stderr="timeout", latency_ms=30000, timed_out=True),
     ])
     record = ch.execute_case(CASE, "run1")
     assert record.execution_status == "timeout"
-    assert record.error_category == "timeout"
+    assert record.error_category == "adb_timeout_remote_state_unknown"
+    assert not record.trace_complete
 
 
 def test_device_exit_nonzero():
     ch = device_with([
-        ok("setup done"),
         AdbResult(returncode=1, stdout=OK_STDOUT, stderr="err", latency_ms=50),
     ])
     record = ch.execute_case(CASE, "run1")
@@ -124,17 +123,18 @@ def test_device_exit_nonzero():
 
 
 def test_device_parse_failed_when_no_json():
-    ch = device_with([ok("setup done"), ok("plain log only")])
+    ch = device_with([ok("plain log only")])
     record = ch.execute_case(CASE, "run1")
     assert record.execution_status == "error"
-    assert record.error_category == "parse_failed"
+    assert record.error_category == "response_missing"
 
 
-def test_device_setup_failure():
+def test_device_command_failure_preserves_diagnostics():
     ch = device_with([AdbResult(returncode=1, stdout="", stderr="denied", latency_ms=10)])
     record = ch.execute_case(CASE, "run1")
     assert record.execution_status == "error"
-    assert record.error_category == "adb_setup_failed"
+    assert record.error_category == "exit_nonzero"
+    assert record.stderr == "denied"
 
 
 # ---------- ReplayChannel ----------

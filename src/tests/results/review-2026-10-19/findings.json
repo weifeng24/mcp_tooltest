@@ -1,0 +1,49 @@
+{
+  "issues": [
+    {
+      "id": "C01", "severity": "major", "rule_id": "4.2", "dimension_id": 4,
+      "dimension": "维度四·代码逻辑", "check_item": "正向字段断言和后置回读绕过工具错误标志",
+      "file": "src/src/mcp_eval/judge.py", "line": 88,
+      "description": "judge_record的后置条件只检查trace_complete和字段值；field_equals分支（108—110行）也不检查工具结果isError。用当前P02模板和真实DeviceChannel解析器，分别令主调用或回读返回isError=true，同时保留匹配的structuredContent，均判pass。相互矛盾或带失败状态的响应不能证明成功。此缺陷影响L1主判定及L1/L2共同的后置验证。证据：C01-primary-error、C01-readback-error。",
+      "code_before": "found, value = resolve_path(verifications[index].get('response_raw'), expected['path'])\nif not found or not json_equal(value, expected['value']):\n    failures.append(f\"后置状态 {expected['path']} 不符合预期\")",
+      "code_after": "# 设计片段：后置条件先核对执行与工具结果，再比较业务字段。\nchecked = verifications[index]\nraw = checked.get('response_raw')\nresult = response_result(raw)\nif checked.get('execution_status') != 'completed' or not checked.get('trace_complete'):\n    unknown.append('回读执行证据不足')\nelif result is None or result.get('isError', False) is not False:\n    failures.append('回读返回错误，不能证明目标状态')\nelse:\n    found, value = resolve_path(raw, expected['path'])\n    if not found or not json_equal(value, expected['value']):\n        failures.append('后置状态不符合预期')",
+      "fix_explain": "P1，正式采集前修复。为正向工具调用与后置读取建立一致的响应成功前置条件，核对回读工具及参数身份；负面error_expected仍按冻结错误契约判断。矛盾响应至少不得pass，错误/未知的细分类需明确。示意片段不是完整补丁，未应用。"
+    },
+    {
+      "id": "C02", "severity": "major", "rule_id": "4.23", "dimension_id": 4,
+      "dimension": "维度四·状态完整性", "check_item": "主调用后发生异常或中断会丢失已执行证据",
+      "file": "src/src/mcp_eval/runner.py", "line": 200,
+      "description": "_execute_item在所有后置调用完成后才返回；run_evaluation在返回后才保存记录。复现主设置成功、回读阶段KeyboardInterrupt后，最终条目为not_run、executed=0、request/response均为空；同位置OSError会生成全新evaluation_error记录并丢掉主响应。分母虽保留，已发生调用仍被错记或遗失。OSError使用边界替身注入，标准AdbRunner已转换的OSError不走此抛出路径；KeyboardInterrupt可直接来自用户中断。证据：C02-interrupt、C02-oserror。",
+      "code_before": "try:\n    record = _execute_item(item, case, run, channel, tools, by_model)\n    judge_record(case, record)\nexcept (OSError, ValueError, RuntimeError, TypeError, KeyError) as exc:\n    record = EvalRecord(run_id=run['run_id'], case_id=case['case_id'], channel=run['channel'], action=case['action'], service=case['service'], execution_status='error')",
+      "code_after": "# 设计片段：分阶段持久化；中断时保留主调用，未开始条目才使用not_run。\nrecord = execute_primary(case)\npersist_checkpoint(record)\ntry:\n    execute_postconditions(record, case, checkpoint=persist_checkpoint)\nexcept KeyboardInterrupt:\n    record.trace_complete = False\n    record.execution_status = 'error'\n    record.error_category = 'interrupted_after_primary'\n    raise\nfinally:\n    persist_checkpoint(record)",
+      "fix_explain": "P1，正式采集前修复。保存每次已完成调用及进行中状态，使异常包装携带部分记录；同样检查L2多轮中断。增加在主调用之后、后置读取期间、模型多轮之间中断的回归，不能仅测试第一条调用前中断。片段内函数为待设计接口，仅用于表达修复方向。"
+    },
+    {
+      "id": "C03", "severity": "minor", "rule_id": "9.1", "dimension_id": 9,
+      "dimension": "维度九·数据格式", "check_item": "用JSON文本相等替代数值语义造成22与22.0误判",
+      "file": "src/src/mcp_eval/judge.py", "line": 35,
+      "description": "json_equal为避免True==1，改为比较json.dumps字符串，但把22和22.0也区分为不同值。当前P02的真实数值型温度回读只要采用浮点表示22.0，就会判fail。JSON Schema的number/整数值语义不要求这种文本差异；用例也没有声明必须返回整数字面量。证据：C03-numeric。",
+      "code_before": "def json_equal(left, right):\n    return json.dumps(left, sort_keys=True, ensure_ascii=False) == json.dumps(right, sort_keys=True, ensure_ascii=False)",
+      "code_after": "# 设计片段：JSON值递归比较；布尔值独立于数值，浮点误差容限应另配。\ndef json_equal(left, right):\n    if isinstance(left, bool) or isinstance(right, bool):\n        return type(left) is type(right) and left == right\n    if type(left) in (int, float) and type(right) in (int, float):\n        return left == right\n    if type(left) is not type(right):\n        return False\n    if isinstance(left, dict):\n        return left.keys() == right.keys() and all(json_equal(left[k], right[k]) for k in left)\n    if isinstance(left, list):\n        return len(left) == len(right) and all(json_equal(a, b) for a, b in zip(left, right))\n    return left == right",
+      "fix_explain": "P2，冻结正式判据前修复。按JSON值语义递归比较，显式区分boolean与number；若业务需要浮点容差或精确字面量，提供单独断言。保留True与1不相等的回归，同时覆盖嵌套对象/列表中的22与22.0。输入非有限数应在数据入口拒绝。"
+    },
+    {
+      "id": "C04", "severity": "major", "rule_id": "1.4", "dimension_id": 1,
+      "dimension": "维度一·边界防护", "check_item": "空对象等非法tool_calls被折算为空数组并通过负面控制",
+      "file": "src/src/mcp_eval/providers/openai_compat.py", "line": 86,
+      "description": "message.get('tool_calls') or []在类型检查之前将空对象、false、0和空字符串折算为[]。复现tool_calls={}并带正常文本的响应，经实际_parse和ModelLoop后得到trace_complete=true、no_tool_call=pass。输入类型错误仍被当作完整的零调用证据，属于前次R04/R10修复的遗漏。证据：C04-malformed-calls。",
+      "code_before": "calls = message.get('tool_calls') or []\nif not isinstance(calls, list):\n    raise ProviderError('响应 tool_calls 必须为数组')",
+      "code_after": "calls = message.get('tool_calls')\nif calls is None:\n    calls = []\nif not isinstance(calls, list):\n    raise ProviderError('响应 tool_calls 必须为数组')",
+      "fix_explain": "P1，L2正式评测前修复。只对接口契约允许的缺失/null做归一化，其他类型均抛ProviderError并归unassessed。增加{}、false、0、空字符串及正常[]的边界测试。"
+    },
+    {
+      "id": "C05", "severity": "minor", "rule_id": "4.25", "dimension_id": 4,
+      "dimension": "维度四·截止时间", "check_item": "L1最后一次调用返回后未检查总截止时间",
+      "file": "src/src/mcp_eval/runner.py", "line": 154,
+      "description": "L1路径只在每条后置调用之前检查deadline，主调用无后置条件或最后一次后置返回后没有再次检查。注入可控时钟：总预算1秒，执行器在2秒返回completed，最终latency_ms=2000仍判pass。该证据证明编排器边界缺失，不证明当前adb在真实设备上已经发生超时失效。证据：C05-late-l1。",
+      "code_before": "result = channel.execute_case(followup, run['run_id'], remaining)\nrecord.provenance['postconditions'].append(result.to_dict())\n# 后置循环结束后直接返回记录。",
+      "code_after": "# 设计片段：主调用及每次后置调用返回后均执行，保留原始响应。\nif time.monotonic() >= deadline:\n    record.execution_status = 'timeout'\n    record.error_category = 'task_deadline_exceeded'\n    record.trace_complete = False",
+      "fix_explain": "P2，按共享任务预算设计补齐返回边界检查。业务效果与时限符合性分开记录；不宣称远端被取消。无后置条件及最后一条回读耗尽预算都应有回归，回放时延与实时墙钟预算口径需显式保留。"
+    }
+  ]
+}

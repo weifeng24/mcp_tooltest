@@ -1,0 +1,46 @@
+{
+  "created_at": "2026-10-19T10:32:29.382956+00:00",
+  "cwd": "/home/tssh/文档/Works/mission/校招生ai演练任务/src",
+  "model": "openai/gpt-6-astra",
+  "harness": "OpenCode API session",
+  "available_tools": [
+    "apply_patch",
+    "bash",
+    "glob",
+    "grep",
+    "read",
+    "skill",
+    "webfetch",
+    "multi_tool_use.parallel"
+  ],
+  "subagent_interface_available": false,
+  "independent_contexts_started": 0,
+  "mode": "main_context_with_skill_sanity_only",
+  "baseline": "without_skill (not old_skill)",
+  "baseline_status": "not_run",
+  "baseline_isolation_established": false,
+  "claude_available": false,
+  "claude_lookup_stdout": "",
+  "user_reported_latest_facts": [
+    "C01-C05已修复",
+    "完整回归160passed",
+    "8合成回放通过",
+    "7原反例修复验证通过"
+  ],
+  "latest_facts_reverified_here": false,
+  "constraints": [
+    "writes only within iteration-3",
+    "no pytest",
+    "no devices or model APIs",
+    "no commit/push",
+    "no memory or product edits"
+  ],
+  "baseline_required_policy": "Only task prompt and necessary public README/configs; prohibit all skills/, skills-creator/, historical comparison outputs, iteration workspace and neighbouring outputs. Own output writes are the sole workspace exception.",
+  "fallback_contamination": "Main context has project rules, memory, all four prompts, expectations, Skill and references; unsuitable for a no-Skill baseline. No baseline answers are generated.",
+  "transcript_limitation": "No raw subagent notification or export interface. Harness Read results remain in session; input-snapshots preserve source bytes, not a fabricated transcript. Subprocess return codes/stdout/stderr preserved verbatim in logs.",
+  "timing": {
+    "total_tokens": null,
+    "duration_ms": null,
+    "total_duration_seconds": null
+  }
+}

@@ -1,0 +1,51 @@
+{
+  "batch": "skills/mcp-eval-workspace/iteration-3/evidence/replay/skill-iteration3-ac0e7d639e7746ed83d2febac233b593-20261019T103235034082Z-a0470db4",
+  "checks": {
+    "output_path_inside_iteration": true,
+    "uuid_requested_run_id": true,
+    "four_files_exist": true,
+    "run_ids_match": true,
+    "all_planned_items_preserved": true,
+    "counts_match": true,
+    "all_completed_synthetic": true,
+    "all_artifacts_match": true,
+    "recording_hash_matches": true,
+    "source_ids_match": true,
+    "model_repeat_match": true,
+    "command_succeeded": true,
+    "only_config_routing_changed": true
+  },
+  "counts": {
+    "pass": 8,
+    "fail": 0,
+    "unassessed": 0
+  },
+  "planned": 8,
+  "unexecuted": 0,
+  "case_ids": [
+    "N01",
+    "N02",
+    "P01",
+    "P02",
+    "P03",
+    "P04",
+    "P05",
+    "P06"
+  ],
+  "recording_sha256": "0a18cffdb92afe1d683d88177f3821f27240bbcac5506d57457ce588e8bcc848",
+  "raw_artifact_hashes": {
+    "evidence/replay/skill-iteration3-ac0e7d639e7746ed83d2febac233b593-20261019T103235034082Z-a0470db4/report.md": "f907af5ba5bd18804afaffa56cd7b6a45356bb6554172a25604c1ff8f0541255",
+    "evidence/replay/skill-iteration3-ac0e7d639e7746ed83d2febac233b593-20261019T103235034082Z-a0470db4/results.jsonl": "55b0b8984e3d7e52ac8a1761d041de5d4b48044ab96d24cbae7caa7172091c75",
+    "evidence/replay/skill-iteration3-ac0e7d639e7746ed83d2febac233b593-20261019T103235034082Z-a0470db4/summary.json": "43ade29fc67d677d0af0a01dde550c5bb7fd309f4a3578fa63eb46cd104d3bfb",
+    "evidence/replay/skill-iteration3-ac0e7d639e7746ed83d2febac233b593-20261019T103235034082Z-a0470db4/recording-input.jsonl": "0a18cffdb92afe1d683d88177f3821f27240bbcac5506d57457ce588e8bcc848",
+    "evidence/replay/skill-iteration3-ac0e7d639e7746ed83d2febac233b593-20261019T103235034082Z-a0470db4/manifest.json": "e32c2650137dce9eed3c85e05697c25988f4ba45f19651755d93511d51693244",
+    "evidence/replay/skill-iteration3-ac0e7d639e7746ed83d2febac233b593-20261019T103235034082Z-a0470db4/artifacts/item-00005.json": "9e60c90e78fa8c892647a41a9a5fe8ec44889099874f9a71baa11dcefb33ad4a",
+    "evidence/replay/skill-iteration3-ac0e7d639e7746ed83d2febac233b593-20261019T103235034082Z-a0470db4/artifacts/item-00006.json": "8dadcff51c79947073bfdbf6ab4beae73c5af14cda0d9d5dc9477c9fe6e13878",
+    "evidence/replay/skill-iteration3-ac0e7d639e7746ed83d2febac233b593-20261019T103235034082Z-a0470db4/artifacts/item-00002.json": "801a9629f6b206b72942f9aa79f447ec29a071b8567b3ac5f4fb98b4ba01fca0",
+    "evidence/replay/skill-iteration3-ac0e7d639e7746ed83d2febac233b593-20261019T103235034082Z-a0470db4/artifacts/item-00004.json": "59b8fe4a6883c79bd0ae6fb01ea848c18768d28f9ee750810b5810f1be0bc0f6",
+    "evidence/replay/skill-iteration3-ac0e7d639e7746ed83d2febac233b593-20261019T103235034082Z-a0470db4/artifacts/item-00007.json": "5c2489440c0d93bc505250d2cbb89d48088542082ae39b1e4a373c9a9c7b6a22",
+    "evidence/replay/skill-iteration3-ac0e7d639e7746ed83d2febac233b593-20261019T103235034082Z-a0470db4/artifacts/item-00001.json": "97477c5a3f55f4aaac35ae4dfb94dfdfbb8d6c307be97482ca2fd4d746351af1",
+    "evidence/replay/skill-iteration3-ac0e7d639e7746ed83d2febac233b593-20261019T103235034082Z-a0470db4/artifacts/item-00003.json": "7ebceef522bab407e8debdae84479edd5d83f8bffa2b6474df128601ba94eb68",
+    "evidence/replay/skill-iteration3-ac0e7d639e7746ed83d2febac233b593-20261019T103235034082Z-a0470db4/artifacts/item-00008.json": "72038391a0b0bfe19a4be33b5207b72dc1338f3dca0d4af89249932a75f391c8"
+  }
+}

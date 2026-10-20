@@ -4,7 +4,7 @@ from __future__ import annotations
 import json
 
 from mcp_eval.records import EvalRecord, append_jsonl
-from mcp_eval.report import summarize, write_report
+from mcp_eval.report import summarize as summarize_with_plan, write_report
 
 CASES = {
     "P01": {"level": "L1", "category": "positive"},
@@ -27,6 +27,19 @@ def make_record(case_id: str, verdict: str, channel: str = "device",
         verdict=verdict,
         latency_ms=latency,
     )
+
+
+def fixed_plan(records):
+    items = []
+    for index, record in enumerate(records):
+        record.item_id = f"item-{index}"
+        items.append({"item_id": record.item_id, "case_id": record.case_id, "model": record.model,
+                      "channel": record.channel, "repeat_index": 0, **CASES[record.case_id]})
+    return items
+
+
+def summarize(records, cases):
+    return summarize_with_plan(records, cases, fixed_plan(records))
 
 
 def test_summarize_counts_and_rates():
@@ -84,14 +97,16 @@ def test_latency_stats():
 def test_write_report_rebuild_is_deterministic(tmp_path):
     """从保存的结果重建报告：两次生成的指标必须一致（报告可复现）。"""
     results = tmp_path / "results.jsonl"
-    append_jsonl(results, make_record("P01", "pass"))
-    append_jsonl(results, make_record("P02", "fail"))
-    append_jsonl(results, make_record("N01", "unassessed", latency=None))
+    records = [make_record("P01", "pass"), make_record("P02", "fail"),
+               make_record("N01", "unassessed", latency=None)]
+    planned = fixed_plan(records)
+    for record in records:
+        append_jsonl(results, record)
 
     out1 = tmp_path / "out1"
     out2 = tmp_path / "out2"
-    s1, r1 = write_report(results, CASES, out1, "run-x")
-    s2, r2 = write_report(results, CASES, out2, "run-x")
+    s1, r1 = write_report(results, CASES, out1, "run-x", planned)
+    s2, r2 = write_report(results, CASES, out2, "run-x", planned)
 
     m1 = json.loads(s1.read_text(encoding="utf-8"))
     m2 = json.loads(s2.read_text(encoding="utf-8"))
@@ -99,6 +114,6 @@ def test_write_report_rebuild_is_deterministic(tmp_path):
     assert m1["failure_categories"] == m2["failure_categories"]
 
     text = r1.read_text(encoding="utf-8")
-    assert "device|L1|positive|-" in text
+    assert "device\\|L1\\|positive\\|-" in text
     assert "P02" in text and "N01" in text  # 失败与无法判断都在明细里
     assert "回放数据仅供开发自测" in text

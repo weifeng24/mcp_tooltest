@@ -1,106 +1,111 @@
-# MCP 工具评测：技术与评测设计
+# MCP 评测技术与验证设计
 
-状态：已按 2026-10-13 确认的意图（D013）收敛。需求与范围见 [proposal.md](../proposal.md)。本文件路径均相对于交付区 `src/`。
+修订：2026-10-16。状态：离线整改已验证，真实设备与最终验收未通过。需求依据见 [proposal.md](../proposal.md)，历史审查见 [reviews/2026-10-16/requirements-review.md](reviews/2026-10-16/requirements-review.md)。
 
-## 1. 设计约束
+2026-10-19复审曾发现错误标志检查、部分执行证据、数值相等、模型响应类型和L1截止时间5项缺口；随后离线整改已通过原7个反例和160项回归，见[本轮整改](remediation-2026-10-19.md)。原[复审](reviews/2026-10-19/requirements-review.md)保留修复前证据。下文描述设计契约，真实设备及最终验收仍未完成。
 
-| 约束 | 影响 |
-|---|---|
-| 截止 2026-10-28（约 2 周） | 不做网页界面、数据库等外围；命令行＋文件化产物 |
-| 真机仅 1—2 次、下周一次（adb 全权限） | 离线为主；录制回放驱动开发；上机窗口只做采集与正式批次 |
-| 被测服务仅车端运行，传输为自研 binder/dds | 评测编排不直连服务；经 adb 在车上执行，开发机做编排/判定/报告 |
-| 人工约 14 小时/周 | 范围聚焦 8 服务中的代表性子集，优先确定性强的工具 |
-| 数据层为标准 MCP 语义（已核实） | 用例、判定、报告按标准 tools/list、tools/call 语义设计 |
+## 1. 范围与约束
 
-## 2. 被测对象与协议事实（2026-10-13 只读核实）
+- 截止 10-28；用户每天约2小时人工投入，设备预计仅10-19/20等1—2次窗口。
+- L1 是首版主要目标；L2 条件允许时推进。IDE 范围差异仍需导师对齐，不将模型切换等同于客户端适配。
+- `mcp_service` 服务配置及协议手册是开发依据，不能代替设备上的真实工具目录与二进制版本。
+- 本项目使用 Python、JSON 文件和命令行。所有开发产物位于交付区；运行不依赖 `/data` 中公司源代码存在。
 
-- 源码：`/data/AIOS_Ark_2026-dev/AIRuntime/MCPServices/Linux`（同仓库多车型树重复检出，正式评测选定一棵基线树，候选 Ark 树）。
-- Server：`mcp_service`（C++），8 个服务：MCPVehicleService、MCPVoiceService、MCPMapService、MCPVGuiService、MCPKanziService、MCPGuideService、AndroidCameraProxy、NVCameraProxy。
-- 数据层：JSON-RPC 2.0 MCP 语义；tools/list 返回含 inputSchema/outputSchema 的工具定义；Client 端工具名带 `serviceId.` 前缀，RouteManager 路由时去除前缀。
-- 传输层：自研 binder/dds（非标准 stdio/HTTP）。因此 IDE 无法直接挂载车端服务，L3 移出首版。
-- 既有测试设施：`mcp_service -c -t` 客户端测试模式，由 `test_config_*.json` 配置驱动，支持 `--list/--all/--mcp/--service/--svcmap` 等；配置含 tools/call 用例与 resources 订阅项（`app/test/TEST_GUIDE.md`、`app/test/config/`）。
-
-## 3. 总体架构
+## 2. 执行架构与能力边界
 
 ```text
-开发机（Ubuntu）
-└── mcp-eval（Python，src/src/mcp_eval/）
-    ├── 配置加载：servers / models / cases / runs（JSON）
-    ├── 执行层
-    │   ├── device 通道：adb shell 驱动车机执行，抓取 stdout/logcat
-    │   └── replay 通道：读取录制流量，离线回放同一批用例
-    ├── L1 执行器：确定参数的 tools/list、tools/call、resources 断言
-    ├── L2 执行器：模型决策循环（DeepSeek/Kimi API）→ 调用经 adb 下发 → 结果回填
-    ├── 判定器：断言执行、错误分类、证据归档
-    └── 报告器：summary.json + report.md（可离线重建）
+run / server / model / case 配置
+    → 本地完整预检
+    → 冻结 manifest（任务×模型×重复序号）
+    → 单独批次目录
+        ├─ device：adb → mcp_service --toolscall → 关联 id=1 响应
+        └─ replay：按请求顺序消费录制，保留原始身份
+    → 断言及独立后置回读
+    → results + artifacts + summary + report
 
-车机（adb 连接，上机窗口）
-└── mcp_service -s（被测 Server）
-    └── 执行方式：复用自带 -c -t 客户端（配置由本工具生成并 push），
-        或经 McpClientProxy 的等效调用；输出与日志回采
+L2：自然语言任务＋完整工具定义 → 模型调用 → 校验与执行 → 结果回填
+    → 最终回答＋独立后置验证 → 与L1相同的记录及判定接口
 ```
 
-设计要点：
+### 车端入口
 
-1. **双通道同一判定**：device 与 replay 两条执行路径产出同一格式的标准记录，判定器不感知来源；回放结果仅用于开发自测，报告结论只引用真机数据。
-2. **复用而非重造**：L1 真机执行优先复用自带测试客户端（本工具负责生成配置、下发、采集、独立断言），避免在自研传输上重写客户端。
-3. **L2 决策与执行分离**：模型在开发机决策，执行经 adb 下发；模型只见到 tools/list 与任务，不接触预期答案。
+核对源码 `app/test/client/test_toolscall.cpp` 后，单工具执行改为显式传递完整工具名与参数。原来生成临时配置再调用 `--mcp auto` 的方式已移除，避免配置未被读取。命令使用 shell 引用；无参调用不传 `{}`，避免旧客户端 arg0 回退。
 
-## 4. 技术选型
+设备调用只接受当前请求 id 的唯一完整 JSON-RPC 响应。解析支持多行 JSON、stdout/stderr，拒绝请求回显，保留全部原文及候选帧。响应缺失或冲突为证据不足。
 
-- 语言：Python 3（开发机侧全部组件）；依赖：`mcp` SDK（可选，用于协议结构校验）、`jsonschema`、`pytest`；模型 API 用各提供方官方接口或 OpenAI 兼容端点。
-- adb 交互：`subprocess` 调用本机 adb，命令与输出全量留痕。
-- 数据：配置与用例 JSON；事件流 JSONL；摘要 JSON＋Markdown 报告。
-- 锁定依赖版本；`README.md` 提供完整安装与运行命令（实现后补）。
+工具发现和资源读取目前没有经过验证的独立机器可读接口：返回 `blocked/unsupported_action`。`--mcp all` 会执行既有测试，不用于只读采集。现场准备见 [device-readiness.md](device-readiness.md)。
 
-## 5. 配置与记录契约
+2026-10-19新增旁路数据采集：`catalog.py`读取现有RouteManager注册定义dump，保留原始文件、名称别名与来源，作为工具目录输入。仅采集定义快照，不把它包装成实时tools/list/resources/read成功。来源及限制见[catalog-capture.md](catalog-capture.md)。
 
-### 5.1 配置对象
+### 回放
 
-| 配置 | 关键字段 | 说明 |
-|---|---|---|
-| server | 基线树、设备序列号、服务清单、test_config 模板 | 对应一棵源码树＋一台设备 |
-| model | provider、model、base_url、api_key 环境变量名、生成参数 | DeepSeek/Kimi/OpenRouter 各一条；密钥只引用环境变量 |
-| case | case_id、层次、类别（正向/负面/边界）、服务、工具、参数、断言、预期来源 | 见 [用例设计](../tests/cases/README.md) |
-| run | 执行通道（device/replay）、模型引用、重复次数、超时、输出目录 | 每次运行固化快照 |
+每个请求指纹对应事件队列，按顺序消费，不取最后一条重复使用。耗尽时返回 no_recording。输出关联当前 case/run/item，来源身份、时间、事件序号另存 provenance。支持从新格式的 L1 后置记录与 L2 内嵌工具记录提取事件。
 
-### 5.2 记录与判定
+回放不是通用状态模拟器：不同任务顺序、参数或工具版本需要对应录制。历史旧格式没有 trace_complete/source_type 时保持未知，不自动升级为可信证据。
 
-- 每条结果：`run_id`、`case_id`、`channel`、请求/响应原文、耗时、错误类别、`execution_status`（completed/timeout/error/blocked/not_run）、`verdict`（pass/fail/unassessed）、证据路径。
-- 判定优先级：已证实的违规（如禁止调用发生）→ fail；时限内未满足要求且证据完整 → fail；必要条件与证据齐全 → pass；证据缺失/冲突 → unassessed。
-- 指标按层次×模型×类别分组：通过率、判定覆盖率、错误分类分布、耗时；分母固定为运行计划条目数，未执行计 unassessed；回放数据单独标记，不与真机混算。
+## 3. 数据契约（schema_version=2）
 
-## 6. 用例与指标设计
+### 配置
 
-详见 [tests/cases/README.md](../tests/cases/README.md)。核心指标：
+- server：服务标识、候选基线信息、设备序列号、实际 `service_bin`、服务清单。
+- model：provider、模型名、端点、密钥环境变量名、生成参数。厂商接口形状相似不等于套餐权益一致。
+- case：唯一标识、层次、动作、任务/工具参数、类型化断言、预期来源、时限与可选 postconditions。
+- run：运行标签、通道、配置引用、用例模式、录制/工具文件、重复次数、任务时限、模型轮数和调用数上限。
 
-- L1：工具枚举完整性（tools/list 与预期服务/工具集一致）、调用成功率、参数校验正确性（边界/越界行为符合预期）、错误可诊断性（错误类别明确且含可操作信息）。
-- L2：选工具准确率、参数正确率、任务完成率、平均调用轮数与耗时；双模型对比表。
-- 负面控制：无需工具任务不调用（L2）；未知工具/越界参数被正确拒绝（L1）。
+预检校验所有引用、用例/模型 ID 唯一性、工具定义及 Schema。外部 `$ref` 不自动解析，需提供自包含定义。所有运行路径限制在交付区内，外部源码路径仅作为元数据。
 
-## 7. AI 交互与培训衔接
+### manifest 与结果
 
-- **L2 循环**：任务（自然语言）→ tools/list → 模型输出调用决策 → 参数校验 → adb 执行 → 结果回填 → 终止判定（完成/超轮/超时）。最大轮数与单次超时强约束。
-- **Vibe Coding**：开发过程保留需求→实现→验证的迭代记录（用户已确认允许）。
-- **Skill（必交）**：`mcp-eval` 流程 Skill——封装 adb 环境检查、配置选择、评测执行、报告解读；初版在核心工具可用后编写，经 Skills Creator 整改并留痕（`skills-creator/fix-log.md`）。
-- **Bad Case→Good Case**：评测报告的失败分类直接驱动工具描述/参数的改进建议；若时间允许做一次小范围前后对比。
+每次生成唯一目录，禁止覆盖历史批次。manifest 保存完整计划、冻结配置/用例/工具、Python 版本、源码哈希与录制输入哈希。每个 item 标识 case、模型和重复序号。
 
-## 8. 验证设计
+EvalRecord 保存：请求、响应、完整stdout/stderr、事件、执行状态、判定、来源、时延、来源身份和证据路径。模型事件包括逐轮输入输出、决策ID、是否执行、结果、逐轮usage和原始回复。密钥值不进入快照。
 
-- 评测器自测（离线）：录制回放驱动；已知正确/错误/缺失证据输入，验证判定与指标计算；报告可重建。
-- 真机验证（上机窗口）：L1 全量批次＋L2 双模型批次；抓 logcat 与服务日志交叉核对。
-- 交付验证：第三方按 README 回放模式复现报告。
+- channel：device/replay。
+- source_type：live_device/recorded_device/synthetic/unknown。标签结合证据解释，不单独作为真实性证明。
+- execution_status：completed/timeout/error/blocked/not_run，表示执行过程。
+- verdict：pass/fail/unassessed，表示业务判定。
+- trace_complete：是否具备本次断言所需的完整可观察轨迹。缺失时不当作零调用。
 
-## 9. 风险与对策
+中断及逐项异常保留计划项；报告始终依据固定 manifest 计算分母。rebuild 使用该批次定义，指标可确定性重建。
 
-| 风险 | 对策 |
-|---|---|
-| 上机时间晚于中期检查 | 中期用回放模式演示并如实标注；真机数据随后补齐 |
-| 自带测试客户端输出不稳定 | 上机先用最小命令验证输出格式；准备 logcat 交叉通道 |
-| Kimi API 工具调用能力受限 | 先用 DeepSeek 打通 L2；Kimi 作为第二模型，失败则报告降级说明 |
-| 车机状态依赖（如空调实际状态） | 用例优先选幂等读取与可恢复设置；执行前后记录状态 |
+执行器接受可选同步`checkpoint(EvalRecord) -> None`回调，在外部请求前后提交快照；编排器按item原子替换artifact。进行中的快照使用`error/execution_in_progress`，不视为已完成；异常或KeyboardInterrupt保留已有请求、响应和模型工具记录。收尾从artifact重建JSONL，区分已判定、部分执行和未开始条目。`executed/attempted_items`统计尝试项数。检查点写入也计入下次请求前的剩余预算。该机制覆盖受控异常/中断，不承诺SIGKILL、断电、磁盘故障后自动恢复。
 
-## 10. 技术参考
+## 4. 判定规则
 
-- MCP 官方架构与 Tools 规范（2026-07-28 与 2025-11-25 两版，2026-10-13 查阅）。
-- 仓库文档：`MCP_Agent.md`（协议数据格式 §9）、`app/test/TEST_GUIDE.md`、`app/test/config/test_config_ark.json`。
+1. 可信记录已证实禁止调用等违规，保留 fail，不因之后 API 失败撤销。
+2. 未执行、模型/基础设施错误、缺失/冲突证据或非法判据，使用 unassessed。
+3. 完整跟踪确认超时、达到调用上限但任务未完成，不能通过。
+4. 正向调用检查完整工具名、参数语义、执行成功及必要状态回读；模型输出“已完成”不作为执行证据。
+5. 负面用例匹配预先冻结的错误码/原因，不能用服务不存在等其他错误替代预期错误。
+6. field_equals按JSON值语义递归比较；布尔与数值分开，22与22.0相等，不使用浮点误差容限，NaN/Inf不相等。Schema检查验证合法性，outputSchema在协议允许范围内为可选。
+7. 需人工复核的用例保留 unassessed，附复核依据后再形成最终结论。
+
+当前 Hvac 等案例仍为开发模板，正式执行前须确认真实绑定。独立后置条件由执行器回读，模型看不到用例标准答案。
+
+正向工具调用和独立回读均需有效结果且无工具/业务错误标志；后置读取还需匹配完整工具名、参数和已完成状态。错误预期用例继续按冻结错误契约判断。模型提供方仅将允许的缺失/null调用列表归一化为空数组，其他非数组类型视为提供方错误。
+
+## 5. 模型循环与预算
+
+模型侧工具名使用双向安全映射，执行与证据保留原始 MCP 名。模型轮数与工具调用数分别计数；最大调用数限制模型发起的请求，固定后置检查另存。
+
+任务使用单调时钟截止时间。剩余预算传入模型请求与adb执行，模型返回后及每个工具执行前重新检查。模型调用后超时不继续下发工具；本机超时不证明远端操作已停止，记录状态未知并按现场恢复办法处理。
+
+usage 保存逐轮原始值，并只对每轮均有提供的字段累计；缺失字段保持未知。成功、失败、无法判断时延分别统计。不能把最后一轮用量当作整项成本。
+
+DeepSeek 有整改前的真实模型＋mock 验证记录；本次模型循环验证为离线边界替身。Kimi Coding Plan 的端点、模型与协议尚待核实，不能直接视为通用 Moonshot API 已适配。
+
+## 6. 验证与量化实验
+
+- 单元/契约测试：错误参数未执行不能通过、API失败不能满足不调用、响应ID关联、多行日志、预算耗尽后停止、分母守恒、结果不可覆盖和回放序列。
+- 集成测试：隔离目录中的回放、独立postconditions、异常及中断、CLI与报告重建。
+- 开发样本：6正向＋2负面，仅合成链路检查；增加P06独立覆盖上界30，不用重复下界替代。
+- 真机验收：冻结真实工具目录与业务标准，按最小调用逐步扩大到至少5＋2；保留所有未执行和失败。
+- 效果对比：冻结同一任务、数据、工具集合、轮数/时限及判定器。优先比较同一模型下工具说明改进前后，或已核实的两个模型配置。保留原始基线与退化，不承诺改善；模型/客户端条件不同则分别注明，不能归因为单一变量。
+
+## 7. Skill 与演练衔接
+
+Skill 使用 Tool Wrapper 方向封装现有工具流程；执行命令、数据来源和统计规则为低自由度，结果解释为中等自由度。采用 metadata→主体流程→按需参考的渐进加载。脚本先查看 --help，再作为黑盒执行。
+
+Skill 初版与结构检查已有记录；正反触发、行为对照及导师认可的整改通过证据需分别完成，不能用结构检查代替。Vibe Coding 已获用户允许，Skill 初版特殊独立搭建要求仍按原差异记录确认。
+
+训练衔接包括 Prompt 设计、Bad Case→修复→回归、自然语言驱动开发及证据管理。A/B/C/D等培训分类尚无完整定义，不自行填结论。

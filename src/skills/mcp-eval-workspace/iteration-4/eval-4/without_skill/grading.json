@@ -1,0 +1,47 @@
+{
+  "expectations": [
+    {
+      "text": "在给定前提下判fail",
+      "passed": true,
+      "evidence": "outputs/answer.md: N02 应判为 `fail`"
+    },
+    {
+      "text": "解释负面用例预期错误未出现",
+      "passed": true,
+      "evidence": "outputs/answer.md: 预期错误未出现"
+    },
+    {
+      "text": "保留版本和请求响应证据",
+      "passed": true,
+      "evidence": "outputs/answer.md: 应保留原版本、变更依据及旧结果"
+    },
+    {
+      "text": "建议回读状态区分接受/截断并按现场办法恢复",
+      "passed": false,
+      "evidence": "保留失败和复测建议明确，但没有建议状态回读及现场恢复。"
+    },
+    {
+      "text": "不倒改预期且不把缺少关联的其他错误当作预期错误",
+      "passed": true,
+      "evidence": "outputs/answer.md: 不能将任意错误都当作负面用例通过"
+    }
+  ],
+  "summary": {
+    "passed": 4,
+    "failed": 1,
+    "total": 5,
+    "pass_rate": 0.8
+  },
+  "eval_feedback": {
+    "overall": "各场景各组仅一次；核心判定多数相同，不能据此证明增量。",
+    "suggestions": [
+      {
+        "reason": "负面控制判失败后仍应提醒核对实际状态和现场恢复；两组均漏掉。"
+      }
+    ]
+  },
+  "notes": [
+    "独立上下文，输出目录分开；没有自动导出的完整工具转录，访问边界依据代理日志与Task返回。",
+    "除eval4无Skill组外，代理按项目规则读取了含历史摘要的根索引/记忆；不是完全盲评。"
+  ]
+}

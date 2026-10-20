@@ -1,0 +1,11 @@
+{
+  "repo": "mcp_tooltest",
+  "module": "mcp_eval 当前工作树复审；任务进度见 requirements-review.md",
+  "branch": "main",
+  "commit": "5e10eef421602fc468b616680f2bba7da35f659e + 未提交工作树（实际源码哈希见probe-results.json）",
+  "timestamp": "2026-10-19（UTC+08:00）",
+  "reviewer": "OpenCode AI 审查；非公司正式评审或评分",
+  "scan_mode": "代码及资料核对、123项回归、8项合成回放、7个针对性反例；未执行真实设备/模型请求",
+  "applied_rules": ["AGENTS.md", "code-review Common九维度", "code-review-and-quality"],
+  "na_dimensions": [2, 8]
+}

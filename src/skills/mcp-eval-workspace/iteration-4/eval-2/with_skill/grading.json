@@ -1,0 +1,40 @@
+{
+  "expectations": [
+    {
+      "text": "明确不能证明正确不调用",
+      "passed": true,
+      "evidence": "outputs/answer.md: 不能证明模型正确地没有使用工具"
+    },
+    {
+      "text": "否定该pass结论",
+      "passed": true,
+      "evidence": "outputs/answer.md: 历史 `verdict=pass` 缺乏证据支持"
+    },
+    {
+      "text": "指出provider_error或轨迹不完整的证据边界",
+      "passed": true,
+      "evidence": "outputs/answer.md: 轨迹不完整"
+    },
+    {
+      "text": "应为unassessed而不是业务通过或失败",
+      "passed": true,
+      "evidence": "outputs/answer.md: `unassessed`（无法判断）"
+    },
+    {
+      "text": "保留计划分母且不删除或篡改原始历史证据",
+      "passed": true,
+      "evidence": "outputs/answer.md: 无法判断项不能从计划分母中删除"
+    }
+  ],
+  "summary": {
+    "passed": 5,
+    "failed": 0,
+    "total": 5,
+    "pass_rate": 1.0
+  },
+  "eval_feedback": {},
+  "notes": [
+    "独立上下文，输出目录分开；没有自动导出的完整工具转录，访问边界依据代理日志与Task返回。",
+    "除eval4无Skill组外，代理按项目规则读取了含历史摘要的根索引/记忆；不是完全盲评。"
+  ]
+}

@@ -1,0 +1,119 @@
+{
+  "execution_mode": "main_context_fallback_nonindependent",
+  "grader_mode": "inline_same_context",
+  "answer_sha256": "d77d200f9077d8be494f4bdb5570081819cb3eeeb54fe4ebed71afbfe9e30c89",
+  "expectations": [
+    {
+      "text": "A1：否定直接跑全部用例，8/8合成通过不等于真机就绪或真实5+2通过。",
+      "passed": true,
+      "evidence": "outputs/answer.md：合成8/8只说明既定合成样本下的回放结果，不能证明真机就绪，更不能替代真实5+2用例通过。；内联语义复核。按题设和引用原文核对，不要求真实设备执行。"
+    },
+    {
+      "text": "A2：明确缺device_serial及完整tools_file，并要求二进制契约、冻结预期和状态恢复条件。",
+      "passed": true,
+      "evidence": "outputs/answer.md：还需核实设备二进制版本与单工具入口契约、工具/服务名称、真实参数及返回字段，评测前冻结预期错误判据，并确认初始状态、回读与恢复方法。；内联语义复核。按题设和引用原文核对，不要求真实设备执行。"
+    },
+    {
+      "text": "A3：明确--mcp all可能执行车窗/空调等既有测试，拒绝当只读采集。",
+      "passed": true,
+      "evidence": "outputs/answer.md：`--mcp all` 可能运行已有的车窗、空调等配置测试，会有执行行为；内联语义复核。按题设和引用原文核对，不要求真实设备执行。"
+    },
+    {
+      "text": "A4：未支持/未执行项保留blocked或unassessed及分母；仅配置或离线预检不能证明设备能力。",
+      "passed": true,
+      "evidence": "outputs/answer.md：未支持或未执行项保留 `blocked` 原因及 `unassessed` 判定，继续计入原manifest分母N，不删除以抬高通过率。；内联语义复核。按题设和引用原文核对，不要求真实设备执行。"
+    },
+    {
+      "text": "A5：引用路径编号真实，分析与实际操作分清，不执行设备/API，不声称已采集工具清单。",
+      "passed": true,
+      "evidence": "outputs/answer.md：本场景未执行设备/API、采集或真实批次。；内联语义复核。按题设和引用原文核对，不要求真实设备执行。 引用定义、路径与行范围校验通过。"
+    }
+  ],
+  "summary": {
+    "passed": 5,
+    "failed": 0,
+    "total": 5,
+    "pass_rate": 1.0
+  },
+  "execution_metrics": {
+    "tool_calls": null,
+    "total_tool_calls": null,
+    "total_steps": null,
+    "errors_encountered": null,
+    "output_chars": 1037,
+    "transcript_chars": null
+  },
+  "timing": {
+    "executor_duration_seconds": null,
+    "grader_duration_seconds": null,
+    "total_duration_seconds": null
+  },
+  "claims": [
+    {
+      "claim": "引用编号、路径和行范围真实",
+      "type": "factual",
+      "verified": true,
+      "evidence": "引用编号、路径、行范围和文件SHA-256详见本条citation_checks。",
+      "citation_checks": {
+        "valid": true,
+        "used": [
+          "1",
+          "2",
+          "3",
+          "4"
+        ],
+        "references": [
+          {
+            "number": "1",
+            "path": "docs/device-readiness.md",
+            "valid": true,
+            "sha256": "245226f401ca03532b9cd5ebc89e557e0752298ecd3d3a76874d9fe4c0f8ef03"
+          },
+          {
+            "number": "2",
+            "path": "configs/servers/ark_mcp_service.json",
+            "valid": true,
+            "sha256": "300921c238cad4e965da494a271ab452707afa910535c878f544caf8eb7ebfbc"
+          },
+          {
+            "number": "3",
+            "path": "configs/runs/l2_device.json",
+            "valid": true,
+            "sha256": "4512da5c2d5a6ba3dce7818b46d43b14febb273194fb0ea7d5a243a72d964637"
+          },
+          {
+            "number": "4",
+            "path": "skills/mcp-eval/references/report-guide.md",
+            "valid": true,
+            "sha256": "634d60857e0409e2bcc5d30b3252b1d46aebd41753d15935cf68087b24b052a7"
+          }
+        ]
+      }
+    },
+    {
+      "claim": "本输出是独立with_skill代理运行",
+      "type": "process",
+      "verified": false,
+      "evidence": "答案主动声明非独立主上下文；此处登记未满足的请求条件，不表示答案作出了该宣称。"
+    }
+  ],
+  "user_notes_summary": {
+    "uncertainties": [
+      "没有独立子代理；已知全部场景/expectations；无隔离基线。"
+    ],
+    "needs_review": [
+      "独立行为对照、用户反馈、自动触发与导师验收均未完成。"
+    ],
+    "workarounds": [
+      "仅做当前Skill主上下文检查，禁止冒充without_skill。"
+    ]
+  },
+  "eval_feedback": {
+    "suggestions": [
+      {
+        "reason": "这些场景明确给出错误线索，公共README也覆盖相同规则。必须由真正隔离的无Skill基线判断区分力；单组通过不证明增量。"
+      }
+    ],
+    "overall": "5项内容断言可复核；独立性失败单独记录，不伪造失败基线或比较统计。"
+  }
+}

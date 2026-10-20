@@ -1,0 +1,106 @@
+{
+  "plan": {
+    "run_id": "replay-smoke",
+    "channel": "replay",
+    "l1_cases": 8,
+    "l2_cases": 0,
+    "models": 0,
+    "repeat": 1,
+    "total_planned": 8,
+    "planned_items": [
+      {
+        "item_id": "item-00001",
+        "case_id": "N01",
+        "level": "L1",
+        "category": "negative",
+        "action": "tools_call",
+        "channel": "replay",
+        "model": null,
+        "repeat_index": 0
+      },
+      {
+        "item_id": "item-00002",
+        "case_id": "N02",
+        "level": "L1",
+        "category": "negative",
+        "action": "tools_call",
+        "channel": "replay",
+        "model": null,
+        "repeat_index": 0
+      },
+      {
+        "item_id": "item-00003",
+        "case_id": "P01",
+        "level": "L1",
+        "category": "positive",
+        "action": "tools_list",
+        "channel": "replay",
+        "model": null,
+        "repeat_index": 0
+      },
+      {
+        "item_id": "item-00004",
+        "case_id": "P02",
+        "level": "L1",
+        "category": "positive",
+        "action": "tools_call",
+        "channel": "replay",
+        "model": null,
+        "repeat_index": 0
+      },
+      {
+        "item_id": "item-00005",
+        "case_id": "P03",
+        "level": "L1",
+        "category": "positive",
+        "action": "tools_call",
+        "channel": "replay",
+        "model": null,
+        "repeat_index": 0
+      },
+      {
+        "item_id": "item-00006",
+        "case_id": "P04",
+        "level": "L1",
+        "category": "positive",
+        "action": "tools_call",
+        "channel": "replay",
+        "model": null,
+        "repeat_index": 0
+      },
+      {
+        "item_id": "item-00007",
+        "case_id": "P05",
+        "level": "L1",
+        "category": "positive",
+        "action": "resources_read",
+        "channel": "replay",
+        "model": null,
+        "repeat_index": 0
+      },
+      {
+        "item_id": "item-00008",
+        "case_id": "P06",
+        "level": "L1",
+        "category": "positive",
+        "action": "tools_call",
+        "channel": "replay",
+        "model": null,
+        "repeat_index": 0
+      }
+    ]
+  },
+  "run_id": "replay-smoke-20261019T080140634273Z-d73e0d37",
+  "executed": 8,
+  "interrupted": false,
+  "counts": {
+    "pass": 8,
+    "fail": 0,
+    "unassessed": 0
+  },
+  "results": "/home/tssh/文档/Works/mission/校招生ai演练任务/src/tests/results/replay-smoke-20261019T080140634273Z-d73e0d37/results.jsonl",
+  "summary": "/home/tssh/文档/Works/mission/校招生ai演练任务/src/tests/results/replay-smoke-20261019T080140634273Z-d73e0d37/summary.json",
+  "report": "/home/tssh/文档/Works/mission/校招生ai演练任务/src/tests/results/replay-smoke-20261019T080140634273Z-d73e0d37/report.md",
+  "manifest": "/home/tssh/文档/Works/mission/校招生ai演练任务/src/tests/results/replay-smoke-20261019T080140634273Z-d73e0d37/manifest.json",
+  "warnings": []
+}

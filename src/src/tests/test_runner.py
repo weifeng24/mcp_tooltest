@@ -2,6 +2,8 @@
 from __future__ import annotations
 
 import json
+import shutil
+import sys
 from pathlib import Path
 
 import pytest
@@ -12,6 +14,14 @@ from mcp_eval.runner import run_evaluation
 
 DELIVERY_ROOT = Path(__file__).resolve().parents[2]
 SMOKE_CONFIG = "configs/runs/replay_smoke.json"
+
+
+@pytest.fixture(autouse=True)
+def isolated_delivery(tmp_path, monkeypatch):
+    original = DELIVERY_ROOT
+    for folder in ("configs", "recordings", "tests/cases"):
+        shutil.copytree(original / folder, tmp_path / folder)
+    monkeypatch.setattr(sys.modules[__name__], "DELIVERY_ROOT", tmp_path)
 
 
 def test_replay_requires_recording():
@@ -29,31 +39,31 @@ def test_replay_requires_recording():
 def test_dry_run_only_plans():
     outcome = run_evaluation(SMOKE_CONFIG, DELIVERY_ROOT, dry_run=True)
     assert outcome["executed"] == 0
-    assert outcome["plan"]["l1_cases"] == 7
+    assert outcome["plan"]["l1_cases"] == 8
     assert outcome["plan"]["channel"] == "replay"
 
 
 def test_replay_smoke_end_to_end():
-    """离线冒烟：7 条 L1 用例经回放通道执行、判定并产出报告。"""
+    """隔离副本：8 条 L1 用例及后置回读执行、判定并产出报告。"""
     outcome = run_evaluation(SMOKE_CONFIG, DELIVERY_ROOT)
-    assert outcome["executed"] == 7
+    assert outcome["executed"] == 8
 
     records = read_jsonl(outcome["results"])
-    assert len(records) == 7
+    assert len(records) == 8
     verdicts = {r["case_id"]: r["verdict"] for r in records}
-    assert set(verdicts) == {"P01", "P02", "P03", "P04", "P05", "N01", "N02"}
+    assert set(verdicts) == {"P01", "P02", "P03", "P04", "P05", "P06", "N01", "N02"}
     assert all(v == "pass" for v in verdicts.values())
     # 回放记录必须带 channel=replay 标记，不与真机混淆
     assert all(r["channel"] == "replay" for r in records)
 
     summary = json.loads(Path(outcome["summary"]).read_text(encoding="utf-8"))
     group = summary["groups"]["replay|L1|positive|-"]
-    assert group["planned"] == 5 and group["pass"] == 5
+    assert group["planned"] == 6 and group["pass"] == 6
     negative = summary["groups"]["replay|L1|negative|-"]
     assert negative["planned"] == 2 and negative["pass"] == 2
 
     report_text = Path(outcome["report"]).read_text(encoding="utf-8")
-    assert "replay|L1" in report_text
+    assert "replay\\|L1" in report_text
 
 
 def test_case_glob_no_match_raises():

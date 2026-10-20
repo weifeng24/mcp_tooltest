@@ -1,0 +1,17 @@
+{
+    "case_id": "P01",
+    "level": "L1",
+    "category": "positive",
+    "service": "MCPVehicleService",
+    "action": "tools_list",
+    "timeout_seconds": 30,
+    "assertions": [
+        {"type": "list_non_empty"},
+        {"type": "tools_have_schema"},
+        {"type": "tool_name_prefixed"},
+        {"type": "list_contains_tool", "name": "HvacService.setTemp"},
+        {"type": "list_contains_tool", "name": "HvacService.getTemp"}
+    ],
+    "expected_source": "MCP_Agent.md §9.3（Client 端格式带 serviceId 前缀）",
+    "notes": "开发模板，示例名称须由实际工具目录替换。校验inputSchema及存在时的outputSchema；不将两项关键工具存在等同于完整8服务覆盖。device发现入口待接入，该条不得冒充真机调用。"
+}

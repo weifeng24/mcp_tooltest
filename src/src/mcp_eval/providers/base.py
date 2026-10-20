@@ -17,6 +17,7 @@ class ToolCallDecision:
     name: str
     arguments: dict[str, Any]
     arguments_parse_error: str | None = None
+    arguments_raw: str | None = None
 
 
 @dataclass
@@ -27,3 +28,4 @@ class ProviderResponse:
     tool_calls: list[ToolCallDecision] = field(default_factory=list)
     usage: dict[str, Any] | None = None
     raw: dict[str, Any] | None = None
+    finish_reason: str | None = None

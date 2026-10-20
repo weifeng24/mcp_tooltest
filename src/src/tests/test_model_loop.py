@@ -6,6 +6,7 @@ import pytest
 from mcp_eval.judge import judge_record
 from mcp_eval.model_loop import ModelLoop, ToolNameMapper
 from mcp_eval.providers.base import ProviderError, ProviderResponse, ToolCallDecision
+from mcp_eval.records import EvalRecord
 
 TOOLS = [
     {
@@ -47,7 +48,7 @@ class ScriptedProvider:
         self.script = list(script)
         self.requests: list[list[dict]] = []
 
-    def chat(self, messages, tools):
+    def chat(self, messages, tools, *, timeout=None):
         self.requests.append(list(messages))
         item = self.script.pop(0)
         if isinstance(item, Exception):
@@ -57,14 +58,19 @@ class ScriptedProvider:
 
 class MockExecutor:
     channel = "replay"
+    source_type = "synthetic"
 
     def __init__(self, handler) -> None:
         self.handler = handler
         self.calls: list[tuple[str, dict]] = []
 
-    def __call__(self, name: str, arguments: dict) -> dict:
+    def __call__(self, name: str, arguments: dict, *, timeout: float) -> EvalRecord:
         self.calls.append((name, arguments))
-        return self.handler(name, arguments)
+        result = self.handler(name, arguments)
+        return EvalRecord(run_id="mock", case_id="adhoc", channel="replay", action="tools_call",
+                          service="auto", tool=name, arguments=arguments, trace_complete=True,
+                          execution_status="completed", source_type="synthetic",
+                          response_raw={"jsonrpc": "2.0", "id": 1, "result": result})
 
 
 def decide(name: str, args: dict, call_id: str = "c1") -> ProviderResponse:
@@ -96,7 +102,7 @@ def test_happy_path_complete_and_judge_pass():
 
     assert record.execution_status == "completed"
     assert record.response_raw["stopped_reason"] == "final_answer"
-    assert record.response_raw["rounds"] == 1
+    assert record.response_raw["rounds"] == 2  # 一轮决策、一轮最终回答
     assert record.response_raw["tool_calls"][0]["name"] == "16777217.setTemp"
     assert record.response_raw["tool_calls"][0]["arguments"] == {"temperature": 22}
     assert "22" in record.response_raw["final_answer"]
@@ -123,7 +129,7 @@ def test_timeout_forces_stop():
     clock_time = [0.0]
 
     class SlowProvider:
-        def chat(self, messages, tools):
+        def chat(self, messages, tools, *, timeout=None):
             clock_time[0] += 999.0
             return decide("16777217.getTemp", {})
 
@@ -173,14 +179,15 @@ def test_schema_violation_fed_back_not_executed():
     assert "inputSchema" in record.response_raw["tool_calls"][0]["result"]["content"][0]["text"]
 
 
-def test_executor_exception_becomes_tool_error_not_crash():
+def test_executor_exception_is_unknown_execution_not_business_error():
     def broken(name, arguments):
         raise RuntimeError("dds 通道断开")
 
     provider = ScriptedProvider([decide("16777217.getTemp", {}), answer("工具暂时不可用")])
     loop = ModelLoop(provider, MockExecutor(broken), TOOLS)
     record = loop.run_case(CASE_M01, "run1", "deepseek-chat")
-    assert record.execution_status == "completed"
+    assert record.execution_status == "error"
+    assert record.error_category == "executor_error"
     assert record.response_raw["tool_calls"][0]["result"]["isError"] is True
     assert record.response_raw["validation_errors"] == 0  # 执行异常不算校验错误
 

@@ -1,8 +1,8 @@
 """OpenAI 兼容接口的模型提供方实现。
 
-DeepSeek、Kimi（Moonshot）、OpenRouter 均提供 OpenAI 兼容的
-chat/completions 端点与 tool calling，差异仅在 base_url/模型名/密钥，
-因此共用一个实现，由配置区分。
+只适用于已核实的 chat/completions 协议。不同产品/套餐的端点、
+模型和工具调用行为需独立验证；Kimi Coding Plan 不能仅凭 API key
+形式认定与通用 Moonshot API 等价。
 
 仅依赖标准库 urllib，避免引入额外依赖。密钥只从环境变量读取。
 """
@@ -18,6 +18,7 @@ from .base import ProviderError, ProviderResponse, ToolCallDecision
 
 
 class OpenAICompatProvider:
+    source = "api"
     def __init__(
         self,
         *,
@@ -41,7 +42,7 @@ class OpenAICompatProvider:
         self.timeout = timeout
 
     def chat(
-        self, messages: list[dict[str, Any]], tools: list[dict[str, Any]]
+        self, messages: list[dict[str, Any]], tools: list[dict[str, Any]], *, timeout: float | None = None
     ) -> ProviderResponse:
         payload: dict[str, Any] = {
             "model": self.model,
@@ -62,10 +63,13 @@ class OpenAICompatProvider:
             method="POST",
         )
         try:
-            with urllib.request.urlopen(request, timeout=self.timeout) as resp:
+            budget = min(self.timeout, timeout) if timeout is not None else self.timeout
+            if budget <= 0:
+                raise ProviderError("请求时间预算已耗尽")
+            with urllib.request.urlopen(request, timeout=budget) as resp:
                 data = json.loads(resp.read().decode("utf-8"))
         except urllib.error.HTTPError as exc:
-            body = exc.read().decode("utf-8", errors="replace")[:500]
+            body = exc.read().decode("utf-8", errors="replace").replace(self._key, "[REDACTED]")[:500]
             raise ProviderError(f"HTTP {exc.code}: {body}") from exc
         except (urllib.error.URLError, TimeoutError, json.JSONDecodeError) as exc:
             raise ProviderError(f"请求失败: {exc}") from exc
@@ -77,14 +81,30 @@ class OpenAICompatProvider:
             message = data["choices"][0]["message"]
         except (KeyError, IndexError, TypeError) as exc:
             raise ProviderError(f"响应缺少 choices[0].message: {str(data)[:300]}") from exc
+        if not isinstance(message, dict) or message.get("content") is not None and not isinstance(message["content"], str):
+            raise ProviderError("响应 message/content 格式错误")
+        calls = message.get("tool_calls")
+        if calls is None:
+            calls = []
+        if not isinstance(calls, list):
+            raise ProviderError("响应 tool_calls 必须为数组")
         decisions = []
-        for call in message.get("tool_calls") or []:
+        ids = set()
+        for call in calls:
+            if not isinstance(call, dict) or not isinstance(call.get("function"), dict):
+                raise ProviderError("响应工具决策缺少 function")
             function = call.get("function", {})
+            if (not isinstance(call.get("id"), str) or not call["id"] or call["id"] in ids
+                    or not isinstance(function.get("name"), str) or not function["name"]):
+                raise ProviderError("工具调用 id/name 缺失或 id 重复")
+            ids.add(call["id"])
             raw_args = function.get("arguments", "{}")
             parse_error = None
             try:
-                arguments = json.loads(raw_args) if isinstance(raw_args, str) else dict(raw_args)
-            except (json.JSONDecodeError, TypeError) as exc:
+                arguments = json.loads(raw_args) if isinstance(raw_args, str) else raw_args
+                if not isinstance(arguments, dict):
+                    raise ValueError("arguments 必须为 JSON 对象")
+            except (ValueError, TypeError) as exc:
                 arguments = {}
                 parse_error = f"arguments JSON 解析失败: {exc}"
             decisions.append(
@@ -93,6 +113,7 @@ class OpenAICompatProvider:
                     name=str(function.get("name", "")),
                     arguments=arguments,
                     arguments_parse_error=parse_error,
+                    arguments_raw=raw_args if isinstance(raw_args, str) else json.dumps(raw_args),
                 )
             )
         return ProviderResponse(
@@ -100,6 +121,7 @@ class OpenAICompatProvider:
             tool_calls=decisions,
             usage=data.get("usage"),
             raw=data,
+            finish_reason=data["choices"][0].get("finish_reason"),
         )
 
     @staticmethod

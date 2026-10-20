@@ -7,6 +7,7 @@ run（一次运行的编排）。所有配置为 JSON，加载时按 schema 校�
 from __future__ import annotations
 
 import json
+import re
 from pathlib import Path
 from typing import Any
 
@@ -25,6 +26,8 @@ SERVER_SCHEMA: dict[str, Any] = {
         "baseline_tree": {"type": "string", "minLength": 1},
         "baseline_commit": {"type": "string", "minLength": 7},
         "device_serial": {"type": "string"},
+        "service_bin": {"type": "string", "minLength": 1},
+        "dump_dir": {"type": "string", "minLength": 1},
         "services": {
             "type": "array",
             "items": {"type": "string", "minLength": 1},
@@ -74,6 +77,8 @@ ASSERTION_TYPES = [
     "no_tool_call",
     "max_rounds",
     "manual_review",
+    "tool_call_matches",
+    "final_answer_contains",
 ]
 
 CASE_SCHEMA: dict[str, Any] = {
@@ -86,11 +91,12 @@ CASE_SCHEMA: dict[str, Any] = {
         "service": {
             "type": "string",
             "minLength": 1,
-            "description": "服务名；auto 表示按工具名经 svcmap/tools_list 解析",
+            "description": "服务元数据；auto 表示使用完整 tool 名路由，不作为车端服务名发送",
         },
         "action": {"enum": CASE_ACTIONS},
         "tool": {"type": "string", "minLength": 1},
         "arguments": {"type": "object"},
+        "resource_uri": {"type": "string", "minLength": 1},
         "task": {"type": "string", "minLength": 1},
         "timeout_seconds": {"type": "integer", "minimum": 1},
         "assertions": {
@@ -103,6 +109,11 @@ CASE_SCHEMA: dict[str, Any] = {
             },
         },
         "expected_source": {"type": "string", "minLength": 1},
+        "postconditions": {"type": "array", "items": {
+            "type": "object", "required": ["tool", "arguments", "path", "value"],
+            "properties": {"tool": {"type": "string", "minLength": 1},
+                           "arguments": {"type": "object"}, "path": {"type": "string", "minLength": 1},
+                           "value": {}}, "additionalProperties": False}},
         "notes": {"type": "string"},
     },
     "additionalProperties": False,
@@ -112,7 +123,7 @@ RUN_SCHEMA: dict[str, Any] = {
     "type": "object",
     "required": ["run_id", "channel", "server_ref", "case_glob", "output_dir"],
     "properties": {
-        "run_id": {"type": "string", "minLength": 1},
+        "run_id": {"type": "string", "pattern": "^[A-Za-z0-9][A-Za-z0-9_-]{0,79}$"},
         "channel": {"enum": ["device", "replay"]},
         "server_ref": {"type": "string", "minLength": 1},
         "model_refs": {"type": "array", "items": {"type": "string", "minLength": 1}},
@@ -127,6 +138,8 @@ RUN_SCHEMA: dict[str, Any] = {
         },
         "repeat": {"type": "integer", "minimum": 1},
         "timeout_seconds": {"type": "integer", "minimum": 1},
+        "max_rounds": {"type": "integer", "minimum": 1},
+        "max_tool_calls": {"type": "integer", "minimum": 1},
         "output_dir": {"type": "string", "minLength": 1},
         "notes": {"type": "string"},
     },
@@ -157,6 +170,7 @@ def validate_config(data: Any, kind: str, source: str = "<memory>") -> Any:
         raise ConfigError(f"{source}: 字段 {field} 不满足约束: {exc.message}") from exc
     if kind == "case":
         _validate_case_cross_fields(data, source)
+        validate_assertions(data["assertions"], source)
     if kind == "run":
         _validate_run_cross_fields(data, source)
     return data
@@ -177,6 +191,51 @@ def _validate_case_cross_fields(case: dict[str, Any], source: str) -> None:
         raise ConfigError(f"{source}: L2 用例的 action 必须为 model_task")
     if case["level"] == "L1" and action == "model_task":
         raise ConfigError(f"{source}: L1 用例不能使用 model_task")
+    if action == "resources_read" and not (case.get("resource_uri") or case.get("tool")):
+        raise ConfigError(f"{source}: resources_read 必须提供 resource_uri")
+
+
+def validate_assertions(assertions: list[dict[str, Any]], source: str = "<memory>") -> None:
+    """校验不同断言的必填参数，避免空选择器产生永真匹配。"""
+    selectors = {"field_equals": "path", "list_contains_tool": "name",
+                 "model_selects_tool": "name_contains", "tool_call_matches": "name",
+                 "final_answer_contains": "text"}
+    common = {"type"}
+    extra = {"field_equals": {"path", "value"}, "list_contains_tool": {"name"},
+             "model_selects_tool": {"name_contains"}, "tool_call_matches": {"name", "arguments", "result_path", "result_value"},
+             "final_answer_contains": {"text"}, "max_rounds": {"value"},
+             "error_expected": {"codes", "message_pattern"}}
+    if not isinstance(assertions, list) or not assertions:
+        raise ConfigError(f"{source}: assertions 必须为非空列表")
+    for index, assertion in enumerate(assertions):
+        if not isinstance(assertion, dict) or assertion.get("type") not in ASSERTION_TYPES:
+            raise ConfigError(f"{source}: assertions[{index}] 未知断言类型")
+        kind = assertion["type"]
+        if set(assertion) - common - extra.get(kind, set()):
+            raise ConfigError(f"{source}: assertions[{index}] 存在不适用字段")
+        selector = selectors.get(kind)
+        if selector and (not isinstance(assertion.get(selector), str) or not assertion[selector].strip()):
+            raise ConfigError(f"{source}: assertions[{index}].{selector} 不得为空")
+        if kind == "field_equals" and "value" not in assertion:
+            raise ConfigError(f"{source}: field_equals 缺少 value")
+        if kind == "tool_call_matches" and not isinstance(assertion.get("arguments"), dict):
+            raise ConfigError(f"{source}: tool_call_matches 缺少 arguments 对象")
+        if "result_path" in assertion or "result_value" in assertion:
+            if not isinstance(assertion.get("result_path"), str) or not assertion["result_path"].strip() or "result_value" not in assertion:
+                raise ConfigError(f"{source}: 业务返回断言需要 result_path 与 result_value")
+        if kind == "max_rounds" and (type(assertion.get("value")) is not int or assertion["value"] < 1):
+            raise ConfigError(f"{source}: max_rounds.value 必须为正整数")
+        if "codes" in assertion and (not isinstance(assertion["codes"], list) or not assertion["codes"]
+                                     or any(type(code) is not int for code in assertion["codes"])):
+            raise ConfigError(f"{source}: error_expected.codes 必须为非空整数列表")
+        if "message_pattern" in assertion:
+            pattern = assertion["message_pattern"]
+            if not isinstance(pattern, str) or not pattern:
+                raise ConfigError(f"{source}: message_pattern 不得为空")
+            try:
+                re.compile(pattern)
+            except re.error as exc:
+                raise ConfigError(f"{source}: message_pattern 非法") from exc
 
 
 def load_config(path: str | Path, kind: str) -> Any:
@@ -190,6 +249,41 @@ def load_config(path: str | Path, kind: str) -> Any:
         raise ConfigError(f"配置文件不存在: {p}")
     try:
         data = json.loads(p.read_text(encoding="utf-8"))
-    except json.JSONDecodeError as exc:
+    except (json.JSONDecodeError, UnicodeError, OSError) as exc:
         raise ConfigError(f"{p}: JSON 解析失败: {exc}") from exc
     return validate_config(data, kind, source=str(p))
+
+
+def validate_tools(tools: Any, source: str = "tools") -> list[dict[str, Any]]:
+    """验证完整工具定义；不解析远程 Schema 引用。"""
+    if not isinstance(tools, list) or not tools:
+        raise ConfigError(f"{source}: 工具列表必须为非空数组")
+    names = set()
+
+    def check_refs(value):
+        if isinstance(value, dict):
+            ref = value.get("$ref")
+            if ref is not None and (not isinstance(ref, str) or not ref.startswith("#")):
+                raise ConfigError(f"{source}: 不支持外部 $ref，请先提供自包含 Schema")
+            for item in value.values():
+                check_refs(item)
+        elif isinstance(value, list):
+            for item in value:
+                check_refs(item)
+
+    for tool in tools:
+        if not isinstance(tool, dict) or not isinstance(tool.get("name"), str) or not tool["name"].strip():
+            raise ConfigError(f"{source}: 工具缺少名称")
+        if tool["name"] in names:
+            raise ConfigError(f"{source}: 重复工具名 {tool['name']}")
+        names.add(tool["name"])
+        if not isinstance(tool.get("inputSchema"), dict):
+            raise ConfigError(f"{source}: {tool['name']} 缺少 inputSchema")
+        for key in ("inputSchema", "outputSchema"):
+            if key in tool:
+                try:
+                    jsonschema.validators.validator_for(tool[key]).check_schema(tool[key])
+                except (jsonschema.SchemaError, TypeError, AttributeError) as exc:
+                    raise ConfigError(f"{source}: {tool['name']}.{key} 非法") from exc
+                check_refs(tool[key])
+    return tools

@@ -1,0 +1,35 @@
+{
+  "expectations": [
+    {
+      "text": "在给定前提下判fail",
+      "passed": true,
+      "evidence": "outputs/answer.md: N02 判为 `fail`"
+    },
+    {
+      "text": "解释负面用例预期错误未出现",
+      "passed": true,
+      "evidence": "outputs/answer.md: 越界拒绝行为未满足"
+    },
+    {
+      "text": "保留版本和请求响应证据",
+      "passed": true,
+      "evidence": "outputs/answer.md: 保留规范版本"
+    },
+    {
+      "text": "建议回读状态区分接受/截断并按现场办法恢复",
+      "passed": true,
+      "evidence": "outputs/answer.md: 区分接受、截断或未生效，再按现场已确认的方法恢复"
+    },
+    {
+      "text": "不倒改预期且不把缺少关联的其他错误当作预期错误",
+      "passed": true,
+      "evidence": "outputs/answer.md: 不能据此次响应将预期改为成功"
+    }
+  ],
+  "summary": {
+    "passed": 5,
+    "failed": 0,
+    "total": 5,
+    "pass_rate": 1.0
+  }
+}

@@ -8,8 +8,9 @@
     "arguments": {"temperature": 16},
     "timeout_seconds": 30,
     "assertions": [
-        {"type": "field_equals", "path": "success", "value": true}
+        {"type": "field_equals", "path": "result.structuredContent.success", "value": true}
     ],
+    "postconditions": [{"tool": "HvacService.getTemp", "arguments": {}, "path": "result.structuredContent.temperature", "value": 16}],
     "expected_source": "MCP_Agent.md §9.3 inputSchema（minimum=16, maximum=30）；下边界值应被接受，待真机校准",
-    "notes": "边界值下界；上界 30 由同工具另一重复执行覆盖（repeat 或后续用例扩展）。"
+    "notes": "开发模板：下边界16；上边界30由独立P06覆盖，repeat不会改变参数。"
 }
