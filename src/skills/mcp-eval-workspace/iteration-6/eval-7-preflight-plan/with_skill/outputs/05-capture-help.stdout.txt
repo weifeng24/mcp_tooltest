@@ -1,0 +1,12 @@
+usage: mcp_eval capture-catalog [-h] [--service SERVICE] [--timeout TIMEOUT]
+                                [--dry-run]
+                                server_config
+
+positional arguments:
+  server_config
+
+options:
+  -h, --help         show this help message and exit
+  --service SERVICE  只采集明确选择的服务，可重复；默认server中的服务清单
+  --timeout TIMEOUT  整次文件采集的总等待预算（秒）
+  --dry-run          仅显示文件读取计划，不运行adb

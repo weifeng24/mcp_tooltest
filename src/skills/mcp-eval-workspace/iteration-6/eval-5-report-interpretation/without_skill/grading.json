@@ -1,0 +1,13 @@
+{
+  "expectations": [
+    {"text": "读取并引用指定批次的manifest与实际结果", "passed": true, "evidence": "outputs/access-log.md:43-51 记录读取指定 fixtures/report-batch 的 manifest/results/summary/report 和 artifact；outputs/answer.md:5,15-22,41 引用该批次。outputs/check-report.stdout.json:459-472 保存计划/结果身份及报告一致性核对，评分时亦直接解析原批次确认一致。"},
+    {"text": "准确报告计划8、通过6、失败1、无法判断1", "passed": true, "evidence": "outputs/answer.md:3,9-19 为 8/6/1/1；outputs/check-report.stdout.json:7-19 与 sandbox/fixtures/report-batch/summary.json 的 total/groups 及 results.jsonl:1-8 相符，逐项 artifact 与记录相等。"},
+    {"text": "计划内通过率为75%，未因无法判断项缩小分母", "passed": true, "evidence": "outputs/answer.md:11,15-18 明确 6/8=75%，保留 P05 分母，并区分 6/7 的已判定通过率；outputs/check-report.stdout.json:13-15 保存三种不同指标，未混用分母。"},
+    {"text": "指出N02预期错误未出现、P05未完成且保留在计划中", "passed": true, "evidence": "outputs/answer.md:29,34,37-41 明确 N02 fail/预期错误未出现，P05 not_run/unassessed 留在计划中。sandbox/fixtures/report-batch/results.jsonl:2,7 及 artifacts/item-00002.json、item-00007.json 的 response_raw/execution_status/verdict 与之相符。"},
+    {"text": "识别synthetic来源；只解读记录，未重跑工具或模型", "passed": true, "evidence": "outputs/answer.md:45-48,66-68 明确人工构造 synthetic、只读核算，无产品重放或模型调用；outputs/access-log.md:63-81 及 outputs/check-report.stdout.json:2,20-27 记录静态核对范围。来源字段与实际 results 一致。"}
+  ],
+  "summary": {"passed": 5, "failed": 0, "total": 5, "pass_rate": 1.0},
+  "timing": {"total_tokens": null, "duration_ms": null, "total_duration_seconds": null, "reason": "等待工具实际返回，缺字段不估算"},
+  "claims": [{"claim": "原 recording-input 的 N02/P05 与人工构造的当前结果存在差异，不能用前者覆盖结果", "type": "factual", "verified": true, "evidence": "outputs/answer.md:47、outputs/check-report.stdout.json:388-442 具体列出差异；../../../prepare_iteration6.py:43-60 显示复制录制后只修改 N02 响应和 P05 执行证据并重写结果，未改录制。"}],
+  "eval_feedback": {"suggestions": [{"reason": "本组发现的 recording-input 与 results 来源差异未被冻结断言单独覆盖；正确揭示它不额外加分。未来应纳入来源链校验，并增加缺整条结果/重复身份/多模型计划变体。"}], "overall": "五项全部满足；与 with_skill 相同，额外来源核查仅记为质性观察。"}
+}

@@ -1,0 +1,13 @@
+0 ../outputs/00-file-scope.stderr.txt
+0 ../outputs/00-path-check.stderr.txt
+0 ../outputs/01-check-env-help.stderr.txt
+0 ../outputs/02-cli-help.stderr.txt
+0 ../outputs/03-check-env.stderr.txt
+0 ../outputs/04-checklist-help.stderr.txt
+0 ../outputs/05-capture-help.stderr.txt
+0 ../outputs/06-input-hashes-before.stderr.txt
+0 ../outputs/07-checklist.stderr.txt
+0 ../outputs/08-capture-catalog-dry-run.stderr.txt
+0 ../outputs/09-input-hashes-after.stderr.txt
+0 ../outputs/10-server-diff.stderr.txt
+0 总计

@@ -1,0 +1,24 @@
+{
+  "status": "template_not_executed",
+  "experiment_id": null,
+  "purpose": null,
+  "source_type": null,
+  "frozen_at": null,
+  "expected_result_confirmed_by": null,
+  "input_sha256": null,
+  "tool_and_device_version": null,
+  "skill_sha256": null,
+  "model_and_generation_config": null,
+  "monthly_frequency_confirmed_by_user": null,
+  "tasks": [
+    {
+      "task_id": null,
+      "task_description": null,
+      "order": null,
+      "manual": {"operator": null, "allowed_tools": null, "active_seconds": null, "waiting_seconds": null, "rework_seconds": null, "wall_seconds": null, "quality_passed": null, "quality_total": null, "evidence_paths": []},
+      "skill_assisted": {"operator": null, "active_seconds": null, "waiting_seconds": null, "rework_seconds": null, "wall_seconds": null, "quality_passed": null, "quality_total": null, "evidence_paths": []},
+      "missing_reason": null,
+      "reviewer_notes": null
+    }
+  ]
+}

@@ -1,0 +1,22 @@
+{
+  "recorded": true,
+  "browser": "/home/tssh/.cache/ms-playwright/chromium_headless_shell-1194/chrome-linux/headless_shell",
+  "screenshots": [
+    "defense-desktop.png",
+    "defense-skill.png",
+    "defense-mobile.png",
+    "demo-mobile.png",
+    "skill-benchmark.png",
+    "demo-desktop.png"
+  ],
+  "status": "passed",
+  "video_seconds": 33.2,
+  "page_errors": [],
+  "console_errors": [
+    "Fetch API cannot load file:///api/feedback. URL scheme \"file\" is not supported."
+  ],
+  "blocked_external_requests": [],
+  "six_sections": true,
+  "mobile_horizontal_overflow": false,
+  "official_benchmark_visible": true
+}

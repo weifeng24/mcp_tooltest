@@ -1,0 +1,18 @@
+{
+  "argv": [
+    "/home/tssh/文档/Works/mission/校招生ai演练任务/src/tests/results/remediation-2026-10-16/.venv/bin/python",
+    "-B",
+    "-m",
+    "mcp_eval",
+    "rebuild",
+    "fixtures/rebuild-batch"
+  ],
+  "cwd": "/home/tssh/文档/Works/mission/校招生ai演练任务/src/skills/mcp-eval-workspace/iteration-6/eval-6-frozen-report-rebuild/without_skill/sandbox",
+  "environment_overrides": {
+    "PYTHONPATH": "src",
+    "PYTHONDONTWRITEBYTECODE": "1"
+  },
+  "returncode": 0,
+  "stdout": "rebuild.stdout.txt",
+  "stderr": "rebuild.stderr.txt"
+}

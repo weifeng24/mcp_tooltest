@@ -1,0 +1,64 @@
+{
+  "verification": "passed",
+  "run_id": "replay-smoke-20261023T071912756704Z-a8c6923f",
+  "immutable_files_unchanged": 29,
+  "batch_input_files_unchanged": 11,
+  "provided_batch_before_hashes_match": true,
+  "recording_matches_manifest_hash": true,
+  "engine_sources_matching_manifest": 14,
+  "artifacts_equal_results": 8,
+  "summary_matches_frozen_plan_and_results": true,
+  "planned": 8,
+  "observed": 8,
+  "counts": {
+    "pass": 6,
+    "fail": 1,
+    "unassessed": 1
+  },
+  "pass_rate_planned": 0.75,
+  "judge_coverage": 0.875,
+  "pass_rate_judged": 0.8571428571428571,
+  "execution_status_counts": {
+    "completed": 7,
+    "not_run": 1
+  },
+  "not_run_cases": [
+    "P05"
+  ],
+  "result_attempted_items": 7,
+  "manifest_attempted_items": 8,
+  "attempted_metadata_consistent": false,
+  "source_types": [
+    "synthetic"
+  ],
+  "fixture_provenance": [
+    "manually_constructed_mixed_outcomes_not_device_evidence"
+  ],
+  "known_latency_samples": 0,
+  "report_hash_changes": {
+    "fixtures/rebuild-batch/summary.json": {
+      "before": "8d2e984bb434331a3e9f7ad30eb47f68c1c9f8a329d7c70b9c82070d6489d66a",
+      "after": "9a22ceefb2eec421b0eda479e857617b9a93c794953c6dcce486b8ea509d66d1"
+    },
+    "fixtures/rebuild-batch/report.md": {
+      "before": "9433d926cb9adf66d24a40f10df130e68325656e8b5a675782817aaa53dcad6e",
+      "after": "3a4472d5525e1868cff5beeeed0249684b7af88183087fd55dbd5f3352223b39"
+    }
+  },
+  "completed_command_stderr_bytes": {
+    "07-rebuild.stderr.txt": 0,
+    "09-reports-after.stderr.txt": 0,
+    "03-env-help.stderr.txt": 0,
+    "05-env-check.stderr.txt": 0,
+    "04-cli-help.stderr.txt": 0,
+    "10-immutable-check.stderr.txt": 0,
+    "01-immutable-before.stderr.txt": 0,
+    "02-reports-before.stderr.txt": 0,
+    "00a-directory.stderr.txt": 0,
+    "00b-directory.stderr.txt": 0,
+    "08-immutable-after.stderr.txt": 0,
+    "06-rebuild-help.stderr.txt": 0
+  },
+  "total_tokens": null,
+  "total_duration_seconds": null
+}

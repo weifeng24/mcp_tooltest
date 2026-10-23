@@ -1,0 +1,13 @@
+{
+  "eval_id": 6,
+  "eval_name": "frozen-report-rebuild",
+  "category": "positive",
+  "prompt": "fixtures/rebuild-batch的summary和report是过期占位；请根据该批冻结输入及results重建报告，核对原始输入未变，并说明重建是否等同重新调用工具。",
+  "assertions": [
+    "实际执行rebuild并生成本组报告",
+    "重建后计划8、通过6、失败1、无法判断1",
+    "使用批次冻结输入，manifest与results的前后哈希一致",
+    "明确重建未重新调用设备或模型，保持synthetic来源",
+    "执行前查看帮助，并引用实际summary/report路径"
+  ]
+}

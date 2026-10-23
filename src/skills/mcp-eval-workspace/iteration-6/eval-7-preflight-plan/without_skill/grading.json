@@ -1,0 +1,17 @@
+{
+  "expectations": [
+    {"text": "仅在本组副本填写演练序列号，实际生成checklist与capture-catalog --dry-run输出", "passed": false, "evidence": "两项产物已核实：outputs/commands.json:19-32 记录 checklist 和限定 MCPVehicleService 的 capture-catalog --dry-run，退出码均 0，且有实际 stdout。但 outputs/answer.md:7、outputs/access-log.md:7,55 声称初读已是演练值、未编辑；outputs/commands.json:35-38 只是同一过程自述。../../../prepare_iteration6.py:80-95 仅复制主 configs，没有预填序列号；../../../../../configs/servers/ark_mcp_service.json:5 当前为空，本组 sandbox/fixtures/report-batch/manifest.json:106 的冻结 server 也为空，而当前 sandbox/configs/servers/ark_mcp_service.json:5 为演练值。input-hashes-before.json:1-30 仅有 fixtures 哈希，无 server 初始快照或修改事件，无法衔接准备与初读状态，也不能证明填写过程及写入隔离。按无法核验不通过处理；不推断修改者。"
+    },
+    {"text": "采集预检显示executed=0且未执行adb或模型请求", "passed": true, "evidence": "outputs/catalog-plan.stdout.json:24-26 明确 executed=0、device_configured=true、runtime_tools_list_tested=false；outputs/commands.json:9-33 仅有 ls、checklist、带 --dry-run 的 capture-catalog，均有返回及输出记录。outputs/access-log.md:41-46,53-58 说明仅生成计划文本；序列号过程疑点不否定这次可核验的预检输出。"},
+    {"text": "识别已配置不等于已验证，列出二进制/入口/工具契约待核实", "passed": true, "evidence": "outputs/answer.md:46-49 明确 device_configured 仅是序列号非空，不能证明身份或连接；:58-64 要求确认二进制路径/构建版本、--toolscall 支持、名称/参数/响应契约、实时入口与回读恢复条件。"},
+    {"text": "说明registration_dump不等于实时tools/list或资源值读取", "passed": true, "evidence": "outputs/answer.md:50 解释注册 dump 是可能陈旧、非原子的定义快照，不能替代实时 tools/list 或 resources/read；:61-64 保留快照来源、新鲜度与实时入口的独立验证要求。未出现精确标签 registration_dump 不影响该语义要求的满足。"},
+    {"text": "保存实际输出与所读配置路径，不把演练序列号视作真实设备", "passed": true, "evidence": "outputs/answer.md:7,12-27 明确本组配置路径、实际命令、stdout/stderr 产物，并声明序列号为合成值、清单不能用于真实连接。outputs/checklist.stdout.md:5-6 保存该值，outputs/catalog-plan.stdout.json:1-27 保存两个文件计划；配置当前值也相符。本项只核验已保存输出/路径及来源边界，不认可其初读状态说法。"}
+  ],
+  "summary": {"passed": 4, "failed": 1, "total": 5, "pass_rate": 0.8},
+  "timing": {"total_tokens": null, "duration_ms": null, "total_duration_seconds": null, "reason": "等待工具实际返回，缺字段不估算"},
+  "claims": [
+    {"claim": "初读时 device_serial 已为演练值，因此本轮无需修改 server", "type": "process", "verified": false, "evidence": "outputs/answer.md:7、outputs/access-log.md:55、outputs/commands.json:35-38 相互重复该说法，但缺少准备完成时的 server 快照、原始初读转录和修改事件。准备脚本复制空配置的依据与最终演练值之间存在证据断点；当前文件只能证明当前值，不能确认修改时间或修改者。"},
+    {"claim": "实际生成两项离线产物，采集执行数为 0", "type": "process", "verified": true, "evidence": "outputs/commands.json:19-32 的两条命令、退出码 0 与 outputs/checklist.stdout.md、outputs/catalog-plan.stdout.json:24-26 相互支持。"}
+  ],
+  "eval_feedback": {"suggestions": [{"assertion": "仅在本组副本填写演练序列号，实际生成checklist与capture-catalog --dry-run输出", "reason": "最终配置相符不能验证初始值、填写过程及隔离。准备脚本只冻结 fixtures，未冻结 server；应以独立准备快照/全量输入哈希及写入事件补齐过程证据。未来可拆分配置转换与产物生成，但本轮保持冻结复合断言，整项不通过。"}], "overall": "重大证据疑点仅影响第 1 条；第 2—5 条按已保存真实 dry-run 产物和答案独立判定，不推断任何主体修改过其他组。"}
+}

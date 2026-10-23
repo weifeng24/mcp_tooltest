@@ -85,7 +85,11 @@ def command_for_case(case: dict[str, Any], service_bin: str = "mcp_service") -> 
     command = [service_bin, "-c", "-t", "--toolscall", tool]
     # 车端 TestToolsCall 的空 JSON 参数会触发 arg0 回退；无参工具不传 ARGS。
     if arguments:
-        command.append(json.dumps(arguments, ensure_ascii=False, separators=(",", ":")))
+        try:
+            payload = json.dumps(arguments, ensure_ascii=False, separators=(",", ":"), allow_nan=False)
+        except ValueError as exc:
+            raise ValueError(f"工具参数包含非有限数值，不是合法JSON，不能下发: {exc}") from exc
+        command.append(payload)
     return command
 
 

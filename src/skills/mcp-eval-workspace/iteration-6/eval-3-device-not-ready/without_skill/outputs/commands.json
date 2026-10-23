@@ -1,0 +1,193 @@
+[
+  {
+    "name": "01-help",
+    "argv": [
+      "/home/tssh/文档/Works/mission/校招生ai演练任务/src/tests/results/remediation-2026-10-16/.venv/bin/python",
+      "-B",
+      "-m",
+      "mcp_eval",
+      "--help"
+    ],
+    "command": "'/home/tssh/文档/Works/mission/校招生ai演练任务/src/tests/results/remediation-2026-10-16/.venv/bin/python' -B -m mcp_eval --help",
+    "cwd": "/home/tssh/文档/Works/mission/校招生ai演练任务/src/skills/mcp-eval-workspace/iteration-6/eval-3-device-not-ready/without_skill/sandbox",
+    "environment_overrides": {
+      "PYTHONDONTWRITEBYTECODE": "1",
+      "PYTHONPATH": "src"
+    },
+    "returncode": 0,
+    "expected_returncode": 0,
+    "stdout": "01-help.stdout.txt",
+    "stderr": "01-help.stderr.txt"
+  },
+  {
+    "name": "02-checklist",
+    "argv": [
+      "/home/tssh/文档/Works/mission/校招生ai演练任务/src/tests/results/remediation-2026-10-16/.venv/bin/python",
+      "-B",
+      "-m",
+      "mcp_eval",
+      "checklist"
+    ],
+    "command": "'/home/tssh/文档/Works/mission/校招生ai演练任务/src/tests/results/remediation-2026-10-16/.venv/bin/python' -B -m mcp_eval checklist",
+    "cwd": "/home/tssh/文档/Works/mission/校招生ai演练任务/src/skills/mcp-eval-workspace/iteration-6/eval-3-device-not-ready/without_skill/sandbox",
+    "environment_overrides": {
+      "PYTHONDONTWRITEBYTECODE": "1",
+      "PYTHONPATH": "src"
+    },
+    "returncode": 0,
+    "expected_returncode": 0,
+    "stdout": "02-checklist.stdout.txt",
+    "stderr": "02-checklist.stderr.txt"
+  },
+  {
+    "name": "03-l1-device-dry-run",
+    "argv": [
+      "/home/tssh/文档/Works/mission/校招生ai演练任务/src/tests/results/remediation-2026-10-16/.venv/bin/python",
+      "-B",
+      "-m",
+      "mcp_eval",
+      "run",
+      "configs/runs/l1_device.json",
+      "--dry-run"
+    ],
+    "command": "'/home/tssh/文档/Works/mission/校招生ai演练任务/src/tests/results/remediation-2026-10-16/.venv/bin/python' -B -m mcp_eval run configs/runs/l1_device.json --dry-run",
+    "cwd": "/home/tssh/文档/Works/mission/校招生ai演练任务/src/skills/mcp-eval-workspace/iteration-6/eval-3-device-not-ready/without_skill/sandbox",
+    "environment_overrides": {
+      "PYTHONDONTWRITEBYTECODE": "1",
+      "PYTHONPATH": "src"
+    },
+    "returncode": 2,
+    "expected_returncode": 2,
+    "stdout": "03-l1-device-dry-run.stdout.txt",
+    "stderr": "03-l1-device-dry-run.stderr.txt"
+  },
+  {
+    "name": "04-l2-device-dry-run",
+    "argv": [
+      "/home/tssh/文档/Works/mission/校招生ai演练任务/src/tests/results/remediation-2026-10-16/.venv/bin/python",
+      "-B",
+      "-m",
+      "mcp_eval",
+      "run",
+      "configs/runs/l2_device.json",
+      "--dry-run"
+    ],
+    "command": "'/home/tssh/文档/Works/mission/校招生ai演练任务/src/tests/results/remediation-2026-10-16/.venv/bin/python' -B -m mcp_eval run configs/runs/l2_device.json --dry-run",
+    "cwd": "/home/tssh/文档/Works/mission/校招生ai演练任务/src/skills/mcp-eval-workspace/iteration-6/eval-3-device-not-ready/without_skill/sandbox",
+    "environment_overrides": {
+      "PYTHONDONTWRITEBYTECODE": "1",
+      "PYTHONPATH": "src"
+    },
+    "returncode": 2,
+    "expected_returncode": 2,
+    "stdout": "04-l2-device-dry-run.stdout.txt",
+    "stderr": "04-l2-device-dry-run.stderr.txt"
+  },
+  {
+    "name": "05-replay-dry-run",
+    "argv": [
+      "/home/tssh/文档/Works/mission/校招生ai演练任务/src/tests/results/remediation-2026-10-16/.venv/bin/python",
+      "-B",
+      "-m",
+      "mcp_eval",
+      "run",
+      "configs/runs/replay_smoke.json",
+      "--dry-run"
+    ],
+    "command": "'/home/tssh/文档/Works/mission/校招生ai演练任务/src/tests/results/remediation-2026-10-16/.venv/bin/python' -B -m mcp_eval run configs/runs/replay_smoke.json --dry-run",
+    "cwd": "/home/tssh/文档/Works/mission/校招生ai演练任务/src/skills/mcp-eval-workspace/iteration-6/eval-3-device-not-ready/without_skill/sandbox",
+    "environment_overrides": {
+      "PYTHONDONTWRITEBYTECODE": "1",
+      "PYTHONPATH": "src"
+    },
+    "returncode": 0,
+    "expected_returncode": 0,
+    "stdout": "05-replay-dry-run.stdout.txt",
+    "stderr": "05-replay-dry-run.stderr.txt"
+  },
+  {
+    "name": "06-show-call-p02",
+    "argv": [
+      "/home/tssh/文档/Works/mission/校招生ai演练任务/src/tests/results/remediation-2026-10-16/.venv/bin/python",
+      "-B",
+      "-m",
+      "mcp_eval",
+      "show-call",
+      "tests/cases/l1/P02_set_temp_valid.json"
+    ],
+    "command": "'/home/tssh/文档/Works/mission/校招生ai演练任务/src/tests/results/remediation-2026-10-16/.venv/bin/python' -B -m mcp_eval show-call tests/cases/l1/P02_set_temp_valid.json",
+    "cwd": "/home/tssh/文档/Works/mission/校招生ai演练任务/src/skills/mcp-eval-workspace/iteration-6/eval-3-device-not-ready/without_skill/sandbox",
+    "environment_overrides": {
+      "PYTHONDONTWRITEBYTECODE": "1",
+      "PYTHONPATH": "src"
+    },
+    "returncode": 0,
+    "expected_returncode": 0,
+    "stdout": "06-show-call-p02.stdout.txt",
+    "stderr": "06-show-call-p02.stderr.txt"
+  },
+  {
+    "name": "07-catalog-dry-run",
+    "argv": [
+      "/home/tssh/文档/Works/mission/校招生ai演练任务/src/tests/results/remediation-2026-10-16/.venv/bin/python",
+      "-B",
+      "-m",
+      "mcp_eval",
+      "capture-catalog",
+      "configs/servers/ark_mcp_service.json",
+      "--dry-run"
+    ],
+    "command": "'/home/tssh/文档/Works/mission/校招生ai演练任务/src/tests/results/remediation-2026-10-16/.venv/bin/python' -B -m mcp_eval capture-catalog configs/servers/ark_mcp_service.json --dry-run",
+    "cwd": "/home/tssh/文档/Works/mission/校招生ai演练任务/src/skills/mcp-eval-workspace/iteration-6/eval-3-device-not-ready/without_skill/sandbox",
+    "environment_overrides": {
+      "PYTHONDONTWRITEBYTECODE": "1",
+      "PYTHONPATH": "src"
+    },
+    "returncode": 0,
+    "expected_returncode": 0,
+    "stdout": "07-catalog-dry-run.stdout.txt",
+    "stderr": "07-catalog-dry-run.stderr.txt"
+  },
+  {
+    "name": "08-show-call-p01",
+    "argv": [
+      "/home/tssh/文档/Works/mission/校招生ai演练任务/src/tests/results/remediation-2026-10-16/.venv/bin/python",
+      "-B",
+      "-m",
+      "mcp_eval",
+      "show-call",
+      "tests/cases/l1/P01_tools_list.json"
+    ],
+    "command": "'/home/tssh/文档/Works/mission/校招生ai演练任务/src/tests/results/remediation-2026-10-16/.venv/bin/python' -B -m mcp_eval show-call tests/cases/l1/P01_tools_list.json",
+    "cwd": "/home/tssh/文档/Works/mission/校招生ai演练任务/src/skills/mcp-eval-workspace/iteration-6/eval-3-device-not-ready/without_skill/sandbox",
+    "environment_overrides": {
+      "PYTHONDONTWRITEBYTECODE": "1",
+      "PYTHONPATH": "src"
+    },
+    "returncode": 2,
+    "expected_returncode": 2,
+    "stdout": "08-show-call-p01.stdout.txt",
+    "stderr": "08-show-call-p01.stderr.txt"
+  },
+  {
+    "name": "09-show-call-p05",
+    "argv": [
+      "/home/tssh/文档/Works/mission/校招生ai演练任务/src/tests/results/remediation-2026-10-16/.venv/bin/python",
+      "-B",
+      "-m",
+      "mcp_eval",
+      "show-call",
+      "tests/cases/l1/P05_resources_read.json"
+    ],
+    "command": "'/home/tssh/文档/Works/mission/校招生ai演练任务/src/tests/results/remediation-2026-10-16/.venv/bin/python' -B -m mcp_eval show-call tests/cases/l1/P05_resources_read.json",
+    "cwd": "/home/tssh/文档/Works/mission/校招生ai演练任务/src/skills/mcp-eval-workspace/iteration-6/eval-3-device-not-ready/without_skill/sandbox",
+    "environment_overrides": {
+      "PYTHONDONTWRITEBYTECODE": "1",
+      "PYTHONPATH": "src"
+    },
+    "returncode": 2,
+    "expected_returncode": 2,
+    "stdout": "09-show-call-p05.stdout.txt",
+    "stderr": "09-show-call-p05.stderr.txt"
+  }
+]

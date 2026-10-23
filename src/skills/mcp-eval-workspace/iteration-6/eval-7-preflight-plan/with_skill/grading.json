@@ -1,0 +1,14 @@
+{
+  "expectations": [
+    {"text": "仅在本组副本填写演练序列号，实际生成checklist与capture-catalog --dry-run输出", "passed": true, "evidence": "outputs/access-log.md:38-48 记录对本组 server 的修改；outputs/server-before.json:5 为空，outputs/06-input-hashes-before.stdout.txt:1 与修改前副本哈希一致，outputs/09-input-hashes-after.stdout.txt:1-2 及 10-server-diff.stdout.txt:7-8 记录唯一序列号变化。outputs/commands.md:45-63 保存修改及生成两项输出的顺序；outputs/07-checklist.stdout.txt:5-6 和 08-capture-catalog-dry-run.stdout.json:1-27 为实际产物。"
+    },
+    {"text": "采集预检显示executed=0且未执行adb或模型请求", "passed": true, "evidence": "outputs/08-capture-catalog-dry-run.stdout.json:24-26 为 executed=0、device_configured=true、runtime_tools_list_tested=false；outputs/commands.md:23-79 只记录本机帮助、自检、清单、带 --dry-run 的采集和文件检查。outputs/access-log.md:45-47 明确清单和 JSON 中的 adb/远端 argv 只是文本。"},
+    {"text": "识别已配置不等于已验证，列出二进制/入口/工具契约待核实", "passed": true, "evidence": "outputs/answer.md:55,72-81 明确非空合成序列号仅使 device_configured=true；列出实际二进制版本、--toolscall 入口、注册目录、真实完整工具名/schema/响应及恢复契约待现场核实。"},
+    {"text": "说明registration_dump不等于实时tools/list或资源值读取", "passed": true, "evidence": "outputs/answer.md:61-65 明确 registration_dump 只是既有定义快照，不能替代实时 tools/list 或 resources/read，且新鲜度/原子性/别名未验证；并明确这些是未来真实采集的边界，不冒充本次 dry-run 输出字段。"},
+    {"text": "保存实际输出与所读配置路径，不把演练序列号视作真实设备", "passed": true, "evidence": "outputs/answer.md:17-21,26-28,35-55,85 引用本组配置、前后记录、checklist 和采集 JSON，并称序列号为虚构值。outputs/commands.md:56-60 指向同一本组 server 和输出；两份实际 stdout 内容与报告相符。"}
+  ],
+  "summary": {"passed": 5, "failed": 0, "total": 5, "pass_rate": 1.0},
+  "timing": {"total_tokens": null, "duration_ms": null, "total_duration_seconds": null, "reason": "等待工具实际返回，缺字段不估算"},
+  "claims": [{"claim": "本组保存的修改前后配置仅 device_serial 不同", "type": "process", "verified": true, "evidence": "outputs/server-before.json、sandbox/configs/servers/ark_mcp_service.json 的字段比较及 SHA-256 复算与 outputs/06-input-hashes-before.stdout.txt、09-input-hashes-after.stdout.txt、10-server-diff.stdout.txt 一致。该证据不用于推断其他组配置由谁修改。"}],
+  "eval_feedback": {"suggestions": [{"assertion": "仅在本组副本填写演练序列号，实际生成checklist与capture-catalog --dry-run输出", "reason": "复合断言混合配置转换、写入隔离和两项产物。准备阶段 input-hashes-before.json 只覆盖 fixtures，未冻结 server 初始字节；应独立保留配置前快照、写入事件及组边界审计，避免以最终状态代替过程证明。"}], "overall": "本组有前快照、哈希、差异及产物相互支持；未单独保存数值退出码，不补造该数据，冻结断言也未要求它。"}
+}

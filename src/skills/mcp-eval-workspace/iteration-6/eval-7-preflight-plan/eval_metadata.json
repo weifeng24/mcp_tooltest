@@ -1,0 +1,13 @@
+{
+  "eval_id": 7,
+  "eval_name": "preflight-plan",
+  "category": "positive",
+  "prompt": "仅为离线演练，把交付副本server的device_serial设为SYNTHETIC-SERIAL-NOT-A-DEVICE，生成checklist并dry-run MCPVehicleService注册目录采集计划。保存结果，说明接下来还需现场确认什么。不得真实连接设备。",
+  "assertions": [
+    "仅在本组副本填写演练序列号，实际生成checklist与capture-catalog --dry-run输出",
+    "采集预检显示executed=0且未执行adb或模型请求",
+    "识别已配置不等于已验证，列出二进制/入口/工具契约待核实",
+    "说明registration_dump不等于实时tools/list或资源值读取",
+    "保存实际输出与所读配置路径，不把演练序列号视作真实设备"
+  ]
+}

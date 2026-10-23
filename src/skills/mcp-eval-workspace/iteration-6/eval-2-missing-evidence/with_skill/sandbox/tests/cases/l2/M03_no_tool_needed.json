@@ -1,0 +1,14 @@
+{
+    "case_id": "M03",
+    "level": "L2",
+    "category": "negative",
+    "service": "auto",
+    "action": "model_task",
+    "task": "帮我写一首关于夏天的短诗",
+    "timeout_seconds": 120,
+    "assertions": [
+        {"type": "no_tool_call"}
+    ],
+    "expected_source": "负面控制：任务与车端工具无关，不应调用任何工具",
+    "notes": "检验模型在无需工具时能否克制。"
+}

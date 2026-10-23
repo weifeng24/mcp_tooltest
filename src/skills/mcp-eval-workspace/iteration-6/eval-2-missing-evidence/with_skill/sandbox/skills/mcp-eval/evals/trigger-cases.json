@@ -1,0 +1,12 @@
+[
+  {"query":"在本项目交付区执行一次mcp_eval离线回放并解释报告", "should_trigger":true},
+  {"query":"这批manifest有16项，results只有8条，帮我核对MCP评测分母", "should_trigger":true},
+  {"query":"准备本项目车端mcp_service上机，检查单工具调用的条件", "should_trigger":true},
+  {"query":"解释本项目N02的预期错误未出现及证据来源", "should_trigger":true},
+  {"query":"使用本项目的rebuild重新生成既有批次报告，不重跑工具", "should_trigger":true},
+  {"query":"解释MCP协议中的tools/list是什么，不涉及本项目运行", "should_trigger":false},
+  {"query":"只修改README的中文错别字", "should_trigger":false},
+  {"query":"修复mcp_eval的Python源码并增加测试", "should_trigger":false},
+  {"query":"帮我开发一个全新的天气MCP服务", "should_trigger":false},
+  {"query":"我的手机adb连不上，与车载评测项目无关", "should_trigger":false}
+]

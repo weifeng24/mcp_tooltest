@@ -1,0 +1,60 @@
+{
+  "checks": {
+    "audit_exit_status_zero": true,
+    "audit_checks_true": true,
+    "all_18_inputs_unchanged": true,
+    "required_outputs_nonempty": true,
+    "audit_stderr_empty": true
+  },
+  "input_hashes_unchanged": {
+    "README.md": true,
+    "configs/runs/replay_smoke.json": true,
+    "fixtures/report-batch/artifacts/item-00001.json": true,
+    "fixtures/report-batch/artifacts/item-00002.json": true,
+    "fixtures/report-batch/artifacts/item-00003.json": true,
+    "fixtures/report-batch/artifacts/item-00004.json": true,
+    "fixtures/report-batch/artifacts/item-00005.json": true,
+    "fixtures/report-batch/artifacts/item-00006.json": true,
+    "fixtures/report-batch/artifacts/item-00007.json": true,
+    "fixtures/report-batch/artifacts/item-00008.json": true,
+    "fixtures/report-batch/manifest.json": true,
+    "fixtures/report-batch/recording-input.jsonl": true,
+    "fixtures/report-batch/report.md": true,
+    "fixtures/report-batch/results.jsonl": true,
+    "fixtures/report-batch/summary.json": true,
+    "src/mcp_eval/judge.py": true,
+    "src/mcp_eval/report.py": true,
+    "src/mcp_eval/runner.py": true
+  },
+  "output_files": {
+    "answer.md": {
+      "bytes": 8498,
+      "sha256": "c5a80acbd1317304385c3424cf327506faf2f8721a1dd9b4d624e882dd04765d"
+    },
+    "access-log.md": {
+      "bytes": 7994,
+      "sha256": "dbb8a1947e4a2e93b99ddbb22e469705d5450d91dfedf8ca5a279882a776949c"
+    },
+    "commands.md": {
+      "bytes": 3624,
+      "sha256": "b95cc30363dc4d418d770b4a9acb2884b3da3947ed94b08ce9016a565abeff75"
+    },
+    "check_report.py": {
+      "bytes": 9910,
+      "sha256": "feae6c175c9d8043461d29cd54713ae0be5a072924ce733cfe4f3f09c0fac3c0"
+    },
+    "directory-check.stdout.txt": {
+      "bytes": 99,
+      "sha256": "37c4706a5fa3a7d1252acae3284dd2e17dc8e9969aa89bee4426a8c193f621cb"
+    },
+    "check-report.stdout.json": {
+      "bytes": 15706,
+      "sha256": "44a2fc82dd5402f0c8fc7b0fbd4118183bc93d80268edd16a57e5313c5291cdb"
+    },
+    "check-report.stderr.txt": {
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  "exit_status": 0
+}

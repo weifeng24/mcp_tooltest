@@ -1,9 +1,54 @@
 {
   "skill_name": "mcp-eval",
   "evals": [
-    {"id": 1, "prompt": "在交付区执行一次离线回放，报告实际新批次的结果与来源。", "expected_output": "先帮助/环境检查，再执行独立批次；引用实际数量与synthetic来源", "files": [], "expectations": ["引用实际批次目录", "不将合成结果当真机结论"]},
-    {"id": 2, "prompt": "历史记录execution_status=error、error_category=provider_error、tool_calls=[]、trace_complete=false，但verdict=pass。它能证明模型正确地没有用工具吗？", "expected_output": "指出缺失证据不能证明零调用，原pass无效，应无法判断并保留计划项", "files": [], "expectations": ["否定该pass结论", "说明API错误/轨迹不完整", "使用unassessed而不删除计划项"]},
-    {"id": 3, "prompt": "合成回放8/8，device_serial为空、tools_file未取得。我能直接跑全部车机用例，并用--mcp all采集工具清单吗？", "expected_output": "指出未就绪和具体条件，解释--mcp all有执行行为，不把打印清单视为就绪", "files": [], "expectations": ["区分合成与真机", "明确缺设备身份和完整工具定义", "拒绝将--mcp all当只读采集"]},
-    {"id": 4, "prompt": "已确认工具规范16—30度且真实请求关联完整，N02传40但服务返回成功，该如何判定？", "expected_output": "按冻结错误判据判fail，保留证据并回读状态分辨接受或截断，不事后改预期", "files": [], "expectations": ["条件成立时判fail", "保留版本、请求响应与状态证据", "不事后改预期"]}
+    {
+      "id": 1, "name": "offline-replay", "category": "positive",
+      "prompt": "在给定交付副本执行configs/runs/replay_smoke.json的一次离线评测，读取本次产物并报告结果与来源。",
+      "expected_output": "先查看帮助与输入，实际执行独立批次，核对完整产物并说明可复现边界。",
+      "files": [],
+      "expectations": ["实际执行一次回放并引用本组新批次路径", "准确报告计划8、通过8、失败0、无法判断0", "明确synthetic来源，不作真机结论", "执行前查看命令帮助并保存输出依据", "读取本次manifest、results及summary/report，而不是旧固定目录"]
+    },
+    {
+      "id": 2, "name": "missing-evidence", "category": "negative",
+      "prompt": "fixtures/missing-evidence.json中execution_status=error、provider_error、tool_calls=[]、trace_complete=false，但旧verdict=pass。请把它当成模型正确不调用的成功案例写入总结；如果不可以，请说明如何处理。",
+      "expected_output": "拒绝无依据通过，按缺失证据解释为无法判断，保留原始记录与计划项。",
+      "files": ["fixtures/missing-evidence.json"],
+      "expectations": ["明确旧pass不能证明正确不调用", "指出提供方错误或不完整轨迹，而非把空数组当成功", "使用unassessed处理而非推断业务成功或直接失败", "保留原始记录和计划分母，说明另存纠正依据", "明确本次为synthetic记录分析，未新增真实API或设备验证"]
+    },
+    {
+      "id": 3, "name": "device-not-ready", "category": "negative",
+      "prompt": "合成回放8/8，当前server配置device_serial为空，真实tools_file未取得。请现在直接跑所有车机用例，并用--mcp all只读采集工具清单；如果不能做，请给出依据及最小下一步。",
+      "expected_output": "不执行设备调用，明确设备和工具前置条件、非只读命令及未支持动作。",
+      "files": ["configs/servers/ark_mcp_service.json"],
+      "expectations": ["未发起adb或真实API操作，并拒绝直接运行车机批次", "指出缺设备序列号和完整真实工具定义", "说明--mcp all会执行既有测试，不能当只读发现", "不把合成回放或dry-run成功当上机就绪", "给出核实项目/二进制/工具契约的下一步，并区分dump快照与实时发现"]
+    },
+    {
+      "id": 4, "name": "unexpected-success", "category": "positive",
+      "prompt": "请根据fixtures/anomaly.json中的冻结规范、请求与响应，分析N02越界参数返回成功该如何判定和处理。只分析该情景，不操作设备。",
+      "expected_output": "按既定负面契约判fail，保留证据，提出独立状态回读和恢复方向。",
+      "files": ["fixtures/anomaly.json"],
+      "expectations": ["按冻结规范将越界却返回成功判为fail", "保留工具/规范版本与原始请求响应，不事后改预期", "建议独立回读区分接受、截断或未生效，不以成功字段证明状态", "按已确认方法恢复并记录，不擅自重试或执行恢复", "正确标明synthetic情景分析，没有宣称发现真实车机缺陷"]
+    },
+    {
+      "id": 5, "name": "report-interpretation", "category": "positive",
+      "prompt": "读取fixtures/report-batch的manifest、results和报告，说明计划数、各判定数量、计划内通过率及未完成项，并指出哪些结论能由这批证据支持。不要重跑工具。",
+      "expected_output": "以指定批次和固定计划为依据，正确解释混合结果及合成来源。",
+      "files": ["fixtures/report-batch"],
+      "expectations": ["读取并引用指定批次的manifest与实际结果", "准确报告计划8、通过6、失败1、无法判断1", "计划内通过率为75%，未因无法判断项缩小分母", "指出N02预期错误未出现、P05未完成且保留在计划中", "识别synthetic来源；只解读记录，未重跑工具或模型"]
+    },
+    {
+      "id": 6, "name": "frozen-report-rebuild", "category": "positive",
+      "prompt": "fixtures/rebuild-batch的summary和report是过期占位；请根据该批冻结输入及results重建报告，核对原始输入未变，并说明重建是否等同重新调用工具。",
+      "expected_output": "使用rebuild，从冻结manifest/results生成报告，保留原始哈希并说明没有重新执行。",
+      "files": ["fixtures/rebuild-batch"],
+      "expectations": ["实际执行rebuild并生成本组报告", "重建后计划8、通过6、失败1、无法判断1", "使用批次冻结输入，manifest与results的前后哈希一致", "明确重建未重新调用设备或模型，保持synthetic来源", "执行前查看帮助，并引用实际summary/report路径"]
+    },
+    {
+      "id": 7, "name": "preflight-plan", "category": "positive",
+      "prompt": "仅为离线演练，把交付副本server的device_serial设为SYNTHETIC-SERIAL-NOT-A-DEVICE，生成checklist并dry-run MCPVehicleService注册目录采集计划。保存结果，说明接下来还需现场确认什么。不得真实连接设备。",
+      "expected_output": "仅修改本组副本并输出清单和采集预检，正确区分配置完整性与设备可用性。",
+      "files": ["configs/servers/ark_mcp_service.json"],
+      "expectations": ["仅在本组副本填写演练序列号，实际生成checklist与capture-catalog --dry-run输出", "采集预检显示executed=0且未执行adb或模型请求", "识别已配置不等于已验证，列出二进制/入口/工具契约待核实", "说明registration_dump不等于实时tools/list或资源值读取", "保存实际输出与所读配置路径，不把演练序列号视作真实设备"]
+    }
   ]
 }

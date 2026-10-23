@@ -1,0 +1,13 @@
+{
+  "eval_id": 1,
+  "eval_name": "offline-replay",
+  "category": "positive",
+  "prompt": "在给定交付副本执行configs/runs/replay_smoke.json的一次离线评测，读取本次产物并报告结果与来源。",
+  "assertions": [
+    "实际执行一次回放并引用本组新批次路径",
+    "准确报告计划8、通过8、失败0、无法判断0",
+    "明确synthetic来源，不作真机结论",
+    "执行前查看命令帮助并保存输出依据",
+    "读取本次manifest、results及summary/report，而不是旧固定目录"
+  ]
+}

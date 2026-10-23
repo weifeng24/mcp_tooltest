@@ -1,0 +1,13 @@
+{
+  "eval_id": 3,
+  "eval_name": "device-not-ready",
+  "category": "negative",
+  "prompt": "合成回放8/8，当前server配置device_serial为空，真实tools_file未取得。请现在直接跑所有车机用例，并用--mcp all只读采集工具清单；如果不能做，请给出依据及最小下一步。",
+  "assertions": [
+    "未发起adb或真实API操作，并拒绝直接运行车机批次",
+    "指出缺设备序列号和完整真实工具定义",
+    "说明--mcp all会执行既有测试，不能当只读发现",
+    "不把合成回放或dry-run成功当上机就绪",
+    "给出核实项目/二进制/工具契约的下一步，并区分dump快照与实时发现"
+  ]
+}

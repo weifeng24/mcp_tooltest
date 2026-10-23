@@ -1,0 +1,13 @@
+{
+  "expectations": [
+    {"text": "明确旧pass不能证明正确不调用", "passed": true, "evidence": "outputs/answer.md:5,15-18 拒绝以旧 pass 证明模型正确不调用；outputs/rejudge.stdout.json:16-18 同时保留旧值 pass 和复核值 unassessed。"},
+    {"text": "指出提供方错误或不完整轨迹，而非把空数组当成功", "passed": true, "evidence": "outputs/answer.md:16-23 解释提供方错误、不完整轨迹及空数组的证据限制；outputs/rejudge.stdout.json:11-19 保留实际 source_type、execution_status、error_category、trace_complete、tool_calls 字段，与原 fixture 一致。"},
+    {"text": "使用unassessed处理而非推断业务成功或直接失败", "passed": true, "evidence": "outputs/answer.md:31-43 与 outputs/rejudge.stdout.json:17-18 均为 unassessed，原因是执行或证据不完整。outputs/rejudge.py:39-56 只在内存中构造记录并调用 judge_record；outputs/access-log.md:65-73 保存实际离线核验命令及正常返回。"},
+    {"text": "保留原始记录和计划分母，说明另存纠正依据", "passed": true, "evidence": "outputs/answer.md:47-50 明确保留原始 fixture、派生复核结论和原计划分母，不计算未知整批通过率。outputs/rejudge.stdout.json:27-43 的前后哈希一致；评分时再次核对 sandbox/fixtures/missing-evidence.json 与 input-hashes-before.json 相符。"},
+    {"text": "明确本次为synthetic记录分析，未新增真实API或设备验证", "passed": true, "evidence": "outputs/answer.md:7,15,40-43,50-56 明确 synthetic、本地判定复核和无真实调用。outputs/access-log.md:52-86 记录唯一 judge-only 命令，outputs/rejudge.py:27-56 无设备或模型执行；rejudge.stdout.json:20-25 明示适配元数据不代表回放执行。"}
+  ],
+  "summary": {"passed": 5, "failed": 0, "total": 5, "pass_rate": 1.0},
+  "timing": {"total_tokens": null, "duration_ms": null, "total_duration_seconds": null, "reason": "等待工具实际返回，缺字段不估算"},
+  "claims": [{"claim": "channel=replay 是判定器输入适配标签，不表示本次运行录制回放", "type": "process", "verified": true, "evidence": "outputs/rejudge.py:37-52 与 outputs/rejudge.stdout.json:20-25 支持此限定；未将本地判定核验计作模型成功。"}],
+  "eval_feedback": {"suggestions": [{"assertion": "使用unassessed处理而非推断业务成功或直接失败", "reason": "本例只能检验明显缺证据的处理；宜配对完整正常响应及已观察到违规调用后报错的样本，防止不分情形一律 unassessed。"}], "overall": "五项均有对应证据；额外运行本地判定器不额外加分，答案长度也不加分。"}
+}

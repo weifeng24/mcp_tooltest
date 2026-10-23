@@ -1,0 +1,2 @@
+drwxrwxr-x  4 tssh tssh 4096 10月 23 15:19 /home/tssh/文档/Works/mission/校招生ai演练任务/src/skills/mcp-eval-workspace/iteration-6/eval-6-frozen-report-rebuild/with_skill
+drwxrwxr-x 10 tssh tssh 4096 10月 23 15:24 /home/tssh/文档/Works/mission/校招生ai演练任务/src/skills/mcp-eval-workspace/iteration-6/eval-6-frozen-report-rebuild/with_skill/sandbox

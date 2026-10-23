@@ -88,6 +88,17 @@ def tool_succeeded(call: dict[str, Any]) -> bool:
             and response_success({"result": call.get("result")})[0] is True)
 
 
+def _has_observed_decision(record: EvalRecord) -> bool:
+    """模型响应事件中保存的调用决策；异常分支可能尚未写入判定用调用数组。"""
+    for event in record.events:
+        if not isinstance(event, dict) or event.get("kind") != "model_response":
+            continue
+        for decision in event.get("decisions") or []:
+            if isinstance(decision, dict) and isinstance(decision.get("name"), str) and decision["name"]:
+                return True
+    return False
+
+
 def judge_record(case: dict[str, Any], record: EvalRecord) -> EvalRecord:
     try:
         validate_assertions(case["assertions"])
@@ -95,8 +106,9 @@ def judge_record(case: dict[str, Any], record: EvalRecord) -> EvalRecord:
         return _set(record, "unassessed", f"判据错误: {exc}")
     response = record.response_raw
     calls = response.get("tool_calls") if isinstance(response, dict) else None
-    # 已保存的调用决策能证明禁止调用被违反，即使后续 API 失败。
-    if any(a["type"] == "no_tool_call" for a in case["assertions"]) and isinstance(calls, list) and calls:
+    # 已保存的调用决策能证明禁止调用被违反，即使后续 API 失败或异常分支未写入调用数组。
+    if any(a["type"] == "no_tool_call" for a in case["assertions"]) and (
+            (isinstance(calls, list) and calls) or _has_observed_decision(record)):
         return _set(record, "fail", "负面控制被违反：已观察到工具调用决策")
     if record.execution_status in ("blocked", "not_run", "error") or not record.trace_complete:
         return _set(record, "unassessed", f"执行或证据不完整: {record.error_category or record.execution_status}")

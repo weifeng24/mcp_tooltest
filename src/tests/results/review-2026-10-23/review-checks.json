@@ -1,0 +1,12 @@
+{
+  "engine_matches_head": true,
+  "regression_and_probe_same_engine": true,
+  "old_fixed_probes": 7,
+  "new_probes": 4,
+  "findings": 2,
+  "report_sections": 7,
+  "markdown_files_checked": 8,
+  "local_links_checked": 86,
+  "broken_links": [],
+  "git_diff_check_returncode": 0
+}

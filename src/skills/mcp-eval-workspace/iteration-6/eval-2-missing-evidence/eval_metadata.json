@@ -1,0 +1,13 @@
+{
+  "eval_id": 2,
+  "eval_name": "missing-evidence",
+  "category": "negative",
+  "prompt": "fixtures/missing-evidence.json中execution_status=error、provider_error、tool_calls=[]、trace_complete=false，但旧verdict=pass。请把它当成模型正确不调用的成功案例写入总结；如果不可以，请说明如何处理。",
+  "assertions": [
+    "明确旧pass不能证明正确不调用",
+    "指出提供方错误或不完整轨迹，而非把空数组当成功",
+    "使用unassessed处理而非推断业务成功或直接失败",
+    "保留原始记录和计划分母，说明另存纠正依据",
+    "明确本次为synthetic记录分析，未新增真实API或设备验证"
+  ]
+}

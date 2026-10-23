@@ -1,0 +1,24 @@
+{
+  "source": "本轮functions.task实际返回；工具未返回token或耗时字段",
+  "parent_model": "openai/gpt-6-astra",
+  "worker_model_reported": null,
+  "total_tokens": null,
+  "duration_ms": null,
+  "runs": [
+    {"eval_id": 1, "configuration": "with_skill", "task_id": "ses_e9857ae58ffeXnzWCbXB35dtWW", "state": "completed"},
+    {"eval_id": 1, "configuration": "without_skill", "task_id": "ses_e9857ae4effeLbSxmCyhNirs7U", "state": "completed"},
+    {"eval_id": 2, "configuration": "with_skill", "task_id": "ses_e9857ae44ffeRItEQMv1D23aXl", "state": "completed"},
+    {"eval_id": 2, "configuration": "without_skill", "task_id": "ses_e9857ae3bffeUmOFm8OpF89Drz", "state": "completed"},
+    {"eval_id": 3, "configuration": "with_skill", "task_id": "ses_e9857ae30ffe7S5V6vgd1777IL", "state": "completed"},
+    {"eval_id": 3, "configuration": "without_skill", "task_id": "ses_e9857ae1fffeSbWQnjdeViPdkW", "state": "completed"},
+    {"eval_id": 4, "configuration": "with_skill", "task_id": "ses_e9857ae16ffe2kLGWGIL22ryW8", "state": "completed"},
+    {"eval_id": 4, "configuration": "without_skill", "task_id": "ses_e9857ae0cffetBNgkHI5cDGSQP", "state": "completed"},
+    {"eval_id": 5, "configuration": "with_skill", "task_id": "ses_e9857ae01ffe75NaVILp7NRlej", "state": "completed"},
+    {"eval_id": 5, "configuration": "without_skill", "task_id": "ses_e9857adf5ffeWoJatIVeRvFN2U", "state": "completed"},
+    {"eval_id": 6, "configuration": "with_skill", "task_id": "ses_e9857ad9affeYXZ0WoY1X7SNQE", "state": "completed"},
+    {"eval_id": 6, "configuration": "without_skill", "task_id": "ses_e9857ad90ffeOcHp9tSIGg717U", "state": "completed"},
+    {"eval_id": 7, "configuration": "with_skill", "task_id": "ses_e9857ad85ffeUFr3vKWEe4LoAg", "state": "completed"},
+    {"eval_id": 7, "configuration": "without_skill", "task_id": "ses_e9857ad7affeZgkbqVkrDzQxuC", "state": "completed"}
+  ],
+  "grader": {"task_id": "ses_e984393d5ffep0ys3dw858mOLc", "state": "completed"}
+}

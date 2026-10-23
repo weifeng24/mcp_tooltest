@@ -1,0 +1,68 @@
+{
+  "analysis_type": "offline_fixture_judgement_only",
+  "case_id": "N02",
+  "source_type": "synthetic",
+  "tool_version": "fixture-v1",
+  "spec_version": "frozen-fixture-2026-10-23",
+  "frozen_range": [
+    16,
+    30
+  ],
+  "request": {
+    "jsonrpc": "2.0",
+    "id": 1,
+    "method": "tools/call",
+    "params": {
+      "name": "HvacService.setTemp",
+      "arguments": {
+        "temperature": 40
+      }
+    }
+  },
+  "response": {
+    "jsonrpc": "2.0",
+    "id": 1,
+    "result": {
+      "isError": false,
+      "success": true
+    }
+  },
+  "frozen_case_matches_local_case": true,
+  "request_identity_checks": "passed",
+  "verdict": "fail",
+  "verdict_reason": "预期错误未出现",
+  "independent_state_readback": null,
+  "recovery_method": "未在真实设备确认",
+  "device_execution": "not_performed",
+  "model_api_execution": "not_performed",
+  "offline_record_assumptions": {
+    "execution_status": "completed",
+    "trace_complete": true,
+    "meaning": "complete supplied synthetic request/response for judge input, not a verified device trace"
+  },
+  "input_sha256_before": {
+    "README.md": "d2a00df48759d4b7039d7a857b946ec9113cac1b0ecf08a758b71e10d8f3b860",
+    "fixtures/anomaly.json": "4a4c5c2e97c0c57f988735791f58c61c423d13fda835509872849e89a84d364b",
+    "tests/cases/l1/N02_param_out_of_range.json": "2ca3de09b76bff9f5a682edfd81e095f2c6b7e5026dfca9e1a734554c97bfd0b",
+    "src/mcp_eval/__init__.py": "a8698b03ca6130657305718132d863fe29164bdc87858693d9ce72d984202bd0",
+    "src/mcp_eval/judge.py": "119a41dca586b662ae5aa1c2787b7af9ce6ab70a24d77f52687c50f38331f838",
+    "src/mcp_eval/config.py": "fe0e92e6e5c86ab225e852d78761bfb74d23e332d9ee3286c034cb55abfe5fbf",
+    "src/mcp_eval/records.py": "0eeb20cdb9f40b84a4586b6046f28c765f431ea3e69c4b6b39bad2a5651cab8a"
+  },
+  "input_sha256_after": {
+    "README.md": "d2a00df48759d4b7039d7a857b946ec9113cac1b0ecf08a758b71e10d8f3b860",
+    "fixtures/anomaly.json": "4a4c5c2e97c0c57f988735791f58c61c423d13fda835509872849e89a84d364b",
+    "tests/cases/l1/N02_param_out_of_range.json": "2ca3de09b76bff9f5a682edfd81e095f2c6b7e5026dfca9e1a734554c97bfd0b",
+    "src/mcp_eval/__init__.py": "a8698b03ca6130657305718132d863fe29164bdc87858693d9ce72d984202bd0",
+    "src/mcp_eval/judge.py": "119a41dca586b662ae5aa1c2787b7af9ce6ab70a24d77f52687c50f38331f838",
+    "src/mcp_eval/config.py": "fe0e92e6e5c86ab225e852d78761bfb74d23e332d9ee3286c034cb55abfe5fbf",
+    "src/mcp_eval/records.py": "0eeb20cdb9f40b84a4586b6046f28c765f431ea3e69c4b6b39bad2a5651cab8a"
+  },
+  "read_inputs_unchanged": true,
+  "loaded_product_modules": {
+    "mcp_eval": "/home/tssh/文档/Works/mission/校招生ai演练任务/src/skills/mcp-eval-workspace/iteration-6/eval-4-unexpected-success/without_skill/sandbox/src/mcp_eval/__init__.py",
+    "mcp_eval.config": "/home/tssh/文档/Works/mission/校招生ai演练任务/src/skills/mcp-eval-workspace/iteration-6/eval-4-unexpected-success/without_skill/sandbox/src/mcp_eval/config.py",
+    "mcp_eval.judge": "/home/tssh/文档/Works/mission/校招生ai演练任务/src/skills/mcp-eval-workspace/iteration-6/eval-4-unexpected-success/without_skill/sandbox/src/mcp_eval/judge.py",
+    "mcp_eval.records": "/home/tssh/文档/Works/mission/校招生ai演练任务/src/skills/mcp-eval-workspace/iteration-6/eval-4-unexpected-success/without_skill/sandbox/src/mcp_eval/records.py"
+  }
+}

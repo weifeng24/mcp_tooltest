@@ -1,0 +1,381 @@
+<!doctype html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8" />
+<title>Code Review Report · {{REPO}}/{{MODULE}}</title>
+<meta name="generator" content="ThunderSoft code-review skill" />
+<style>
+:root {
+  --wine-dark: #6B0F1A; --wine-primary: #8B1A2B; --wine-mid: #A0303F;
+  --wine-light: #C76070; --wine-pale: #F2D5DA; --wine-bg: #FDF5F6;
+  --text-primary: #2D2D2D; --text-secondary: #5A5A5A;
+  --white: #FFFFFF; --gray-100: #F7F7F7; --gray-200: #E8E8E8; --gray-300: #D1D1D1;
+  --critical: #c0392b; --major: #e67e22; --minor: #27ae60; --question: #2980b9;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: 'Segoe UI', 'Microsoft YaHei', 'PingFang SC', sans-serif;
+  background: var(--gray-100); color: var(--text-primary); line-height: 1.6;
+}
+body::before {
+  content: 'Confidential'; position: fixed; top: 50%; left: 50%;
+  transform: translate(-50%, -50%) rotate(-35deg); font-size: 120px;
+  font-weight: 900; color: rgba(139,26,43,0.04); pointer-events: none; z-index: 9999;
+  white-space: nowrap; letter-spacing: 20px;
+}
+.watermark-grid { position: fixed; top:0; left:0; right:0; bottom:0; pointer-events: none; z-index: 9998; overflow: hidden; }
+.watermark-grid span { position: absolute; font-size: 14px; font-weight: 600; color: rgba(139,26,43,0.035); transform: rotate(-35deg); white-space: nowrap; }
+.cover {
+  background: linear-gradient(135deg, var(--wine-dark) 0%, var(--wine-primary) 40%, var(--wine-mid) 100%);
+  color: var(--white); padding: 60px 40px; text-align: center; position: relative;
+}
+.cover h1 { font-size: 36px; font-weight: 700; margin-bottom: 8px; }
+.cover .subtitle { font-size: 18px; opacity: 0.85; margin-bottom: 24px; }
+.cover .meta { display: flex; justify-content: center; gap: 40px; font-size: 14px; opacity: 0.85; flex-wrap: wrap; }
+.cover .meta span { display: flex; align-items: center; gap: 6px; }
+.cover .logo { position: absolute; top: 20px; right: 30px; font-size: 12px; opacity: 0.6; letter-spacing: 2px; }
+.cover .applied-rules { margin-top: 20px; font-size: 12px; opacity: 0.75; }
+.container { max-width: 1200px; margin: 0 auto; padding: 30px 20px; position: relative; z-index: 1; }
+.section-title {
+  font-size: 22px; font-weight: 700; color: var(--wine-primary);
+  margin: 30px 0 16px; padding-left: 12px; border-left: 4px solid var(--wine-primary);
+}
+.section-title .num { color: var(--wine-mid); margin-right: 6px; }
+.summary { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 16px; margin-bottom: 30px; }
+.summary-card {
+  background: var(--white); border-radius: 12px; padding: 20px; text-align: center;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.06); border-top: 4px solid var(--wine-primary);
+  transition: transform 0.2s;
+}
+.summary-card:hover { transform: translateY(-2px); }
+.summary-card .label { font-size: 12px; color: var(--text-secondary); margin-bottom: 6px; text-transform: uppercase; letter-spacing: 1px; }
+.summary-card .value { font-size: 32px; font-weight: 700; color: var(--wine-primary); }
+.summary-card .value.grade { font-size: 42px; color: var(--question); }
+.summary-card .value.grade-A { color: var(--minor); }
+.summary-card .value.grade-B { color: var(--question); }
+.summary-card .value.grade-C { color: var(--major); }
+.summary-card .value.grade-D { color: var(--critical); }
+.summary-card .value.critical { color: var(--critical); }
+.summary-card .value.major { color: var(--major); }
+.summary-card .value.minor { color: var(--minor); }
+.summary-card .sub { font-size: 11px; color: var(--text-secondary); margin-top: 4px; }
+.charts { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; margin-bottom: 30px; }
+.chart-box { background: var(--white); border-radius: 12px; padding: 24px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+.chart-box h3 { font-size: 16px; color: var(--wine-primary); margin-bottom: 16px; padding-bottom: 8px; border-bottom: 2px solid var(--wine-pale); }
+.chart-box canvas { max-height: 320px !important; }
+.dim-card { background: var(--white); border-radius: 10px; margin-bottom: 12px; box-shadow: 0 2px 6px rgba(0,0,0,0.05); overflow: hidden; }
+.dim-card.na { opacity: 0.65; }
+.dim-header { display: flex; justify-content: space-between; align-items: center; padding: 16px 20px; cursor: pointer; transition: background 0.2s; flex-wrap: wrap; gap: 8px; }
+.dim-header:hover { background: var(--wine-bg); }
+.dim-title { font-weight: 600; font-size: 16px; display: flex; align-items: center; gap: 10px; }
+.expand-icon { font-size: 12px; transition: transform 0.3s; display: inline-block; color: var(--wine-mid); }
+.dim-header.expanded .expand-icon { transform: rotate(90deg); }
+.dim-meta { display: flex; gap: 16px; font-size: 13px; align-items: center; flex-wrap: wrap; }
+.score-good { color: var(--minor); font-weight: 700; font-size: 18px; }
+.score-warn { color: var(--major); font-weight: 700; font-size: 18px; }
+.score-bad  { color: var(--critical); font-weight: 700; font-size: 18px; }
+.score-na   { color: var(--text-secondary); font-weight: 600; font-size: 14px; font-style: italic; }
+.issue-count, .check-info, .weight-info { color: var(--text-secondary); }
+.dim-body { padding: 0 20px 16px; }
+.issue-item { padding: 12px 16px; margin-bottom: 8px; border-radius: 8px; background: var(--gray-100); border-left: 4px solid var(--gray-300); font-size: 14px; }
+.issue-item.sev-critical-l { border-left-color: var(--critical); }
+.issue-item.sev-major-l    { border-left-color: var(--major); }
+.issue-item.sev-minor-l    { border-left-color: var(--minor); }
+.issue-item .issue-desc { font-size: 13px; color: var(--text-secondary); margin: 6px 0; }
+.issue-item .code-pair { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 8px 0; }
+.issue-item .code-pair > div > .lbl { font-size: 11px; color: var(--text-secondary); margin-bottom: 2px; text-transform: uppercase; letter-spacing: 1px; }
+.issue-item .code-block { padding: 8px 12px; background: #2D2D2D; color: #E8E8E8; border-radius: 6px; font-family: 'Consolas','Courier New',monospace; font-size: 12px; overflow-x: auto; white-space: pre; line-height: 1.5; }
+.issue-item .code-block.before { border-left: 3px solid var(--critical); }
+.issue-item .code-block.after  { border-left: 3px solid var(--minor); }
+.issue-item .fix-hint { font-size: 12px; color: var(--wine-mid); margin-top: 6px; font-style: italic; }
+.severity-badge { display: inline-block; padding: 2px 10px; border-radius: 12px; font-size: 11px; font-weight: 700; text-transform: uppercase; }
+.sev-critical { background: #FDECEA; color: var(--critical); }
+.sev-major    { background: #FFF3E0; color: var(--major); }
+.sev-minor    { background: #E8F5E9; color: var(--minor); }
+.sev-question { background: #E3F2FD; color: var(--question); }
+.table-controls { display: flex; gap: 12px; margin-bottom: 12px; flex-wrap: wrap; }
+.table-controls select, .table-controls input { padding: 8px 14px; border: 1px solid var(--gray-300); border-radius: 8px; font-size: 13px; background: var(--white); }
+.table-container { background: var(--white); border-radius: 12px; padding: 20px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); overflow-x: auto; }
+table { width: 100%; border-collapse: collapse; font-size: 13px; }
+th { background: var(--wine-primary); color: var(--white); padding: 12px 14px; text-align: left; cursor: pointer; user-select: none; white-space: nowrap; }
+th:hover { background: var(--wine-dark); }
+td { padding: 10px 14px; border-bottom: 1px solid var(--gray-200); vertical-align: top; }
+tr:hover td { background: var(--wine-bg); }
+code { font-family: 'Consolas','Courier New',monospace; font-size: 12px; }
+.snippet { display: inline-block; max-width: 320px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.roadmap { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
+.roadmap-card { background: var(--white); border-radius: 12px; padding: 18px; box-shadow: 0 2px 8px rgba(0,0,0,0.06); }
+.roadmap-card h3 { font-size: 15px; color: var(--wine-primary); margin-bottom: 10px; }
+.roadmap-card ul { padding-left: 18px; font-size: 13px; }
+.roadmap-card li { margin-bottom: 6px; color: var(--text-secondary); }
+.roadmap-card .eta { margin-top: 12px; font-size: 12px; color: var(--wine-mid); font-weight: 600; }
+.boundary-banner { background: var(--wine-bg); border-left: 4px solid var(--wine-primary); padding: 14px 18px; border-radius: 8px; margin: 16px 0; font-size: 13px; color: var(--text-secondary); }
+.boundary-banner strong { color: var(--wine-primary); }
+.no-issues { color: var(--minor); font-style: italic; padding: 12px 0; }
+.footer { text-align: center; padding: 30px; color: var(--text-secondary); font-size: 12px; margin-top: 40px; border-top: 1px solid var(--gray-200); position: relative; z-index: 1; }
+.footer .conf { color: var(--wine-primary); font-weight: 700; letter-spacing: 2px; }
+@media (max-width: 768px) {
+  .charts { grid-template-columns: 1fr; }
+  .summary { grid-template-columns: repeat(2, 1fr); }
+  .roadmap { grid-template-columns: 1fr; }
+  .cover h1 { font-size: 24px; }
+  .issue-item .code-pair { grid-template-columns: 1fr; }
+}
+@media print {
+  body::before { font-size: 80px; }
+  .dim-body { display: block !important; }
+  .expand-icon { display: none; }
+}
+</style>
+<script src="./chart.min.js"></script>
+<script>
+if (typeof Chart === 'undefined') {
+  document.write('<script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.0/dist/chart.umd.min.js"><\/script>');
+}
+</script>
+</head>
+<body>
+
+<div class="watermark-grid" id="watermarkGrid"></div>
+
+<!-- 封面 -->
+<div class="cover">
+  <div class="logo">THUNDERSOFT &middot; CONFIDENTIAL</div>
+  <h1>Code Review 质量审查报告</h1>
+  <div class="subtitle">{{REPO}} / {{MODULE}}</div>
+  <div class="meta">
+    <span>📅 审查时间：{{TIMESTAMP}}</span>
+    <span>🌿 分支：{{BRANCH}}</span>
+    <span>🔖 Commit：{{COMMIT}}</span>
+    <span>👤 审查人：{{REVIEWER}}</span>
+    <span>🔍 扫描模式：{{SCAN_MODE}}</span>
+  </div>
+  <div class="applied-rules">应用规则集：{{APPLIED_RULES}}</div>
+</div>
+
+<div class="container">
+
+<!-- §1 项目概览 + 边界提示 -->
+<h2 class="section-title"><span class="num">§1</span>项目概览</h2>
+<div class="boundary-banner">
+  <strong>评审边界</strong> · 本报告只覆盖 <strong>编码规范 / 设计规范 / 历史 Bug Root Cause 逻辑检查</strong>；
+  不覆盖架构设计 / Bug Fix / 功能验收。
+</div>
+<p><strong>审查结论：Request changes。</strong>新增2项问题（P1一项、P2一项），4个离线反例复现；旧7项修复复核通过。模板评分仅按已检出项扣分，不代表覆盖率、合入批准、公司评分或验收。修复后代码均为未应用的设计片段，只做了语法核对，不代表完整补丁已验证。<a href="requirements-review.md">任务与设计对照审查</a></p><h2 class="section-title"><span class="num">§2</span>总体评分与雷达图</h2>
+<div class="summary">
+  <div class="summary-card"><div class="label">综合评分</div><div class="value">{{TOTAL_SCORE}}</div><div class="sub">/ 10</div></div>
+  <div class="summary-card"><div class="label">评级</div><div class="value grade grade-{{GRADE}}">{{GRADE}}</div><div class="sub">CL 评分 不适用；本地复审结论为Request changes</div></div>
+  <div class="summary-card"><div class="label">Critical</div><div class="value critical">{{COUNT_CRITICAL}}</div><div class="sub">🔴 Must Fix · P0</div></div>
+  <div class="summary-card"><div class="label">Major</div><div class="value major">{{COUNT_MAJOR}}</div><div class="sub">🟡 Suggestion · P1</div></div>
+  <div class="summary-card"><div class="label">Minor</div><div class="value minor">{{COUNT_MINOR}}</div><div class="sub">🟢 Nice to have · P2</div></div>
+  <div class="summary-card"><div class="label">Q / Praise</div><div class="value">{{COUNT_QUESTION}}</div><div class="sub">💡 👍 · P3</div></div>
+</div>
+
+<!-- §2 总体评分与雷达图 (4 图) -->
+
+<div class="charts">
+  <div class="chart-box"><h3>九大维度雷达图</h3><canvas id="radarChart"></canvas></div>
+  <div class="chart-box"><h3>维度得分 &amp; 问题数对比</h3><canvas id="barChart"></canvas></div>
+
+  <div class="chart-box"><h3>维度权重占比</h3><canvas id="weightChart"></canvas></div>
+</div>
+
+<!-- §3 各维度详细分析 -->
+<h2 class="section-title"><span class="num">§3</span>九大维度详细分析</h2>
+{{DIMENSION_CARDS}}
+
+<p>N/A：维度二无多线程共享锁模型；维度八不涉及 AIDL/Binder 实现，adb 子进程契约在维度四检查。雷达图 N/A 的零位仅作显示，不计入评分。</p><h2 class="section-title"><span class="num">§4</span>严重等级分布</h2>
+<div class="charts">  <div class="chart-box"><h3>问题严重等级分布</h3><canvas id="pieChart"></canvas></div></div>
+<!-- §5 问题汇总表 -->
+<h2 class="section-title"><span class="num">§5</span>问题汇总表</h2>
+<div class="table-controls">
+  <select id="filterSeverity" onchange="filterTable()">
+    <option value="">全部严重等级</option>
+    <option value="Critical">Critical</option>
+    <option value="Major">Major</option>
+    <option value="Minor">Minor</option>
+    <option value="Question">Question/Praise</option>
+  </select>
+  <select id="filterDimension" onchange="filterTable()">
+    <option value="">全部维度</option>
+    {{DIMENSION_OPTIONS}}
+  </select>
+  <input type="text" id="searchInput" placeholder="搜索文件/规则..." oninput="filterTable()" />
+</div>
+<div class="table-container">
+  <table id="issueTable"><thead><tr>
+    <th onclick="sortTable(0)">严重等级</th>
+    <th onclick="sortTable(1)">规则</th>
+    <th onclick="sortTable(2)">维度</th>
+    <th onclick="sortTable(3)">检查项</th>
+    <th onclick="sortTable(4)">位置</th>
+    <th onclick="sortTable(5)">代码片段</th>
+    <th>修复建议</th>
+  </tr></thead><tbody>
+{{ISSUE_TABLE_ROWS}}
+  </tbody></table>
+</div>
+
+<h2 class="section-title"><span class="num">§6</span>问题详情与修复方向</h2>
+<div class="issue-item"><h3>R23-C01 · 非有限数值可通过参数校验并进入工具执行（P1）</h3><p><a href="../../../src/mcp_eval/providers/openai_compat.py">src/src/mcp_eval/providers/openai_compat.py:101</a></p><p>模型参数使用默认json.loads；NaN被解析为float，带minimum=16/maximum=30的number Schema仍接受它。离线反例观察到validation_errors=0且执行器收到一次NaN参数。L1配置也接受NaN，device.command_for_case产生包含NaN的非标准JSON命令。此处只复现本地下发边界，不声称真实设备接受或执行了非法参数。关联位置：config.py:166、model_loop.py:207、device.py:88。</p><pre class="code-block">--- 原代码摘录
++++ 修复建议（未应用）
+@@ -1,3 +1,7 @@
+-arguments = json.loads(raw_args) if isinstance(raw_args, str) else raw_args
++def reject_nonfinite(token):
++    raise ValueError(f&quot;非标准JSON常量: {token}&quot;)
++
++arguments = json.loads(raw_args, parse_constant=reject_nonfinite) if isinstance(raw_args, str) else raw_args
++json.dumps(arguments, allow_nan=False)
+ if not isinstance(arguments, dict):
+     raise ValueError(&quot;arguments 必须为 JSON 对象&quot;)</pre><p>修复说明：建议片段未应用，仅经语法检查。严格拒绝NaN/Infinity及溢出产生的非有限浮点数；L1加载、模型解析、直接对象入参及最终序列化应采用一致策略，并转换为现有配置/参数错误。验收：NaN、Infinity、-Infinity、1e309及嵌套非有限值均不得下发；合法边界数值保持正常。证据：tests/results/review-2026-10-23/probe-results.json中的C01两项。</p></div>
+<div class="issue-item"><h3>R23-C02 · 异常结束时已观察的禁止调用决策未参与负面判定（P2）</h3><p><a href="../../../src/mcp_eval/model_loop.py">src/src/mcp_eval/model_loop.py:111</a></p><p>model_response事件已经保存一个完整调用决策，但在超时或finish_reason=length分支提前返回，response_raw.tool_calls仍为空。judge_record只检查后者，两个反例均判unassessed；按design.md第4节已观察到禁止调用即保留fail的契约，应判fail。实际下发次数均为0，停止执行的预算保护有效；问题是决策证据与执行记录混用导致漏报违规。关联位置：judge.py:97-102。</p><pre class="code-block">--- 原代码摘录
++++ 修复建议（未应用）
+@@ -1,3 +1,9 @@
+ calls = response.get(&quot;tool_calls&quot;) if isinstance(response, dict) else None
+-if any(a[&quot;type&quot;] == &quot;no_tool_call&quot; for a in case[&quot;assertions&quot;]) and isinstance(calls, list) and calls:
++observed = [decision for event in record.events
++            if isinstance(event, dict) and event.get(&quot;kind&quot;) == &quot;model_response&quot;
++            and isinstance(event.get(&quot;decisions&quot;), list)
++            for decision in event[&quot;decisions&quot;]
++            if isinstance(decision, dict) and isinstance(decision.get(&quot;name&quot;), str)
++            and decision[&quot;name&quot;]]
++if any(a[&quot;type&quot;] == &quot;no_tool_call&quot; for a in case[&quot;assertions&quot;]) and (observed or isinstance(calls, list) and calls):
+     return _set(record, &quot;fail&quot;, &quot;负面控制被违反：已观察到工具调用决策&quot;)</pre><p>修复说明：建议片段未应用，仅经语法检查。将已解析决策与实际执行分开记录，在异常收尾和rebuild时使用一致判据；不要为了保存决策而继续下发超时工具，也不要把没有有效决策的API错误改为fail。验收：两个反例均fail且执行器调用0次，无决策的错误仍unassessed。证据：tests/results/review-2026-10-23/probe-results.json中的C02两项。</p></div><h2 class="section-title"><span class="num">§7</span>改进路线图</h2>
+<div class="roadmap">
+  <div class="roadmap-card">
+    <h3><span class="severity-badge sev-critical">Critical</span> 必修 (合入前)</h3>
+    <ul>{{ROADMAP_CRITICAL}}</ul>
+    <div class="eta">预估工时：尚未估时；先修判定与证据，再核对真机</div>
+  </div>
+  <div class="roadmap-card">
+    <h3><span class="severity-badge sev-major">Major</span> 强烈建议</h3>
+    <ul>{{ROADMAP_MAJOR}}</ul>
+    <div class="eta">预估工时：尚未估时；先修判定与证据，再核对真机</div>
+  </div>
+  <div class="roadmap-card">
+    <h3><span class="severity-badge sev-minor">Minor</span> 可协商</h3>
+    <ul>{{ROADMAP_MINOR}}</ul>
+    <div class="eta">预估工时：尚未估时；先修判定与证据，再核对真机</div>
+  </div>
+</div>
+
+</div>
+
+<div class="footer">
+  <p class="conf">CONFIDENTIAL</p>
+  <p>Thundersoft &middot; Code Review Skill &middot; 本报告由 code-review skill 自动生成</p>
+  <p>生成时间：{{TIMESTAMP}}</p>
+</div>
+
+<script>
+(function(){
+  var g = document.getElementById('watermarkGrid');
+  for (var y = 0; y < (window.innerHeight || 2000) + 400; y += 180) {
+    for (var x = -200; x < (window.innerWidth || 2000) + 200; x += 320) {
+      var s = document.createElement('span');
+      s.textContent = 'Confidential';
+      s.style.left = x + 'px';
+      s.style.top = y + 'px';
+      g.appendChild(s);
+    }
+  }
+})();
+
+function toggleCard(h) {
+  var b = h.nextElementSibling;
+  var v = b.style.display !== 'none';
+  b.style.display = v ? 'none' : 'block';
+  h.classList.toggle('expanded', !v);
+}
+
+function filterTable() {
+  var sev = document.getElementById('filterSeverity').value.toLowerCase();
+  var dim = document.getElementById('filterDimension').value;
+  var q   = document.getElementById('searchInput').value.toLowerCase();
+  var rows = document.querySelectorAll('#issueTable tbody tr.issue-row');
+  rows.forEach(function (r) {
+    var s = (r.getAttribute('data-severity') || '').toLowerCase();
+    var d = r.getAttribute('data-dimension') || '';
+    var text = r.innerText.toLowerCase();
+    var ok = (!sev || s === sev) && (!dim || d === dim) && (!q || text.indexOf(q) !== -1);
+    r.style.display = ok ? '' : 'none';
+  });
+}
+
+function sortTable(col) {
+  var tbody = document.querySelector('#issueTable tbody');
+  var rows = Array.from(tbody.querySelectorAll('tr.issue-row'));
+  var asc = tbody.getAttribute('data-sort-col') == col ? tbody.getAttribute('data-sort-asc') !== '1' : true;
+  rows.sort(function (a, b) {
+    var av = a.children[col].innerText.trim();
+    var bv = b.children[col].innerText.trim();
+    return asc ? av.localeCompare(bv, 'zh') : bv.localeCompare(av, 'zh');
+  });
+  rows.forEach(function (r) { tbody.appendChild(r); });
+  tbody.setAttribute('data-sort-col', col);
+  tbody.setAttribute('data-sort-asc', asc ? '1' : '0');
+}
+
+window.addEventListener('load', function () {
+  if (typeof Chart === 'undefined') {
+    console.warn('Chart.js failed to load. Charts will not render.');
+    return;
+  }
+  Chart.defaults.color = '#5A5A5A';
+  Chart.defaults.borderColor = '#E8E8E8';
+  var wine = ['#8B1A2B','#A0303F','#C76070','#F2D5DA','#6B0F1A','#2980b9','#27ae60','#e67e22','#c0392b'];
+
+  var dimNames  = {{RADAR_LABELS_JSON}};
+  var dimScores = {{RADAR_DATA_JSON}};
+  var dimIssueCounts = {{DIM_ISSUE_COUNTS_JSON}};
+  var dimWeights = {{DIM_WEIGHTS_JSON}};
+
+  new Chart(document.getElementById('radarChart'), {
+    type: 'radar',
+    data: { labels: dimNames, datasets: [{
+      label: '维度得分', data: dimScores,
+      backgroundColor: 'rgba(139,26,43,0.15)', borderColor: '#8B1A2B', borderWidth: 2,
+      pointBackgroundColor: '#8B1A2B', pointBorderColor: '#fff', pointBorderWidth: 2, pointRadius: 5
+    }]},
+    options: { responsive: true, scales: { r: { beginAtZero: true, max: 10, ticks: { stepSize: 2 } } }, plugins: { legend: { display: false } } }
+  });
+
+  new Chart(document.getElementById('barChart'), {
+    type: 'bar',
+    data: { labels: dimNames, datasets: [
+      { label: '得分(满分10)', data: dimScores, backgroundColor: 'rgba(139,26,43,0.7)', borderRadius: 6, yAxisID: 'y' },
+      { label: '问题数',       data: dimIssueCounts, backgroundColor: 'rgba(199,96,112,0.5)', borderRadius: 6, yAxisID: 'y1' }
+    ]},
+    options: {
+      responsive: true,
+      scales: {
+        y: { beginAtZero: true, max: 10, position: 'left', title: { display: true, text: '得分' } },
+        y1: { beginAtZero: true, position: 'right', grid: { drawOnChartArea: false }, title: { display: true, text: '问题数' } }
+      },
+      plugins: { legend: { position: 'bottom' } }
+    }
+  });
+
+  new Chart(document.getElementById('pieChart'), {
+    type: 'doughnut',
+    data: { labels: ['P0 Critical', 'P1 Major', 'P2 Minor', 'P3 Question'], datasets: [{
+      data: [{{COUNT_CRITICAL}}, {{COUNT_MAJOR}}, {{COUNT_MINOR}}, {{COUNT_QUESTION}}],
+      backgroundColor: ['#c0392b', '#e67e22', '#27ae60', '#2980b9'], borderWidth: 0
+    }]},
+    options: { responsive: true, plugins: { legend: { position: 'bottom' } } }
+  });
+
+  new Chart(document.getElementById('weightChart'), {
+    type: 'polarArea',
+    data: { labels: dimNames, datasets: [{
+      data: dimWeights,
+      backgroundColor: wine.map(function (c) { return c + '99'; }),
+      borderColor: wine, borderWidth: 2
+    }]},
+    options: { responsive: true, plugins: { legend: { position: 'bottom', labels: { font: { size: 11 } } } }, scales: { r: { beginAtZero: true, ticks: { display: false } } } }
+  });
+});
+</script>
+
+</body>
+</html>

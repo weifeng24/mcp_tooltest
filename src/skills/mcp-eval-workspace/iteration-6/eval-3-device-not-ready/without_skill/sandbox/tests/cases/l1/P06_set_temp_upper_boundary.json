@@ -1,0 +1,8 @@
+{
+    "case_id": "P06", "level": "L1", "category": "positive", "service": "auto", "action": "tools_call",
+    "tool": "HvacService.setTemp", "arguments": {"temperature": 30}, "timeout_seconds": 30,
+    "assertions": [{"type": "field_equals", "path": "result.structuredContent.success", "value": true}],
+    "postconditions": [{"tool": "HvacService.getTemp", "arguments": {}, "path": "result.structuredContent.temperature", "value": 30}],
+    "expected_source": "协议文档示例的上边界30；真实工具定义与字段尚待确认",
+    "notes": "开发模板，不能把合成回放作为真机验收。"
+}

@@ -1,0 +1,13 @@
+{
+  "eval_id": 5,
+  "eval_name": "report-interpretation",
+  "category": "positive",
+  "prompt": "读取fixtures/report-batch的manifest、results和报告，说明计划数、各判定数量、计划内通过率及未完成项，并指出哪些结论能由这批证据支持。不要重跑工具。",
+  "assertions": [
+    "读取并引用指定批次的manifest与实际结果",
+    "准确报告计划8、通过6、失败1、无法判断1",
+    "计划内通过率为75%，未因无法判断项缩小分母",
+    "指出N02预期错误未出现、P05未完成且保留在计划中",
+    "识别synthetic来源；只解读记录，未重跑工具或模型"
+  ]
+}

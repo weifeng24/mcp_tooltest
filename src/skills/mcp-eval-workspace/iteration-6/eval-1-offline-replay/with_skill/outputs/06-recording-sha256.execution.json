@@ -1,0 +1,17 @@
+{
+  "cwd": "/home/tssh/文档/Works/mission/校招生ai演练任务/src/skills/mcp-eval-workspace/iteration-6/eval-1-offline-replay/with_skill/sandbox",
+  "argv": [
+    "sha256sum",
+    "recordings/DEV_SYNTHETIC_V2_NOT_REAL.jsonl",
+    "tests/results/replay-smoke-20261023T073041689863Z-ee5b5d7f/recording-input.jsonl"
+  ],
+  "command": "sha256sum recordings/DEV_SYNTHETIC_V2_NOT_REAL.jsonl tests/results/replay-smoke-20261023T073041689863Z-ee5b5d7f/recording-input.jsonl",
+  "launcher": "'/home/tssh/文档/Works/mission/校招生ai演练任务/src/tests/results/remediation-2026-10-16/.venv/bin/python' ../outputs/capture_command.py 06-recording-sha256 sha256sum recordings/DEV_SYNTHETIC_V2_NOT_REAL.jsonl tests/results/replay-smoke-20261023T073041689863Z-ee5b5d7f/recording-input.jsonl",
+  "environment": {
+    "PYTHONPATH": "src",
+    "PYTHONDONTWRITEBYTECODE": "1"
+  },
+  "returncode": 0,
+  "stdout": "/home/tssh/文档/Works/mission/校招生ai演练任务/src/skills/mcp-eval-workspace/iteration-6/eval-1-offline-replay/with_skill/outputs/06-recording-sha256.stdout.txt",
+  "stderr": "/home/tssh/文档/Works/mission/校招生ai演练任务/src/skills/mcp-eval-workspace/iteration-6/eval-1-offline-replay/with_skill/outputs/06-recording-sha256.stderr.txt"
+}

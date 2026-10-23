@@ -1,0 +1,17 @@
+{
+    "case_id": "M01",
+    "level": "L2",
+    "category": "positive",
+    "service": "auto",
+    "action": "model_task",
+    "task": "把空调温度调到 22 度",
+    "timeout_seconds": 120,
+    "assertions": [
+        {"type": "tool_call_matches", "name": "HvacService.setTemp", "arguments": {"temperature": 22}, "result_path": "structuredContent.success", "result_value": true},
+        {"type": "max_rounds", "value": 3},
+        {"type": "final_answer_contains", "text": "22"}
+    ],
+    "postconditions": [{"tool": "HvacService.getTemp", "arguments": {}, "path": "result.structuredContent.temperature", "value": 22}],
+    "expected_source": "任务语义；执行后由 harness 回读温度交叉验证",
+    "notes": "模型需自主选择调温工具并填对参数 22。"
+}

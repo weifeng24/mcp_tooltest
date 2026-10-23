@@ -1,0 +1,7 @@
+[OK] Python >= 3.10
+[OK] jsonschema / pytest 可导入
+[OK] 当前目录为交付根目录
+[OK] adb 命令存在；未验证设备连接和版本
+[INFO] DEEPSEEK_API_KEY 未设置（离线回放不需要）
+[INFO] KIMI_API_KEY 未设置（离线回放不需要）
+离线基础环境检查通过；设备、工具绑定、模型和完整发现能力仍需分别验证。

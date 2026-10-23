@@ -1,0 +1,22 @@
+[
+  {"query":"我在本项目交付目录，想跑一次mcp_eval离线回放。请检查配置，执行并告诉我新生成哪批报告、数据是什么来源。", "should_trigger":true},
+  {"query":"这次MCP评测manifest列了16项，results只剩8行。请帮我按原计划核对分母，解释哪些是没执行、哪些真的失败。", "should_trigger":true},
+  {"query":"明天有一次车机用机窗口，请根据本项目现有配置准备上机检查清单，并标出仍需现场确认的二进制和工具定义。", "should_trigger":true},
+  {"query":"本项目N02越界输入居然返回success，请按已冻结用例解释应该判什么，以及需要保留哪些证据。", "should_trigger":true},
+  {"query":"有一批旧mcp_eval结果，摘要丢了，但manifest和results还在。帮我重建报告，别重新调用设备或模型。", "should_trigger":true},
+  {"query":"请解读本项目tests/results下我指定的那个批次，列出计划、通过、失败、无法判断和数据来源，别用历史成功报告。", "should_trigger":true},
+  {"query":"我想检查这份车端注册定义dump采集计划，只做capture-catalog的dry-run，并说明这能不能代表实时工具发现。", "should_trigger":true},
+  {"query":"本项目模型评测结果显示provider_error且tool_calls为空，旧报告却判通过。帮我依据证据复核这个不调用工具的案例。", "should_trigger":true},
+  {"query":"这次mcp_eval运行中断，前几项好像已经执行了。请读取批次的manifest和artifact，解释保留的证据，先别重试设备操作。", "should_trigger":true},
+  {"query":"我已经有本项目的离线报告和录制，想让你按既有流程执行一次并解释负面用例为什么也可能pass。", "should_trigger":true},
+  {"query":"给我从概念上解释MCP的tools/list和tools/call区别，不需要读取或运行任何项目。", "should_trigger":false},
+  {"query":"请修复mcp_eval判定器的Python代码，并写新的单元测试；这次不要执行已有评测任务。", "should_trigger":false},
+  {"query":"只把README里的一处中文错别字修正，保留所有命令和语义，不运行工具。", "should_trigger":false},
+  {"query":"我要从零开发一个天气MCP server，和现有车载评测器无关，请先帮我设计工具接口。", "should_trigger":false},
+  {"query":"我的个人手机adb devices显示unauthorized，想了解手机授权步骤，不涉及这个车载评测项目。", "should_trigger":false},
+  {"query":"帮我按公司HTML模板排版答辩个人介绍页，只调整文字和样式，不读取批次或运行评测。", "should_trigger":false},
+  {"query":"请比较GitHub Copilot和Cursor的编辑体验，不要讨论本项目工具的运行结果。", "should_trigger":false},
+  {"query":"我想优化mcp-eval这个Skill的description并扩充评测集，任务是开发Skill本身，不是用它执行评测。", "should_trigger":false},
+  {"query":"用Python解释JSON NaN与浮点数的关系，给一个通用教学例子，不修改或者运行当前项目。", "should_trigger":false},
+  {"query":"请根据现有项目计划整理我需要向导师确认的事项，不调用评测器，不分析任何批次数据。", "should_trigger":false}
+]

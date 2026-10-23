@@ -1,0 +1,11 @@
+{
+  "checked_files": 35,
+  "changed": [
+    "fixtures/rebuild-batch/report.md",
+    "fixtures/rebuild-batch/summary.json"
+  ],
+  "unexpected_changes": [],
+  "immutable_files": 33,
+  "immutable_unchanged": true,
+  "original_batch_immutable_match": true
+}

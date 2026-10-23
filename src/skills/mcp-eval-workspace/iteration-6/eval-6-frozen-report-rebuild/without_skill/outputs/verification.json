@@ -1,0 +1,36 @@
+{
+  "status": "passed",
+  "planned": 8,
+  "observed": 8,
+  "counts": {
+    "pass": 6,
+    "fail": 1,
+    "unassessed": 1
+  },
+  "pass_rate_planned": 0.75,
+  "judge_coverage": 0.875,
+  "pass_rate_judged": 0.8571428571428571,
+  "execution_status_counts": {
+    "completed": 7,
+    "not_run": 1
+  },
+  "source_types": [
+    "synthetic"
+  ],
+  "failure_categories": {
+    "assertion_failed": 1
+  },
+  "artifacts_match_results": 8,
+  "recording_matches_manifest": true,
+  "engine_source_mismatches": [],
+  "hash_checked_files": 35,
+  "changed_files": [
+    "fixtures/rebuild-batch/report.md",
+    "fixtures/rebuild-batch/summary.json"
+  ],
+  "immutable_files_unchanged": 33,
+  "report_item_rows_checked": 8,
+  "summary_groups_checked": 2,
+  "tool_or_model_rerun": false,
+  "method": "rebuild CLI; independent JSON/count/report/hash checks; no run command or rejudging"
+}

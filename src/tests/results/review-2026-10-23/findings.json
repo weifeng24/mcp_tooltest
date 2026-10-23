@@ -1,0 +1,32 @@
+{
+  "issues": [
+    {
+      "id": "R23-C01",
+      "severity": "major",
+      "dimension_id": 4,
+      "dimension": "维度4·代码逻辑与语法规范",
+      "rule_id": "4.21",
+      "check_item": "非有限数值可通过参数校验并进入工具执行（P1）",
+      "file": "src/src/mcp_eval/providers/openai_compat.py",
+      "line": 101,
+      "description": "模型参数使用默认json.loads；NaN被解析为float，带minimum=16/maximum=30的number Schema仍接受它。离线反例观察到validation_errors=0且执行器收到一次NaN参数。L1配置也接受NaN，device.command_for_case产生包含NaN的非标准JSON命令。此处只复现本地下发边界，不声称真实设备接受或执行了非法参数。关联位置：config.py:166、model_loop.py:207、device.py:88。",
+      "code_before": "arguments = json.loads(raw_args) if isinstance(raw_args, str) else raw_args\nif not isinstance(arguments, dict):\n    raise ValueError(\"arguments 必须为 JSON 对象\")",
+      "code_after": "def reject_nonfinite(token):\n    raise ValueError(f\"非标准JSON常量: {token}\")\n\narguments = json.loads(raw_args, parse_constant=reject_nonfinite) if isinstance(raw_args, str) else raw_args\njson.dumps(arguments, allow_nan=False)\nif not isinstance(arguments, dict):\n    raise ValueError(\"arguments 必须为 JSON 对象\")",
+      "fix_explain": "建议片段未应用，仅经语法检查。严格拒绝NaN/Infinity及溢出产生的非有限浮点数；L1加载、模型解析、直接对象入参及最终序列化应采用一致策略，并转换为现有配置/参数错误。验收：NaN、Infinity、-Infinity、1e309及嵌套非有限值均不得下发；合法边界数值保持正常。证据：tests/results/review-2026-10-23/probe-results.json中的C01两项。"
+    },
+    {
+      "id": "R23-C02",
+      "severity": "minor",
+      "dimension_id": 4,
+      "dimension": "维度4·代码逻辑与语法规范",
+      "rule_id": "4.23",
+      "check_item": "异常结束时已观察的禁止调用决策未参与负面判定（P2）",
+      "file": "src/src/mcp_eval/model_loop.py",
+      "line": 111,
+      "description": "model_response事件已经保存一个完整调用决策，但在超时或finish_reason=length分支提前返回，response_raw.tool_calls仍为空。judge_record只检查后者，两个反例均判unassessed；按design.md第4节已观察到禁止调用即保留fail的契约，应判fail。实际下发次数均为0，停止执行的预算保护有效；问题是决策证据与执行记录混用导致漏报违规。关联位置：judge.py:97-102。",
+      "code_before": "calls = response.get(\"tool_calls\") if isinstance(response, dict) else None\nif any(a[\"type\"] == \"no_tool_call\" for a in case[\"assertions\"]) and isinstance(calls, list) and calls:\n    return _set(record, \"fail\", \"负面控制被违反：已观察到工具调用决策\")",
+      "code_after": "calls = response.get(\"tool_calls\") if isinstance(response, dict) else None\nobserved = [decision for event in record.events\n            if isinstance(event, dict) and event.get(\"kind\") == \"model_response\"\n            and isinstance(event.get(\"decisions\"), list)\n            for decision in event[\"decisions\"]\n            if isinstance(decision, dict) and isinstance(decision.get(\"name\"), str)\n            and decision[\"name\"]]\nif any(a[\"type\"] == \"no_tool_call\" for a in case[\"assertions\"]) and (observed or isinstance(calls, list) and calls):\n    return _set(record, \"fail\", \"负面控制被违反：已观察到工具调用决策\")",
+      "fix_explain": "建议片段未应用，仅经语法检查。将已解析决策与实际执行分开记录，在异常收尾和rebuild时使用一致判据；不要为了保存决策而继续下发超时工具，也不要把没有有效决策的API错误改为fail。验收：两个反例均fail且执行器调用0次，无决策的错误仍unassessed。证据：tests/results/review-2026-10-23/probe-results.json中的C02两项。"
+    }
+  ]
+}

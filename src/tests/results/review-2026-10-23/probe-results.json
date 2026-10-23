@@ -1,0 +1,313 @@
+{
+  "source_type": "synthetic",
+  "real_device_or_api": false,
+  "probes": {
+    "C01-L2-nonfinite": {
+      "arguments_parse_error": null,
+      "validation_errors": 0,
+      "dispatched": 1,
+      "argument_is_nan": true
+    },
+    "C01-L1-nonfinite": {
+      "config_accepted": true,
+      "argv": [
+        "mcp_service",
+        "-c",
+        "-t",
+        "--toolscall",
+        "service.setTemp",
+        "{\"temperature\":NaN}"
+      ]
+    },
+    "C02-deadline-decision": {
+      "mode": "deadline",
+      "observed_decisions": 1,
+      "judged_calls": 0,
+      "dispatched": 0,
+      "verdict": "unassessed",
+      "reason": "执行或证据不完整: timeout",
+      "expected_verdict": "fail",
+      "record": {
+        "run_id": "probe",
+        "case_id": "M01",
+        "channel": "replay",
+        "action": "model_task",
+        "service": "auto",
+        "tool": null,
+        "arguments": null,
+        "model": "mock",
+        "request_raw": {
+          "task": "不要调用任何工具，仅回答你好",
+          "tools": [
+            {
+              "name": "service.setTemp",
+              "inputSchema": {
+                "type": "object",
+                "properties": {
+                  "temperature": {
+                    "type": "number",
+                    "minimum": 16,
+                    "maximum": 30
+                  }
+                },
+                "required": [
+                  "temperature"
+                ],
+                "additionalProperties": false
+              }
+            }
+          ],
+          "api_name_map": {
+            "service.setTemp": "service_setTemp"
+          },
+          "messages": [
+            {
+              "role": "system",
+              "content": "你是车载智能助手，可调用提供的工具完成任务。只在必要时调用工具，参数须符合工具约束；信息不足时先澄清。根据实际工具结果回答，不声称未完成的操作已经成功。"
+            },
+            {
+              "role": "user",
+              "content": "不要调用任何工具，仅回答你好"
+            }
+          ]
+        },
+        "response_raw": {
+          "tool_calls": [],
+          "final_answer": null,
+          "rounds": 1,
+          "call_count": 0,
+          "validation_errors": 0,
+          "usage_by_round": [
+            null
+          ],
+          "stopped_reason": "timeout",
+          "usage": {
+            "prompt_tokens": null,
+            "completion_tokens": null,
+            "total_tokens": null
+          }
+        },
+        "execution_status": "timeout",
+        "error_category": "timeout",
+        "latency_ms": 2000,
+        "verdict": "unassessed",
+        "verdict_reason": "执行或证据不完整: timeout",
+        "timestamp": "2026-10-23T14:34:27+08:00",
+        "stdout_tail": "",
+        "evidence": [],
+        "schema_version": 2,
+        "item_id": "",
+        "repeat_index": 0,
+        "source_type": "synthetic",
+        "trace_complete": false,
+        "stdout": "",
+        "stderr": "",
+        "events": [
+          {
+            "kind": "model_request",
+            "messages": [
+              {
+                "role": "system",
+                "content": "你是车载智能助手，可调用提供的工具完成任务。只在必要时调用工具，参数须符合工具约束；信息不足时先澄清。根据实际工具结果回答，不声称未完成的操作已经成功。"
+              },
+              {
+                "role": "user",
+                "content": "不要调用任何工具，仅回答你好"
+              }
+            ]
+          },
+          {
+            "kind": "model_response",
+            "raw": {
+              "choices": [
+                {
+                  "finish_reason": "tool_calls",
+                  "message": {
+                    "content": null,
+                    "tool_calls": [
+                      {
+                        "id": "call-1",
+                        "type": "function",
+                        "function": {
+                          "name": "service_setTemp",
+                          "arguments": "{\"temperature\": 22}"
+                        }
+                      }
+                    ]
+                  }
+                }
+              ]
+            },
+            "content": null,
+            "finish_reason": "tool_calls",
+            "decisions": [
+              {
+                "call_id": "call-1",
+                "name": "service_setTemp",
+                "arguments": {
+                  "temperature": 22
+                },
+                "arguments_parse_error": null,
+                "arguments_raw": "{\"temperature\": 22}"
+              }
+            ]
+          }
+        ],
+        "provenance": {}
+      }
+    },
+    "C02-length-decision": {
+      "mode": "length",
+      "observed_decisions": 1,
+      "judged_calls": 0,
+      "dispatched": 0,
+      "verdict": "unassessed",
+      "reason": "执行或证据不完整: incomplete_response",
+      "expected_verdict": "fail",
+      "record": {
+        "run_id": "probe",
+        "case_id": "M01",
+        "channel": "replay",
+        "action": "model_task",
+        "service": "auto",
+        "tool": null,
+        "arguments": null,
+        "model": "mock",
+        "request_raw": {
+          "task": "不要调用任何工具，仅回答你好",
+          "tools": [
+            {
+              "name": "service.setTemp",
+              "inputSchema": {
+                "type": "object",
+                "properties": {
+                  "temperature": {
+                    "type": "number",
+                    "minimum": 16,
+                    "maximum": 30
+                  }
+                },
+                "required": [
+                  "temperature"
+                ],
+                "additionalProperties": false
+              }
+            }
+          ],
+          "api_name_map": {
+            "service.setTemp": "service_setTemp"
+          },
+          "messages": [
+            {
+              "role": "system",
+              "content": "你是车载智能助手，可调用提供的工具完成任务。只在必要时调用工具，参数须符合工具约束；信息不足时先澄清。根据实际工具结果回答，不声称未完成的操作已经成功。"
+            },
+            {
+              "role": "user",
+              "content": "不要调用任何工具，仅回答你好"
+            }
+          ]
+        },
+        "response_raw": {
+          "tool_calls": [],
+          "final_answer": null,
+          "rounds": 1,
+          "call_count": 0,
+          "validation_errors": 0,
+          "usage_by_round": [
+            null
+          ],
+          "stopped_reason": "incomplete_response",
+          "usage": {
+            "prompt_tokens": null,
+            "completion_tokens": null,
+            "total_tokens": null
+          }
+        },
+        "execution_status": "error",
+        "error_category": "incomplete_response",
+        "latency_ms": 0,
+        "verdict": "unassessed",
+        "verdict_reason": "执行或证据不完整: incomplete_response",
+        "timestamp": "2026-10-23T14:34:27+08:00",
+        "stdout_tail": "",
+        "evidence": [],
+        "schema_version": 2,
+        "item_id": "",
+        "repeat_index": 0,
+        "source_type": "synthetic",
+        "trace_complete": false,
+        "stdout": "",
+        "stderr": "",
+        "events": [
+          {
+            "kind": "model_request",
+            "messages": [
+              {
+                "role": "system",
+                "content": "你是车载智能助手，可调用提供的工具完成任务。只在必要时调用工具，参数须符合工具约束；信息不足时先澄清。根据实际工具结果回答，不声称未完成的操作已经成功。"
+              },
+              {
+                "role": "user",
+                "content": "不要调用任何工具，仅回答你好"
+              }
+            ]
+          },
+          {
+            "kind": "model_response",
+            "raw": {
+              "choices": [
+                {
+                  "finish_reason": "length",
+                  "message": {
+                    "content": null,
+                    "tool_calls": [
+                      {
+                        "id": "call-1",
+                        "type": "function",
+                        "function": {
+                          "name": "service_setTemp",
+                          "arguments": "{\"temperature\": 22}"
+                        }
+                      }
+                    ]
+                  }
+                }
+              ]
+            },
+            "content": null,
+            "finish_reason": "length",
+            "decisions": [
+              {
+                "call_id": "call-1",
+                "name": "service_setTemp",
+                "arguments": {
+                  "temperature": 22
+                },
+                "arguments_parse_error": null,
+                "arguments_raw": "{\"temperature\": 22}"
+              }
+            ]
+          }
+        ],
+        "provenance": {}
+      }
+    }
+  },
+  "engine_sha256": {
+    "src/mcp_eval/__init__.py": "a8698b03ca6130657305718132d863fe29164bdc87858693d9ce72d984202bd0",
+    "src/mcp_eval/__main__.py": "057caab0f061b777bf97069b4356caa899c779aca7be4d8c68f25efb8e8782a5",
+    "src/mcp_eval/catalog.py": "8f0941e06714e521a4370c5d268d0e4034396bcf089cc8d1f326a86c60b6cdd2",
+    "src/mcp_eval/config.py": "968232e60efafd643feeb0d1bff859c83817695d66b50fa41c221d4808e8bf81",
+    "src/mcp_eval/device.py": "05dcc6eb74523f75d95147a4947b9be3974cebf11cf8ad36ae907c9ed25fabcc",
+    "src/mcp_eval/judge.py": "def6618927156e94a30ccb7e5e737780169b5fa44bd39ef7430e63c1abc387df",
+    "src/mcp_eval/model_loop.py": "1c6e427b0a745bf14ac3bb60ba49d4071672b4db48c4bbf1fbc9db3a3e775d98",
+    "src/mcp_eval/providers/__init__.py": "750f080c99bc03876a73cc43e2efb5373433d1119b12953a5af12202a3fb96f2",
+    "src/mcp_eval/providers/base.py": "a5ca9e7c4df4b834e604e9c67542e0801636eeff2a1ed9dec80028b1ef00f17e",
+    "src/mcp_eval/providers/openai_compat.py": "43496c402fe5d3a8a0057ad6d53313d215ed550af35c195b9156404ef072b17c",
+    "src/mcp_eval/records.py": "0eeb20cdb9f40b84a4586b6046f28c765f431ea3e69c4b6b39bad2a5651cab8a",
+    "src/mcp_eval/replay.py": "e8e35ad753530b6c3dfcbb0fe9d9e0eddae672ef3a5b0e7242facb076161b9f9",
+    "src/mcp_eval/report.py": "673104565d97fd16641175d99a8fcdaf36c2e32f5a9c6b7ace4f3e9ed23d0374",
+    "src/mcp_eval/runner.py": "14c9c410713204fc0e219d9a96148a6109806120b3d4f9318cd55fb8043c712a"
+  }
+}

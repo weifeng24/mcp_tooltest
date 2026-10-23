@@ -1,0 +1,18 @@
+{
+  "cwd": "/home/tssh/文档/Works/mission/校招生ai演练任务/src/skills/mcp-eval-workspace/iteration-6/eval-1-offline-replay/with_skill/sandbox",
+  "argv": [
+    "env",
+    "MCP_EVAL_PYTHON=/home/tssh/文档/Works/mission/校招生ai演练任务/src/tests/results/remediation-2026-10-16/.venv/bin/python",
+    "bash",
+    "skills/mcp-eval/scripts/check_env.sh"
+  ],
+  "command": "env 'MCP_EVAL_PYTHON=/home/tssh/文档/Works/mission/校招生ai演练任务/src/tests/results/remediation-2026-10-16/.venv/bin/python' bash skills/mcp-eval/scripts/check_env.sh",
+  "launcher": "'/home/tssh/文档/Works/mission/校招生ai演练任务/src/tests/results/remediation-2026-10-16/.venv/bin/python' ../outputs/capture_command.py 02-check-env env 'MCP_EVAL_PYTHON=/home/tssh/文档/Works/mission/校招生ai演练任务/src/tests/results/remediation-2026-10-16/.venv/bin/python' bash skills/mcp-eval/scripts/check_env.sh",
+  "environment": {
+    "PYTHONPATH": "src",
+    "PYTHONDONTWRITEBYTECODE": "1"
+  },
+  "returncode": 0,
+  "stdout": "/home/tssh/文档/Works/mission/校招生ai演练任务/src/skills/mcp-eval-workspace/iteration-6/eval-1-offline-replay/with_skill/outputs/02-check-env.stdout.txt",
+  "stderr": "/home/tssh/文档/Works/mission/校招生ai演练任务/src/skills/mcp-eval-workspace/iteration-6/eval-1-offline-replay/with_skill/outputs/02-check-env.stderr.txt"
+}

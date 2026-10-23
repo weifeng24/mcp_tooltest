@@ -1,0 +1,10 @@
+{
+  "company_template_sha256": "eb5ac1f571d137ce0cc326a151b402523d799953472ae49050fca2efa89bab80",
+  "skill_runtime_sha256": "2ea3176ad2b88d38168aded0f6b50f38de92d996ac5d9c95e5f06ca8a9111b9b",
+  "status": "stage_draft_not_final_acceptance",
+  "outputs": [
+    "index.html",
+    "offline-demo.html"
+  ],
+  "external_assets": false
+}

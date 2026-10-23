@@ -1,0 +1,6 @@
+usage: check_skill_trigger.py [-h]
+
+检查真实Skill自动触发评测的本机前置条件；默认不调用模型。
+
+options:
+  -h, --help  show this help message and exit

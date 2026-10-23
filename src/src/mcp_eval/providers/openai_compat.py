@@ -9,12 +9,27 @@
 from __future__ import annotations
 
 import json
+import math
 import os
 import urllib.error
 import urllib.request
 from typing import Any
 
 from .base import ProviderError, ProviderResponse, ToolCallDecision
+
+
+def reject_nonfinite(value: Any, source: str = "参数") -> None:
+    """递归拒绝 NaN/Infinity 等非有限数值；它们不是合法 JSON，且会绕过数值范围校验。"""
+    if isinstance(value, bool):
+        return
+    if isinstance(value, float) and not math.isfinite(value):
+        raise ValueError(f"{source}包含非有限数值，不是合法JSON且不能下发")
+    if isinstance(value, dict):
+        for item in value.values():
+            reject_nonfinite(item, source)
+    elif isinstance(value, list):
+        for item in value:
+            reject_nonfinite(item, source)
 
 
 class OpenAICompatProvider:
@@ -104,6 +119,7 @@ class OpenAICompatProvider:
                 arguments = json.loads(raw_args) if isinstance(raw_args, str) else raw_args
                 if not isinstance(arguments, dict):
                     raise ValueError("arguments 必须为 JSON 对象")
+                reject_nonfinite(arguments, "模型工具参数")
             except (ValueError, TypeError) as exc:
                 arguments = {}
                 parse_error = f"arguments JSON 解析失败: {exc}"

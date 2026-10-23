@@ -1,5 +1,9 @@
 # MCP 工具评测
 
+**本地材料补齐（2026-10-23）：**Skill当前版本的5正向＋2负面行为验证已完成本轮有限对照，官方复核页面、业务对比方案、阶段答辩HTML及合成演示录屏已生成。查看[本地执行记录](tasks/local-completion-2026-10-23.md)、[阶段展示](docs/defense/index.html)和[Skill复核](skills/mcp-eval-workspace/iteration-6/review.html)。真实设备、自动触发与正式验收仍未完成。
+
+**2026-10-23复审整改更新：**复审发现的2项问题（非有限参数下发、异常结束时禁止调用决策漏判）已完成离线整改：新增24项回归通过，完整回归184项，8项合成回放及报告重建通过，10-23新增4反例与10-19旧7反例均满足修复判据。真机、完整工具发现、Kimi接入及最终验收仍未完成。整改见[本轮记录](docs/remediation-2026-10-23.md)，[10-23复审](docs/reviews/2026-10-23/requirements-review.md)保留修复前结论。
+
 面向车载 MCP 工具的接口评测（L1）与模型调用评测（L2）原型。2026-10-19复审发现的5项问题已完成本轮离线整改：原7个反例均满足修复判据，完整回归160项通过，8项合成回放通过且报告重建一致。**真机、完整工具发现、Kimi接入及最终验收仍未完成**。最新证据见[本轮整改记录](docs/remediation-2026-10-19.md)，[复审报告](docs/reviews/2026-10-19/requirements-review.md)保留修复前结论。
 
 支持配置加载、独立运行计划、顺序回放、明确的通过/失败/无法判断、报告重建和模型工具调用循环。开发样本采用 `synthetic` 标记，不能作为车机能力结论。实际范围及差异见 [proposal.md](proposal.md)，整改见 [docs/remediation.md](docs/remediation.md)。
@@ -186,8 +190,10 @@ PYTHONPATH=src .venv/bin/python scripts/api_smoke.py configs/models/deepseek.jso
 
 - [需求与范围](proposal.md)、[设计](docs/design.md)、[整改记录](docs/remediation.md)。
 - [用例设计](tests/cases/README.md)、[工具目录状态](docs/tool-catalog.md)、[任务状态](tasks/todo.md)。
-- [Skill](skills/mcp-eval/SKILL.md)及[整改记录](skills-creator/fix-log.md)：初版存在，完整验收仍待闭环。
+- [Skill](skills/mcp-eval/SKILL.md)及[整改记录](skills-creator/fix-log.md)：当前7场景行为验证有证据，自动触发和完整验收仍待闭环。
 - [中期自评](midterm.md)、[结题报告](docs/report.md)：区分已验证结果和待真机材料。
 - [真实用例冻结表](docs/case-freeze.md)、[答辩讲解准备稿](docs/defense-outline.md)：用于取得设备信息后准备真实批次与最终演示。
+- [业务对比方案](docs/effect-comparison-plan.md)、[培训与业务素材待补表](docs/training-and-business-inputs.md)。
+- [阶段答辩与演示说明](docs/defense/README.md)：六部分HTML、已执行记录回看、录屏及讲解提纲，明确合成来源。
 
 源码在 `src/mcp_eval/`，测试在 `src/tests/`，配置在 `configs/`。正式提交名称和部门入口待确认；运行不依赖交付区之外的 `memory/` 或 `/data` 源码路径。

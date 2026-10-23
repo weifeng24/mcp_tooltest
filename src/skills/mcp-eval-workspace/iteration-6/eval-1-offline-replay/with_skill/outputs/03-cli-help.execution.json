@@ -1,0 +1,18 @@
+{
+  "cwd": "/home/tssh/文档/Works/mission/校招生ai演练任务/src/skills/mcp-eval-workspace/iteration-6/eval-1-offline-replay/with_skill/sandbox",
+  "argv": [
+    "/home/tssh/文档/Works/mission/校招生ai演练任务/src/tests/results/remediation-2026-10-16/.venv/bin/python",
+    "-m",
+    "mcp_eval",
+    "--help"
+  ],
+  "command": "'/home/tssh/文档/Works/mission/校招生ai演练任务/src/tests/results/remediation-2026-10-16/.venv/bin/python' -m mcp_eval --help",
+  "launcher": "'/home/tssh/文档/Works/mission/校招生ai演练任务/src/tests/results/remediation-2026-10-16/.venv/bin/python' ../outputs/capture_command.py 03-cli-help '/home/tssh/文档/Works/mission/校招生ai演练任务/src/tests/results/remediation-2026-10-16/.venv/bin/python' -m mcp_eval --help",
+  "environment": {
+    "PYTHONPATH": "src",
+    "PYTHONDONTWRITEBYTECODE": "1"
+  },
+  "returncode": 0,
+  "stdout": "/home/tssh/文档/Works/mission/校招生ai演练任务/src/skills/mcp-eval-workspace/iteration-6/eval-1-offline-replay/with_skill/outputs/03-cli-help.stdout.txt",
+  "stderr": "/home/tssh/文档/Works/mission/校招生ai演练任务/src/skills/mcp-eval-workspace/iteration-6/eval-1-offline-replay/with_skill/outputs/03-cli-help.stderr.txt"
+}

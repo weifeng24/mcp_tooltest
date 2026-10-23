@@ -1,0 +1,49 @@
+{
+  "workdir": "/home/tssh/文档/Works/mission/校招生ai演练任务/src/skills/mcp-eval-workspace/iteration-6/eval-7-preflight-plan/without_skill/sandbox",
+  "shell": "Ubuntu Bash",
+  "python": "/home/tssh/文档/Works/mission/校招生ai演练任务/src/tests/results/remediation-2026-10-16/.venv/bin/python",
+  "python_environment": {
+    "PYTHONPATH": "src",
+    "PYTHONDONTWRITEBYTECODE": "1"
+  },
+  "commands": [
+    {
+      "id": "00-directory-check",
+      "command": "ls -ld \".\" \"../outputs\"",
+      "exit_code": 0,
+      "stdout": "00-directory-check.stdout.txt",
+      "stderr": "00-directory-check.stderr.txt",
+      "capture": "Tool output transcribed unchanged; no stderr was reported."
+    },
+    {
+      "id": "checklist",
+      "command": "PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=src \"/home/tssh/文档/Works/mission/校招生ai演练任务/src/tests/results/remediation-2026-10-16/.venv/bin/python\" -m mcp_eval checklist > \"../outputs/checklist.stdout.md\" 2> \"../outputs/checklist.stderr.txt\"",
+      "exit_code": 0,
+      "stdout": "checklist.stdout.md",
+      "stderr": "checklist.stderr.txt",
+      "capture": "Direct shell redirection; raw CLI output."
+    },
+    {
+      "id": "catalog-plan",
+      "command": "PYTHONDONTWRITEBYTECODE=1 PYTHONPATH=src \"/home/tssh/文档/Works/mission/校招生ai演练任务/src/tests/results/remediation-2026-10-16/.venv/bin/python\" -m mcp_eval capture-catalog configs/servers/ark_mcp_service.json --service MCPVehicleService --dry-run > \"../outputs/catalog-plan.stdout.json\" 2> \"../outputs/catalog-plan.stderr.txt\"",
+      "exit_code": 0,
+      "stdout": "catalog-plan.stdout.json",
+      "stderr": "catalog-plan.stderr.txt",
+      "capture": "Direct shell redirection; raw CLI output."
+    }
+  ],
+  "observed": {
+    "device_serial_before": "SYNTHETIC-SERIAL-NOT-A-DEVICE",
+    "device_serial_after": "SYNTHETIC-SERIAL-NOT-A-DEVICE",
+    "server_edit_required": false,
+    "planned_files": 2,
+    "executed": 0,
+    "device_configured": true,
+    "runtime_tools_list_tested": false,
+    "device_readiness_verified": false,
+    "real_device_or_api_used": false
+  },
+  "token_usage": null,
+  "elapsed_seconds": null,
+  "measurement_note": "Token usage and total elapsed time are unknown and were not estimated."
+}

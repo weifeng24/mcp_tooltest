@@ -1,0 +1,167 @@
+{
+  "files": [
+    {
+      "service": "MCPVehicleService",
+      "kind": "tools",
+      "filename": "tools_MCPVehicleService.json",
+      "remote": "/data/mcp/dump/tools_MCPVehicleService.json",
+      "argv": [
+        "shell",
+        "cat /data/mcp/dump/tools_MCPVehicleService.json"
+      ]
+    },
+    {
+      "service": "MCPVehicleService",
+      "kind": "resources",
+      "filename": "resources_MCPVehicleService.json",
+      "remote": "/data/mcp/dump/resources_MCPVehicleService.json",
+      "argv": [
+        "shell",
+        "cat /data/mcp/dump/resources_MCPVehicleService.json"
+      ]
+    },
+    {
+      "service": "MCPVoiceService",
+      "kind": "tools",
+      "filename": "tools_MCPVoiceService.json",
+      "remote": "/data/mcp/dump/tools_MCPVoiceService.json",
+      "argv": [
+        "shell",
+        "cat /data/mcp/dump/tools_MCPVoiceService.json"
+      ]
+    },
+    {
+      "service": "MCPVoiceService",
+      "kind": "resources",
+      "filename": "resources_MCPVoiceService.json",
+      "remote": "/data/mcp/dump/resources_MCPVoiceService.json",
+      "argv": [
+        "shell",
+        "cat /data/mcp/dump/resources_MCPVoiceService.json"
+      ]
+    },
+    {
+      "service": "MCPMapService",
+      "kind": "tools",
+      "filename": "tools_MCPMapService.json",
+      "remote": "/data/mcp/dump/tools_MCPMapService.json",
+      "argv": [
+        "shell",
+        "cat /data/mcp/dump/tools_MCPMapService.json"
+      ]
+    },
+    {
+      "service": "MCPMapService",
+      "kind": "resources",
+      "filename": "resources_MCPMapService.json",
+      "remote": "/data/mcp/dump/resources_MCPMapService.json",
+      "argv": [
+        "shell",
+        "cat /data/mcp/dump/resources_MCPMapService.json"
+      ]
+    },
+    {
+      "service": "MCPVGuiService",
+      "kind": "tools",
+      "filename": "tools_MCPVGuiService.json",
+      "remote": "/data/mcp/dump/tools_MCPVGuiService.json",
+      "argv": [
+        "shell",
+        "cat /data/mcp/dump/tools_MCPVGuiService.json"
+      ]
+    },
+    {
+      "service": "MCPVGuiService",
+      "kind": "resources",
+      "filename": "resources_MCPVGuiService.json",
+      "remote": "/data/mcp/dump/resources_MCPVGuiService.json",
+      "argv": [
+        "shell",
+        "cat /data/mcp/dump/resources_MCPVGuiService.json"
+      ]
+    },
+    {
+      "service": "MCPKanziService",
+      "kind": "tools",
+      "filename": "tools_MCPKanziService.json",
+      "remote": "/data/mcp/dump/tools_MCPKanziService.json",
+      "argv": [
+        "shell",
+        "cat /data/mcp/dump/tools_MCPKanziService.json"
+      ]
+    },
+    {
+      "service": "MCPKanziService",
+      "kind": "resources",
+      "filename": "resources_MCPKanziService.json",
+      "remote": "/data/mcp/dump/resources_MCPKanziService.json",
+      "argv": [
+        "shell",
+        "cat /data/mcp/dump/resources_MCPKanziService.json"
+      ]
+    },
+    {
+      "service": "MCPGuideService",
+      "kind": "tools",
+      "filename": "tools_MCPGuideService.json",
+      "remote": "/data/mcp/dump/tools_MCPGuideService.json",
+      "argv": [
+        "shell",
+        "cat /data/mcp/dump/tools_MCPGuideService.json"
+      ]
+    },
+    {
+      "service": "MCPGuideService",
+      "kind": "resources",
+      "filename": "resources_MCPGuideService.json",
+      "remote": "/data/mcp/dump/resources_MCPGuideService.json",
+      "argv": [
+        "shell",
+        "cat /data/mcp/dump/resources_MCPGuideService.json"
+      ]
+    },
+    {
+      "service": "AndroidCameraProxy",
+      "kind": "tools",
+      "filename": "tools_AndroidCameraProxy.json",
+      "remote": "/data/mcp/dump/tools_AndroidCameraProxy.json",
+      "argv": [
+        "shell",
+        "cat /data/mcp/dump/tools_AndroidCameraProxy.json"
+      ]
+    },
+    {
+      "service": "AndroidCameraProxy",
+      "kind": "resources",
+      "filename": "resources_AndroidCameraProxy.json",
+      "remote": "/data/mcp/dump/resources_AndroidCameraProxy.json",
+      "argv": [
+        "shell",
+        "cat /data/mcp/dump/resources_AndroidCameraProxy.json"
+      ]
+    },
+    {
+      "service": "NVCameraProxy",
+      "kind": "tools",
+      "filename": "tools_NVCameraProxy.json",
+      "remote": "/data/mcp/dump/tools_NVCameraProxy.json",
+      "argv": [
+        "shell",
+        "cat /data/mcp/dump/tools_NVCameraProxy.json"
+      ]
+    },
+    {
+      "service": "NVCameraProxy",
+      "kind": "resources",
+      "filename": "resources_NVCameraProxy.json",
+      "remote": "/data/mcp/dump/resources_NVCameraProxy.json",
+      "argv": [
+        "shell",
+        "cat /data/mcp/dump/resources_NVCameraProxy.json"
+      ]
+    }
+  ],
+  "executed": 0,
+  "device_configured": false,
+  "runtime_tools_list_tested": false
+}

@@ -1,0 +1,11 @@
+{
+  "queries": 20,
+  "positive": 10,
+  "negative": 10,
+  "claude_cli": null,
+  "yaml_available": true,
+  "official_runner_exists": true,
+  "authentication": "not_checked",
+  "trigger_evaluation_executed": false,
+  "status": "blocked_missing_claude_cli"
+}

@@ -1,0 +1,85 @@
+{
+  "run_id": "replay-smoke-20261023T083911050669Z-0886a092",
+  "schema_version": 2,
+  "total": 8,
+  "observed": 8,
+  "groups": {
+    "replay|L1|negative|-": {
+      "planned": 2,
+      "pass": 2,
+      "fail": 0,
+      "unassessed": 0,
+      "pass_rate_planned": 1.0,
+      "judge_coverage": 1.0,
+      "pass_rate_judged": 1.0,
+      "source_types": [
+        "synthetic"
+      ],
+      "latency_by_verdict": {
+        "pass": {
+          "median": null,
+          "min": null,
+          "max": null,
+          "samples": 0
+        },
+        "fail": {
+          "median": null,
+          "min": null,
+          "max": null,
+          "samples": 0
+        },
+        "unassessed": {
+          "median": null,
+          "min": null,
+          "max": null,
+          "samples": 0
+        }
+      },
+      "latency_ms": {
+        "median": null,
+        "min": null,
+        "max": null,
+        "samples": 0
+      }
+    },
+    "replay|L1|positive|-": {
+      "planned": 6,
+      "pass": 6,
+      "fail": 0,
+      "unassessed": 0,
+      "pass_rate_planned": 1.0,
+      "judge_coverage": 1.0,
+      "pass_rate_judged": 1.0,
+      "source_types": [
+        "synthetic"
+      ],
+      "latency_by_verdict": {
+        "pass": {
+          "median": null,
+          "min": null,
+          "max": null,
+          "samples": 0
+        },
+        "fail": {
+          "median": null,
+          "min": null,
+          "max": null,
+          "samples": 0
+        },
+        "unassessed": {
+          "median": null,
+          "min": null,
+          "max": null,
+          "samples": 0
+        }
+      },
+      "latency_ms": {
+        "median": null,
+        "min": null,
+        "max": null,
+        "samples": 0
+      }
+    }
+  },
+  "failure_categories": {}
+}

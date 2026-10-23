@@ -1,0 +1,13 @@
+{
+  "expectations": [
+    {"text": "实际执行rebuild并生成本组报告", "passed": true, "evidence": "outputs/commands.md:31-43,81-87 记录实际 rebuild fixtures/rebuild-batch、退出码 0；outputs/07-rebuild.stdout.txt:1 返回本组 summary/report 路径。sandbox/fixtures/rebuild-batch/summary.json 与 report.md 已有混合结果内容，非 STALE 占位；outputs/11-verify.stdout.json:38-46 保存派生报告前后哈希变化。"},
+    {"text": "重建后计划8、通过6、失败1、无法判断1", "passed": true, "evidence": "outputs/answer.md:5,33-50 报告 8/6/1/1；outputs/11-verify.stdout.json:11-26 与 sandbox/fixtures/rebuild-batch/summary.json 的 total/groups、results.jsonl:1-8 及 report.md 分组和逐项行相符。"},
+    {"text": "使用批次冻结输入，manifest与results的前后哈希一致", "passed": true, "evidence": "outputs/commands.md:84 的 rebuild 指向该批次；outputs/01-immutable-before.sha256:1-11 与 outputs/08-immutable-after.sha256:1-11 完全相同，manifest=faaafffd…30783、results=ffbd14e2…69626。评分时逐字节复算这两文件和全部受检文件，匹配前后记录及 input-hashes-before.json；冻结用例在 manifest.inputs.cases 中，未以当前用例替换。"},
+    {"text": "明确重建未重新调用设备或模型，保持synthetic来源", "passed": true, "evidence": "outputs/answer.md:89-95 明确重建不等于重新调用、未 run/回放/设备/API；outputs/commands.md:31-43,57-110 的命令仅有帮助、自检、重建和文件核验。sandbox/fixtures/rebuild-batch/results.jsonl:1-8 及重建 summary.groups[*].source_types 仍为 synthetic。"},
+    {"text": "执行前查看帮助，并引用实际summary/report路径", "passed": true, "evidence": "outputs/commands.md:35-39,75-85 记录 rebuild --help 先于 rebuild，均返回 0；outputs/06-rebuild-help.stdout.txt:1-7 保存实际帮助。outputs/answer.md:7-10 引用本组重建文件，和 outputs/07-rebuild.stdout.txt:1 的实际输出路径一致。"}
+  ],
+  "summary": {"passed": 5, "failed": 0, "total": 5, "pass_rate": 1.0},
+  "timing": {"total_tokens": null, "duration_ms": null, "total_duration_seconds": null, "reason": "等待工具实际返回，缺字段不估算"},
+  "claims": [{"claim": "重建只更新两份派生报告，所列 29 个受检文件保持不变", "type": "process", "verified": true, "evidence": "outputs/01-immutable-before.sha256、08-immutable-after.sha256 各 29 行相同，当前文件复算匹配；outputs/11-verify.stdout.json:38-46 的报告哈希由 STALE 值变为实际报告值。核验范围仅限所列文件。"}],
+  "eval_feedback": {"suggestions": [{"assertion": "使用批次冻结输入，manifest与results的前后哈希一致", "reason": "哈希检查证明原文件字节不变，但当前用例与冻结用例相同，未形成能区分错误输入来源的结果对照。未来可预置当前配置/用例与冻结版本不同，验证重建仍遵循冻结计划；本轮按已有命令和文件证据判通过。"}], "overall": "报告重建及原始证据保留可核验；不能把退出 0 或重建完成当成业务全通过。"}
+}

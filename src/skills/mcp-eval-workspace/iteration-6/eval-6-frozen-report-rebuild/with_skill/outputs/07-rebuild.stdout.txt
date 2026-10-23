@@ -1,0 +1,1 @@
+{"summary": "/home/tssh/文档/Works/mission/校招生ai演练任务/src/skills/mcp-eval-workspace/iteration-6/eval-6-frozen-report-rebuild/with_skill/sandbox/fixtures/rebuild-batch/summary.json", "report": "/home/tssh/文档/Works/mission/校招生ai演练任务/src/skills/mcp-eval-workspace/iteration-6/eval-6-frozen-report-rebuild/with_skill/sandbox/fixtures/rebuild-batch/report.md"}

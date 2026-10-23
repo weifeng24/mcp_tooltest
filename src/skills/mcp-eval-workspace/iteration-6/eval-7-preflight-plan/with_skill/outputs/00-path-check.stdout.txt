@@ -1,0 +1,2 @@
+drwxrwxr-x 9 tssh tssh 4096 10月 23 15:19 .
+drwxrwxr-x 2 tssh tssh 4096 10月 23 15:33 ../outputs

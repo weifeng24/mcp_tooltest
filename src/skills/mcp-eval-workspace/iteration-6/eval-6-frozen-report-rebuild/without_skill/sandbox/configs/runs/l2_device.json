@@ -1,0 +1,15 @@
+{
+    "run_id": "l2-device",
+    "channel": "device",
+    "server_ref": "configs/servers/ark_mcp_service.json",
+    "model_refs": [
+        "configs/models/deepseek.json",
+        "configs/models/kimi.json"
+    ],
+    "case_glob": "tests/cases/l2/*.json",
+    "tools_file": "tests/results/l2-device/tools_capture.json",
+    "repeat": 1,
+    "timeout_seconds": 120,
+    "output_dir": "tests/results",
+    "notes": "L2候选双模型批次，尚未真机验证。tools_file是待替换的路径：按docs/catalog-capture.md采集并核对完整定义后填写实际catalog路径；快照不代表实时tools/list通过。DeepSeek/Kimi分别核对端点、权限与密钥环境变量，未验证模型保留未执行。"
+}

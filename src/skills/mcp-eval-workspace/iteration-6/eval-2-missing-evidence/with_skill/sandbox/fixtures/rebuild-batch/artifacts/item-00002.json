@@ -1,0 +1,50 @@
+{
+  "run_id": "replay-smoke-20261023T071912756704Z-a8c6923f",
+  "case_id": "N02",
+  "channel": "replay",
+  "action": "tools_call",
+  "service": "auto",
+  "tool": "HvacService.setTemp",
+  "arguments": {
+    "temperature": 40
+  },
+  "model": null,
+  "request_raw": null,
+  "response_raw": {
+    "jsonrpc": "2.0",
+    "id": 1,
+    "result": {
+      "isError": false,
+      "success": true
+    }
+  },
+  "execution_status": "completed",
+  "error_category": null,
+  "latency_ms": null,
+  "verdict": "fail",
+  "verdict_reason": "预期错误未出现",
+  "timestamp": "2026-10-23T15:19:12+08:00",
+  "stdout_tail": "",
+  "evidence": [
+    "artifacts/item-00002.json"
+  ],
+  "schema_version": 2,
+  "item_id": "item-00002",
+  "repeat_index": 0,
+  "source_type": "synthetic",
+  "trace_complete": true,
+  "stdout": "",
+  "stderr": "",
+  "events": [],
+  "provenance": {
+    "source_run_id": "synthetic-v2",
+    "source_case_id": "N02",
+    "source_timestamp": "2026-10-23T15:19:12+08:00",
+    "source_event_index": "1:0",
+    "source_model": null,
+    "primary_latency_ms": null,
+    "postconditions": [],
+    "replay_wall_ms": 0,
+    "skill_eval_fixture": "manually_constructed_mixed_outcomes_not_device_evidence"
+  }
+}

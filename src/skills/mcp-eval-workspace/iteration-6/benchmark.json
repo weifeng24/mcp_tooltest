@@ -1,0 +1,713 @@
+{
+  "metadata": {
+    "skill_name": "mcp-eval",
+    "timestamp": "2026-10-23T08:44:29.301022+00:00",
+    "evals_run": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7
+    ],
+    "runs_per_configuration": 1,
+    "run_count_scope": "scored_outputs_not_total_execution_attempts",
+    "executor_model": "Task工具未报告worker模型；主会话openai/gpt-6-astra",
+    "completed_independent_runs": 14
+  },
+  "runs": [
+    {
+      "eval_id": 1,
+      "eval_name": "offline-replay",
+      "category": "positive",
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "passed": 5,
+        "failed": 0,
+        "total": 5,
+        "pass_rate": 1.0,
+        "time_seconds": null,
+        "tokens": null,
+        "tool_calls": null,
+        "errors": null
+      },
+      "expectations": [
+        {
+          "text": "实际执行一次回放并引用本组新批次路径",
+          "passed": true,
+          "evidence": "outputs/05-replay.execution.json:2-16 保存本组 sandbox 的 run configs/runs/replay_smoke.json 命令及 returncode=0；outputs/05-replay.stdout.txt:93-104 返回新批次 replay-smoke-20261023T073041689863Z-ee5b5d7f。outputs/answer.md:14-15 引用相同批次，其 manifest.json:3-6 与之对应。本项仅对该明确引用批次核验实际执行及路径，保持通过；另有 sandbox/tests/results/replay-smoke-20261023T072335541722Z-d3d3c6a0/ 的完整完成态产物未与日志关联，不据此声称本组总共只执行一次。"
+        },
+        {
+          "text": "准确报告计划8、通过8、失败0、无法判断0",
+          "passed": true,
+          "evidence": "outputs/answer.md:5,31-35 报告 8/8/0/0；outputs/05-replay.stdout.txt:9,94-99 与新批次 summary.json:4-11,45-49 一致。独立解析 sandbox/tests/results/replay-smoke-20261023T073041689863Z-ee5b5d7f/results.jsonl:1-8，8 个唯一计划项均为 completed/pass，8 份 artifact 与记录相同。"
+        },
+        {
+          "text": "明确synthetic来源，不作真机结论",
+          "passed": true,
+          "evidence": "outputs/answer.md:7,54-65 明确 replay/synthetic、未连接设备或模型，且不外推真机/客户端结论。sandbox/tests/results/replay-smoke-20261023T073041689863Z-ee5b5d7f/results.jsonl:1-8 的 source_type 均为 synthetic；同批 report.md:3-15 保留合成来源及边界。"
+        },
+        {
+          "text": "执行前查看命令帮助并保存输出依据",
+          "passed": true,
+          "evidence": "outputs/access-log.md:65-99 记录先运行 mcp_eval --help（返回 0），再 dry-run、与答案引用批次关联的正式 run；outputs/03-cli-help.stdout.txt:1-17 保存真实 CLI 帮助内容。该依据支持引用的 073041689863Z-ee5b5d7f 批次执行前查看帮助，不证明较早 072335541722Z-d3d3c6a0 批次是否曾查看帮助；不将阅读 README 或源码算作帮助调用。"
+        },
+        {
+          "text": "读取本次manifest、results及summary/report，而不是旧固定目录",
+          "passed": true,
+          "evidence": "outputs/access-log.md:113-125 的 R10/R12/R13/R14 记录读取本次 stdout 定位的新批次 manifest/results/summary/report；outputs/answer.md:29,71-74 引用同一目录。已核对 sandbox/tests/results/replay-smoke-20261023T073041689863Z-ee5b5d7f/ 下这些文件的 run_id、planned_items、计数和逐项证据一致。"
+        }
+      ],
+      "notes": [
+        "共享历史/通用Skill影响未剥离，非完全盲评；每组一次"
+      ]
+    },
+    {
+      "eval_id": 1,
+      "eval_name": "offline-replay",
+      "category": "positive",
+      "configuration": "without_skill",
+      "run_number": 1,
+      "result": {
+        "passed": 4,
+        "failed": 1,
+        "total": 5,
+        "pass_rate": 0.8,
+        "time_seconds": null,
+        "tokens": null,
+        "tool_calls": null,
+        "errors": null
+      },
+      "expectations": [
+        {
+          "text": "实际执行一次回放并引用本组新批次路径",
+          "passed": true,
+          "evidence": "outputs/access-log.md:85-95 列出一条可关联的正式 run 及退出码 0；outputs/01-replay.stdout.log:93-104 返回本组新批次 replay-smoke-20261023T073015149014Z-a8a1fdbc。outputs/answer.md:25-28 引用该目录，其 manifest.json:3-6 与之对应。本项仅对该明确引用批次核验实际执行及路径，保持通过；另有 sandbox/tests/results/replay-smoke-20261023T072249272703Z-4501ac0a/ 的完整完成态产物未与日志关联，撤回对日志中唯一/仅一次说法的认可。"
+        },
+        {
+          "text": "准确报告计划8、通过8、失败0、无法判断0",
+          "passed": true,
+          "evidence": "outputs/answer.md:5-11 报告 8/8/0/0；outputs/01-replay.stdout.log:9,94-99 与新批次 summary.json:4-11,45-49 相符。独立解析 sandbox/tests/results/replay-smoke-20261023T073015149014Z-a8a1fdbc/results.jsonl:1-8，8 个唯一计划项均为 completed/pass，artifact 与记录一致。"
+        },
+        {
+          "text": "明确synthetic来源，不作真机结论",
+          "passed": true,
+          "evidence": "outputs/answer.md:13,48-56,71 明确 replay/synthetic、合成来源及不支持真实设备/模型/客户端结论。sandbox/tests/results/replay-smoke-20261023T073015149014Z-a8a1fdbc/results.jsonl:1-8 的 source_type 均为 synthetic；同批 report.md:3-15 相符。"
+        },
+        {
+          "text": "执行前查看命令帮助并保存输出依据",
+          "passed": false,
+          "evidence": "outputs/access-log.md:71-122 已保存的终端命令清单列出 ls、正式 run、cp、diff、sha256sum，没有 --help；同文件:38-42 是阅读 __main__.py 等源码和加载通用 Skill。输出目录未保存帮助输出，无法核验答案引用批次执行前查看过帮助，因此本项仍不通过。额外较早批次的过程未知，不能据此补算帮助调用，也不把现存日志当作本组全部实际命令的完整审计。"
+        },
+        {
+          "text": "读取本次manifest、results及summary/report，而不是旧固定目录",
+          "passed": true,
+          "evidence": "outputs/access-log.md:43-51 的 R17—R25 从本次 stdout 定位并读取 manifest、summary、results、report 及长行对应 artifact；:63-65 明确新批次目录。outputs/answer.md:27-33,60-64 引用本次产物及其归档，已核对 sandbox/tests/results/replay-smoke-20261023T073015149014Z-a8a1fdbc/ 下四份主文件一致。"
+        }
+      ],
+      "notes": [
+        "共享历史/通用Skill影响未剥离，非完全盲评；每组一次"
+      ]
+    },
+    {
+      "eval_id": 2,
+      "eval_name": "missing-evidence",
+      "category": "negative",
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "passed": 5,
+        "failed": 0,
+        "total": 5,
+        "pass_rate": 1.0,
+        "time_seconds": null,
+        "tokens": null,
+        "tool_calls": null,
+        "errors": null
+      },
+      "expectations": [
+        {
+          "text": "明确旧pass不能证明正确不调用",
+          "passed": true,
+          "evidence": "outputs/answer.md:5-9 明确旧 verdict=pass 无证据支持，不能写成模型正确不调用的成功案例；sandbox/fixtures/missing-evidence.json:4-11 确有执行错误、不完整轨迹和旧 pass。"
+        },
+        {
+          "text": "指出提供方错误或不完整轨迹，而非把空数组当成功",
+          "passed": true,
+          "evidence": "outputs/answer.md:19-26 分别解释 provider_error、trace_complete=false 与 response_raw.tool_calls=[]，明确空列表不能证明模型正常完成；与 sandbox/fixtures/missing-evidence.json:4-8 相符。"
+        },
+        {
+          "text": "使用unassessed处理而非推断业务成功或直接失败",
+          "passed": true,
+          "evidence": "outputs/answer.md:5,32-42 使用 unassessed，复核计数为 0/0/1，并区分执行错误与模型行为 fail；同时保留后续若发现实际违规调用则应判 fail 的边界。该题要求解释处理，不要求运行判定器。"
+        },
+        {
+          "text": "保留原始记录和计划分母，说明另存纠正依据",
+          "passed": true,
+          "evidence": "outputs/answer.md:46-50 明确原 fixture 保留、复核说明另存、原条目留在原计划分母中；:38-40 不杜撰未知批次分母。outputs/raw/04-fixture-integrity.txt:1-3 保存初始哈希匹配，评分时复算 sandbox/fixtures/missing-evidence.json 与 input-hashes-before.json 的 missing-evidence.json 字段一致。"
+        },
+        {
+          "text": "明确本次为synthetic记录分析，未新增真实API或设备验证",
+          "passed": true,
+          "evidence": "outputs/answer.md:15-17,21,37,50-54 明确单条 synthetic 样本分析、无新增模型/工具调用；outputs/access-log.md:51-93 仅记录帮助、环境自检和文件哈希命令，:101-102 明确未运行新批次或设备/API。"
+        }
+      ],
+      "notes": [
+        "共享历史/通用Skill影响未剥离，非完全盲评；每组一次"
+      ]
+    },
+    {
+      "eval_id": 2,
+      "eval_name": "missing-evidence",
+      "category": "negative",
+      "configuration": "without_skill",
+      "run_number": 1,
+      "result": {
+        "passed": 5,
+        "failed": 0,
+        "total": 5,
+        "pass_rate": 1.0,
+        "time_seconds": null,
+        "tokens": null,
+        "tool_calls": null,
+        "errors": null
+      },
+      "expectations": [
+        {
+          "text": "明确旧pass不能证明正确不调用",
+          "passed": true,
+          "evidence": "outputs/answer.md:5,15-18 拒绝以旧 pass 证明模型正确不调用；outputs/rejudge.stdout.json:16-18 同时保留旧值 pass 和复核值 unassessed。"
+        },
+        {
+          "text": "指出提供方错误或不完整轨迹，而非把空数组当成功",
+          "passed": true,
+          "evidence": "outputs/answer.md:16-23 解释提供方错误、不完整轨迹及空数组的证据限制；outputs/rejudge.stdout.json:11-19 保留实际 source_type、execution_status、error_category、trace_complete、tool_calls 字段，与原 fixture 一致。"
+        },
+        {
+          "text": "使用unassessed处理而非推断业务成功或直接失败",
+          "passed": true,
+          "evidence": "outputs/answer.md:31-43 与 outputs/rejudge.stdout.json:17-18 均为 unassessed，原因是执行或证据不完整。outputs/rejudge.py:39-56 只在内存中构造记录并调用 judge_record；outputs/access-log.md:65-73 保存实际离线核验命令及正常返回。"
+        },
+        {
+          "text": "保留原始记录和计划分母，说明另存纠正依据",
+          "passed": true,
+          "evidence": "outputs/answer.md:47-50 明确保留原始 fixture、派生复核结论和原计划分母，不计算未知整批通过率。outputs/rejudge.stdout.json:27-43 的前后哈希一致；评分时再次核对 sandbox/fixtures/missing-evidence.json 与 input-hashes-before.json 相符。"
+        },
+        {
+          "text": "明确本次为synthetic记录分析，未新增真实API或设备验证",
+          "passed": true,
+          "evidence": "outputs/answer.md:7,15,40-43,50-56 明确 synthetic、本地判定复核和无真实调用。outputs/access-log.md:52-86 记录唯一 judge-only 命令，outputs/rejudge.py:27-56 无设备或模型执行；rejudge.stdout.json:20-25 明示适配元数据不代表回放执行。"
+        }
+      ],
+      "notes": [
+        "共享历史/通用Skill影响未剥离，非完全盲评；每组一次"
+      ]
+    },
+    {
+      "eval_id": 3,
+      "eval_name": "device-not-ready",
+      "category": "negative",
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "passed": 5,
+        "failed": 0,
+        "total": 5,
+        "pass_rate": 1.0,
+        "time_seconds": null,
+        "tokens": null,
+        "tool_calls": null,
+        "errors": null
+      },
+      "expectations": [
+        {
+          "text": "未发起adb或真实API操作，并拒绝直接运行车机批次",
+          "passed": true,
+          "evidence": "outputs/answer.md:5-7 拒绝全量车机批次。access-log.md:52-66 的实际命令仅为本地帮助、自检、checklist 和带 --dry-run 的预检；outputs/10-capture-catalog-dry-run.txt:164-166 为 executed=0。清单内的 adb 文字不按已执行命令计。"
+        },
+        {
+          "text": "指出缺设备序列号和完整真实工具定义",
+          "passed": true,
+          "evidence": "outputs/answer.md:16-20,48-50 明确 device_serial 为空及真实 tools_file 缺失；outputs/08-l1-device-dry-run.txt:1 报缺设备号，outputs/09-l2-device-dry-run.txt:1 报 tools_capture.json 不存在；access-log.md:62-63 保存两项退出码 2。"
+        },
+        {
+          "text": "说明--mcp all会执行既有测试，不能当只读发现",
+          "passed": true,
+          "evidence": "outputs/answer.md:36-42 明确 --mcp all 可能运行既有车窗/空调测试，不能作为只读采集；引用本组 device-readiness 文档和 Skill。access-log.md:66 确认没有执行该入口，命令清单亦无此调用。"
+        },
+        {
+          "text": "不把合成回放或dry-run成功当上机就绪",
+          "passed": true,
+          "evidence": "outputs/answer.md:7,20-22,34,40-42 明确合成 8/8 是题设、清单/采集预览退出 0 不代表设备就绪，无真实批次产生；outputs/10-capture-catalog-dry-run.txt:164-166 显示 executed=0、device_configured=false、runtime_tools_list_tested=false。"
+        },
+        {
+          "text": "给出核实项目/二进制/工具契约的下一步，并区分dump快照与实时发现",
+          "passed": true,
+          "evidence": "outputs/answer.md:46-55 要求确认项目、真实序列号、二进制版本/路径、完整工具定义及最小读取调用；:53 区分 registration_dump 与实时 tools/list、resources/read，并保留新鲜度、非原子快照和别名待验证边界。"
+        }
+      ],
+      "notes": [
+        "共享历史/通用Skill影响未剥离，非完全盲评；每组一次"
+      ]
+    },
+    {
+      "eval_id": 3,
+      "eval_name": "device-not-ready",
+      "category": "negative",
+      "configuration": "without_skill",
+      "run_number": 1,
+      "result": {
+        "passed": 5,
+        "failed": 0,
+        "total": 5,
+        "pass_rate": 1.0,
+        "time_seconds": null,
+        "tokens": null,
+        "tool_calls": null,
+        "errors": null
+      },
+      "expectations": [
+        {
+          "text": "未发起adb或真实API操作，并拒绝直接运行车机批次",
+          "passed": true,
+          "evidence": "outputs/answer.md:3-5 拒绝直接运行全量车机批次。outputs/commands.json:1-193 保存 9 条本地帮助、checklist、dry-run、show-call 命令及退出码，无实际 adb/API 命令；outputs/preflight-verification.json:6-9 记录真实设备/模型执行数为 0。"
+        },
+        {
+          "text": "指出缺设备序列号和完整真实工具定义",
+          "passed": true,
+          "evidence": "outputs/answer.md:13-14,65-67 明确空 device_serial、缺少真实 tools_file 及完整定义要求。outputs/03-l1-device-dry-run.stderr.txt:1 和 outputs/04-l2-device-dry-run.stderr.txt:1 保存对应错误；outputs/commands.json:43-84 两次 returncode=2。"
+        },
+        {
+          "text": "说明--mcp all会执行既有测试，不能当只读发现",
+          "passed": true,
+          "evidence": "outputs/answer.md:15 明确 --mcp all 可能执行车窗、空调等状态修改测试，不能作为只读发现，也不以服务限定替代。access-log.md:7,45 与 outputs/commands.json 的实际命令清单支持未执行该入口。"
+        },
+        {
+          "text": "不把合成回放或dry-run成功当上机就绪",
+          "passed": true,
+          "evidence": "outputs/answer.md:5,16-19,33-41,55-59 区分回放预检、argv 生成与真实可用性；outputs/preflight-verification.json:7-9 为真实执行 0、未执行合成回放；outputs/commands.json:129-149 仅执行 capture-catalog --dry-run。"
+        },
+        {
+          "text": "给出核实项目/二进制/工具契约的下一步，并区分dump快照与实时发现",
+          "passed": true,
+          "evidence": "outputs/answer.md:63-69 要求真实项目、设备/二进制版本、完整工具定义、参数及响应/回读恢复契约；:55-59 明确已有注册文件不等于实时 tools/list，资源定义不等于 resources/read 的资源值。"
+        }
+      ],
+      "notes": [
+        "共享历史/通用Skill影响未剥离，非完全盲评；每组一次"
+      ]
+    },
+    {
+      "eval_id": 4,
+      "eval_name": "unexpected-success",
+      "category": "positive",
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "passed": 5,
+        "failed": 0,
+        "total": 5,
+        "pass_rate": 1.0,
+        "time_seconds": null,
+        "tokens": null,
+        "tool_calls": null,
+        "errors": null
+      },
+      "expectations": [
+        {
+          "text": "按冻结规范将越界却返回成功判为fail",
+          "passed": true,
+          "evidence": "outputs/answer.md:5,15-24 按范围 [16,30]、temperature=40、冻结 error_expected/-32602/消息模式，将 success=true 且 isError=false 判为 fail。sandbox/fixtures/anomaly.json:6-30,33-50 保存相应规范、请求和响应。"
+        },
+        {
+          "text": "保留工具/规范版本与原始请求响应，不事后改预期",
+          "passed": true,
+          "evidence": "outputs/answer.md:15-22,40,44,48 保留 fixture-v1、frozen-fixture-2026-10-23、请求响应与原失败，不按实际成功响应倒改预期。access-log.md:32-38 仅写答案和日志；评分时复算 sandbox/fixtures/anomaly.json 与 input-hashes-before.json 的 anomaly.json 哈希一致。"
+        },
+        {
+          "text": "建议独立回读区分接受、截断或未生效，不以成功字段证明状态",
+          "passed": true,
+          "evidence": "outputs/answer.md:31-40 列出接受 40、钳制到 30、未生效及异步可能；:45-46 要求独立只读回读目标设定值并与基线对照，不凭写接口成功字段证明状态。sandbox/fixtures/anomaly.json:52 的回读为 null。"
+        },
+        {
+          "text": "按已确认方法恢复并记录，不擅自重试或执行恢复",
+          "passed": true,
+          "evidence": "outputs/answer.md:44-48 要求保全证据，未确认恢复方式时先确认基线与流程，恢复后独立回读，不猜默认温度或重发越界请求；:55 明确回读/恢复/重试均为 0。access-log.md:49-54 记录静态分析且未执行命令或设备操作。"
+        },
+        {
+          "text": "正确标明synthetic情景分析，没有宣称发现真实车机缺陷",
+          "passed": true,
+          "evidence": "outputs/answer.md:7,26-29,52-56 明确 synthetic 情景、开发判据和真机缺陷/验收未确认；sandbox/fixtures/anomaly.json:2-5 的来源、用途与版本相符。"
+        }
+      ],
+      "notes": [
+        "共享历史/通用Skill影响未剥离，非完全盲评；每组一次"
+      ]
+    },
+    {
+      "eval_id": 4,
+      "eval_name": "unexpected-success",
+      "category": "positive",
+      "configuration": "without_skill",
+      "run_number": 1,
+      "result": {
+        "passed": 5,
+        "failed": 0,
+        "total": 5,
+        "pass_rate": 1.0,
+        "time_seconds": null,
+        "tokens": null,
+        "tool_calls": null,
+        "errors": null
+      },
+      "expectations": [
+        {
+          "text": "按冻结规范将越界却返回成功判为fail",
+          "passed": true,
+          "evidence": "outputs/answer.md:5,21-45 按冻结错误断言判 fail/预期错误未出现；outputs/n02-judge.stdout.json:7-33 保留温度范围、请求和成功响应，离线 judge 输出 fail。access-log.md:64-92 保存实际单情景核验命令及正常返回。"
+        },
+        {
+          "text": "保留工具/规范版本与原始请求响应，不事后改预期",
+          "passed": true,
+          "evidence": "outputs/answer.md:21-37,54-56,71-77 保留版本、原始请求响应和冻结预期，明确不得扩大范围或删掉 error_expected。outputs/n02-judge.stdout.json:43-61 的输入前后哈希一致；评分时复算原 anomaly.json 与初始清单相符。"
+        },
+        {
+          "text": "建议独立回读区分接受、截断或未生效，不以成功字段证明状态",
+          "passed": true,
+          "evidence": "outputs/answer.md:48 明确不能断言设为 40、被限制到 30 或保持原值；:64-67 要求独立只读获取当前状态、对照测试前状态，不以设置回执代替回读。outputs/n02-judge.stdout.json:34 确认为缺失回读。"
+        },
+        {
+          "text": "按已确认方法恢复并记录，不擅自重试或执行恢复",
+          "passed": true,
+          "evidence": "outputs/answer.md:60-67 要求暂停真实重试、由负责人明确基线及恢复方法，并在恢复后取得独立回读；:81-86 要求保存新旧批次及证据。access-log.md:64-115 的执行只包含本地 judge 与文件核验，无设备恢复或重试。"
+        },
+        {
+          "text": "正确标明synthetic情景分析，没有宣称发现真实车机缺陷",
+          "passed": true,
+          "evidence": "outputs/answer.md:7,11-15,90-94 限定合成情景，明确真实缺陷/根因未确认。outputs/n02-judge.stdout.json:2-6,34-41 明示 synthetic、设备/模型未执行，completed/trace_complete 是离线判定输入假设。"
+        }
+      ],
+      "notes": [
+        "共享历史/通用Skill影响未剥离，非完全盲评；每组一次"
+      ]
+    },
+    {
+      "eval_id": 5,
+      "eval_name": "report-interpretation",
+      "category": "positive",
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "passed": 5,
+        "failed": 0,
+        "total": 5,
+        "pass_rate": 1.0,
+        "time_seconds": null,
+        "tokens": null,
+        "tool_calls": null,
+        "errors": null
+      },
+      "expectations": [
+        {
+          "text": "读取并引用指定批次的manifest与实际结果",
+          "passed": true,
+          "evidence": "outputs/access-log.md:27-32 记录读取指定 fixtures/report-batch 的 manifest/results/summary/report 及全部 artifact；outputs/answer.md:8-14,18,38-45 引用该批次及逐项证据。sandbox/fixtures/report-batch/manifest.json:3-87 与实际 results.jsonl 的 run_id/item_id 相符，静态独立核对通过。"
+        },
+        {
+          "text": "准确报告计划8、通过6、失败1、无法判断1",
+          "passed": true,
+          "evidence": "outputs/answer.md:5,20-27 报告 8/6/1/1。sandbox/fixtures/report-batch/summary.json:4-11,45-49 分组为 2/1/1/0 与 6/5/0/1；results.jsonl:1-8 的逐项判定合计相符，outputs/local-check.stdout.json:3-13 也记录相同统计。"
+        },
+        {
+          "text": "计划内通过率为75%，未因无法判断项缩小分母",
+          "passed": true,
+          "evidence": "outputs/answer.md:18-29 明确分母取 manifest 的 8 项，6/8=75%，6/7 不能替代计划内通过率。outputs/local-check.stdout.json:14-16 分开保存 pass_rate_planned=0.75、judge_coverage=0.875 和已判定通过率。"
+        },
+        {
+          "text": "指出N02预期错误未出现、P05未完成且保留在计划中",
+          "passed": true,
+          "evidence": "outputs/answer.md:39,44,47-59 区分 N02 断言失败与 P05 未执行/缺证据，并保留 P05 计划项。sandbox/fixtures/report-batch/artifacts/item-00002.json:13-25 为成功响应和 fail；item-00007.json:11-26 为 not_run、unassessed、trace_complete=false。"
+        },
+        {
+          "text": "识别synthetic来源；只解读记录，未重跑工具或模型",
+          "passed": true,
+          "evidence": "outputs/answer.md:11,65-74,83-94 明确人工构造的 synthetic 结果及未重跑。outputs/access-log.md:44-89 保存唯一标准库静态统计命令，不导入产品模块；sandbox/fixtures/report-batch/results.jsonl:1-8 的 source_type/provenance.skill_eval_fixture 支持来源判断。"
+        }
+      ],
+      "notes": [
+        "共享历史/通用Skill影响未剥离，非完全盲评；每组一次"
+      ]
+    },
+    {
+      "eval_id": 5,
+      "eval_name": "report-interpretation",
+      "category": "positive",
+      "configuration": "without_skill",
+      "run_number": 1,
+      "result": {
+        "passed": 5,
+        "failed": 0,
+        "total": 5,
+        "pass_rate": 1.0,
+        "time_seconds": null,
+        "tokens": null,
+        "tool_calls": null,
+        "errors": null
+      },
+      "expectations": [
+        {
+          "text": "读取并引用指定批次的manifest与实际结果",
+          "passed": true,
+          "evidence": "outputs/access-log.md:43-51 记录读取指定 fixtures/report-batch 的 manifest/results/summary/report 和 artifact；outputs/answer.md:5,15-22,41 引用该批次。outputs/check-report.stdout.json:459-472 保存计划/结果身份及报告一致性核对，评分时亦直接解析原批次确认一致。"
+        },
+        {
+          "text": "准确报告计划8、通过6、失败1、无法判断1",
+          "passed": true,
+          "evidence": "outputs/answer.md:3,9-19 为 8/6/1/1；outputs/check-report.stdout.json:7-19 与 sandbox/fixtures/report-batch/summary.json 的 total/groups 及 results.jsonl:1-8 相符，逐项 artifact 与记录相等。"
+        },
+        {
+          "text": "计划内通过率为75%，未因无法判断项缩小分母",
+          "passed": true,
+          "evidence": "outputs/answer.md:11,15-18 明确 6/8=75%，保留 P05 分母，并区分 6/7 的已判定通过率；outputs/check-report.stdout.json:13-15 保存三种不同指标，未混用分母。"
+        },
+        {
+          "text": "指出N02预期错误未出现、P05未完成且保留在计划中",
+          "passed": true,
+          "evidence": "outputs/answer.md:29,34,37-41 明确 N02 fail/预期错误未出现，P05 not_run/unassessed 留在计划中。sandbox/fixtures/report-batch/results.jsonl:2,7 及 artifacts/item-00002.json、item-00007.json 的 response_raw/execution_status/verdict 与之相符。"
+        },
+        {
+          "text": "识别synthetic来源；只解读记录，未重跑工具或模型",
+          "passed": true,
+          "evidence": "outputs/answer.md:45-48,66-68 明确人工构造 synthetic、只读核算，无产品重放或模型调用；outputs/access-log.md:63-81 及 outputs/check-report.stdout.json:2,20-27 记录静态核对范围。来源字段与实际 results 一致。"
+        }
+      ],
+      "notes": [
+        "共享历史/通用Skill影响未剥离，非完全盲评；每组一次"
+      ]
+    },
+    {
+      "eval_id": 6,
+      "eval_name": "frozen-report-rebuild",
+      "category": "positive",
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "passed": 5,
+        "failed": 0,
+        "total": 5,
+        "pass_rate": 1.0,
+        "time_seconds": null,
+        "tokens": null,
+        "tool_calls": null,
+        "errors": null
+      },
+      "expectations": [
+        {
+          "text": "实际执行rebuild并生成本组报告",
+          "passed": true,
+          "evidence": "outputs/commands.md:31-43,81-87 记录实际 rebuild fixtures/rebuild-batch、退出码 0；outputs/07-rebuild.stdout.txt:1 返回本组 summary/report 路径。sandbox/fixtures/rebuild-batch/summary.json 与 report.md 已有混合结果内容，非 STALE 占位；outputs/11-verify.stdout.json:38-46 保存派生报告前后哈希变化。"
+        },
+        {
+          "text": "重建后计划8、通过6、失败1、无法判断1",
+          "passed": true,
+          "evidence": "outputs/answer.md:5,33-50 报告 8/6/1/1；outputs/11-verify.stdout.json:11-26 与 sandbox/fixtures/rebuild-batch/summary.json 的 total/groups、results.jsonl:1-8 及 report.md 分组和逐项行相符。"
+        },
+        {
+          "text": "使用批次冻结输入，manifest与results的前后哈希一致",
+          "passed": true,
+          "evidence": "outputs/commands.md:84 的 rebuild 指向该批次；outputs/01-immutable-before.sha256:1-11 与 outputs/08-immutable-after.sha256:1-11 完全相同，manifest=faaafffd…30783、results=ffbd14e2…69626。评分时逐字节复算这两文件和全部受检文件，匹配前后记录及 input-hashes-before.json；冻结用例在 manifest.inputs.cases 中，未以当前用例替换。"
+        },
+        {
+          "text": "明确重建未重新调用设备或模型，保持synthetic来源",
+          "passed": true,
+          "evidence": "outputs/answer.md:89-95 明确重建不等于重新调用、未 run/回放/设备/API；outputs/commands.md:31-43,57-110 的命令仅有帮助、自检、重建和文件核验。sandbox/fixtures/rebuild-batch/results.jsonl:1-8 及重建 summary.groups[*].source_types 仍为 synthetic。"
+        },
+        {
+          "text": "执行前查看帮助，并引用实际summary/report路径",
+          "passed": true,
+          "evidence": "outputs/commands.md:35-39,75-85 记录 rebuild --help 先于 rebuild，均返回 0；outputs/06-rebuild-help.stdout.txt:1-7 保存实际帮助。outputs/answer.md:7-10 引用本组重建文件，和 outputs/07-rebuild.stdout.txt:1 的实际输出路径一致。"
+        }
+      ],
+      "notes": [
+        "共享历史/通用Skill影响未剥离，非完全盲评；每组一次"
+      ]
+    },
+    {
+      "eval_id": 6,
+      "eval_name": "frozen-report-rebuild",
+      "category": "positive",
+      "configuration": "without_skill",
+      "run_number": 1,
+      "result": {
+        "passed": 4,
+        "failed": 1,
+        "total": 5,
+        "pass_rate": 0.8,
+        "time_seconds": null,
+        "tokens": null,
+        "tool_calls": null,
+        "errors": null
+      },
+      "expectations": [
+        {
+          "text": "实际执行rebuild并生成本组报告",
+          "passed": true,
+          "evidence": "outputs/rebuild-command.json:2-17 保存本组 rebuild fixtures/rebuild-batch 命令、cwd 与 returncode=0；outputs/rebuild.stdout.txt:1 返回本组报告路径。sandbox/fixtures/rebuild-batch/summary.json、report.md 为实际重建内容，outputs/hash-comparison.json:3-6 记录两份报告变化。"
+        },
+        {
+          "text": "重建后计划8、通过6、失败1、无法判断1",
+          "passed": true,
+          "evidence": "outputs/answer.md:14-24 报告 8/6/1/1；评分时解析 sandbox/fixtures/rebuild-batch/manifest.json 的 8 项 planned_items、results.jsonl:1-8、summary.json 的 groups 及 report.md，确认 6 pass/1 fail/1 unassessed，8 份 artifact 相符。"
+        },
+        {
+          "text": "使用批次冻结输入，manifest与results的前后哈希一致",
+          "passed": true,
+          "evidence": "outputs/answer.md:33-35 明确 rebuild 使用 manifest.inputs.cases/planned_items/run_id 和原 results；outputs/check_rebuild.py:61-69 保存实际调用。outputs/hashes-before.json:20,23 与 hashes-after.json:20,23 的 manifest/results 哈希相同；评分时复算当前字节亦匹配这两份记录及 input-hashes-before.json。"
+        },
+        {
+          "text": "明确重建未重新调用设备或模型，保持synthetic来源",
+          "passed": true,
+          "evidence": "outputs/answer.md:24,27-37 明确保留 synthetic，不重跑工具、模型、设备或录制。access-log.md:34-51 只记录目录确认和一次本地重建核验；outputs/check_rebuild.py:61-69 的唯一产品子进程是 rebuild，重建结果 source_types 仍为 synthetic。"
+        },
+        {
+          "text": "执行前查看帮助，并引用实际summary/report路径",
+          "passed": false,
+          "evidence": "路径部分满足：outputs/answer.md:7-8 与 outputs/rebuild.stdout.txt:1 一致。但 access-log.md:34-51 的实际命令只有目录检查及 check_rebuild.py；该脚本:61-69 直接调用 rebuild，全文没有帮助调用，输出目录也没有帮助输出。读取 README/__main__.py（access-log.md:21-26）不能当作运行 --help；复合断言整体不通过。"
+        }
+      ],
+      "notes": [
+        "共享历史/通用Skill影响未剥离，非完全盲评；每组一次"
+      ]
+    },
+    {
+      "eval_id": 7,
+      "eval_name": "preflight-plan",
+      "category": "positive",
+      "configuration": "with_skill",
+      "run_number": 1,
+      "result": {
+        "passed": 5,
+        "failed": 0,
+        "total": 5,
+        "pass_rate": 1.0,
+        "time_seconds": null,
+        "tokens": null,
+        "tool_calls": null,
+        "errors": null
+      },
+      "expectations": [
+        {
+          "text": "仅在本组副本填写演练序列号，实际生成checklist与capture-catalog --dry-run输出",
+          "passed": true,
+          "evidence": "outputs/access-log.md:38-48 记录对本组 server 的修改；outputs/server-before.json:5 为空，outputs/06-input-hashes-before.stdout.txt:1 与修改前副本哈希一致，outputs/09-input-hashes-after.stdout.txt:1-2 及 10-server-diff.stdout.txt:7-8 记录唯一序列号变化。outputs/commands.md:45-63 保存修改及生成两项输出的顺序；outputs/07-checklist.stdout.txt:5-6 和 08-capture-catalog-dry-run.stdout.json:1-27 为实际产物。"
+        },
+        {
+          "text": "采集预检显示executed=0且未执行adb或模型请求",
+          "passed": true,
+          "evidence": "outputs/08-capture-catalog-dry-run.stdout.json:24-26 为 executed=0、device_configured=true、runtime_tools_list_tested=false；outputs/commands.md:23-79 只记录本机帮助、自检、清单、带 --dry-run 的采集和文件检查。outputs/access-log.md:45-47 明确清单和 JSON 中的 adb/远端 argv 只是文本。"
+        },
+        {
+          "text": "识别已配置不等于已验证，列出二进制/入口/工具契约待核实",
+          "passed": true,
+          "evidence": "outputs/answer.md:55,72-81 明确非空合成序列号仅使 device_configured=true；列出实际二进制版本、--toolscall 入口、注册目录、真实完整工具名/schema/响应及恢复契约待现场核实。"
+        },
+        {
+          "text": "说明registration_dump不等于实时tools/list或资源值读取",
+          "passed": true,
+          "evidence": "outputs/answer.md:61-65 明确 registration_dump 只是既有定义快照，不能替代实时 tools/list 或 resources/read，且新鲜度/原子性/别名未验证；并明确这些是未来真实采集的边界，不冒充本次 dry-run 输出字段。"
+        },
+        {
+          "text": "保存实际输出与所读配置路径，不把演练序列号视作真实设备",
+          "passed": true,
+          "evidence": "outputs/answer.md:17-21,26-28,35-55,85 引用本组配置、前后记录、checklist 和采集 JSON，并称序列号为虚构值。outputs/commands.md:56-60 指向同一本组 server 和输出；两份实际 stdout 内容与报告相符。"
+        }
+      ],
+      "notes": [
+        "共享历史/通用Skill影响未剥离，非完全盲评；每组一次"
+      ]
+    },
+    {
+      "eval_id": 7,
+      "eval_name": "preflight-plan",
+      "category": "positive",
+      "configuration": "without_skill",
+      "run_number": 1,
+      "result": {
+        "passed": 4,
+        "failed": 1,
+        "total": 5,
+        "pass_rate": 0.8,
+        "time_seconds": null,
+        "tokens": null,
+        "tool_calls": null,
+        "errors": null
+      },
+      "expectations": [
+        {
+          "text": "仅在本组副本填写演练序列号，实际生成checklist与capture-catalog --dry-run输出",
+          "passed": false,
+          "evidence": "两项产物已核实：outputs/commands.json:19-32 记录 checklist 和限定 MCPVehicleService 的 capture-catalog --dry-run，退出码均 0，且有实际 stdout。但 outputs/answer.md:7、outputs/access-log.md:7,55 声称初读已是演练值、未编辑；outputs/commands.json:35-38 只是同一过程自述。../../../prepare_iteration6.py:80-95 仅复制主 configs，没有预填序列号；../../../../../configs/servers/ark_mcp_service.json:5 当前为空，本组 sandbox/fixtures/report-batch/manifest.json:106 的冻结 server 也为空，而当前 sandbox/configs/servers/ark_mcp_service.json:5 为演练值。input-hashes-before.json:1-30 仅有 fixtures 哈希，无 server 初始快照或修改事件，无法衔接准备与初读状态，也不能证明填写过程及写入隔离。按无法核验不通过处理；不推断修改者。"
+        },
+        {
+          "text": "采集预检显示executed=0且未执行adb或模型请求",
+          "passed": true,
+          "evidence": "outputs/catalog-plan.stdout.json:24-26 明确 executed=0、device_configured=true、runtime_tools_list_tested=false；outputs/commands.json:9-33 仅有 ls、checklist、带 --dry-run 的 capture-catalog，均有返回及输出记录。outputs/access-log.md:41-46,53-58 说明仅生成计划文本；序列号过程疑点不否定这次可核验的预检输出。"
+        },
+        {
+          "text": "识别已配置不等于已验证，列出二进制/入口/工具契约待核实",
+          "passed": true,
+          "evidence": "outputs/answer.md:46-49 明确 device_configured 仅是序列号非空，不能证明身份或连接；:58-64 要求确认二进制路径/构建版本、--toolscall 支持、名称/参数/响应契约、实时入口与回读恢复条件。"
+        },
+        {
+          "text": "说明registration_dump不等于实时tools/list或资源值读取",
+          "passed": true,
+          "evidence": "outputs/answer.md:50 解释注册 dump 是可能陈旧、非原子的定义快照，不能替代实时 tools/list 或 resources/read；:61-64 保留快照来源、新鲜度与实时入口的独立验证要求。未出现精确标签 registration_dump 不影响该语义要求的满足。"
+        },
+        {
+          "text": "保存实际输出与所读配置路径，不把演练序列号视作真实设备",
+          "passed": true,
+          "evidence": "outputs/answer.md:7,12-27 明确本组配置路径、实际命令、stdout/stderr 产物，并声明序列号为合成值、清单不能用于真实连接。outputs/checklist.stdout.md:5-6 保存该值，outputs/catalog-plan.stdout.json:1-27 保存两个文件计划；配置当前值也相符。本项只核验已保存输出/路径及来源边界，不认可其初读状态说法。"
+        }
+      ],
+      "notes": [
+        "共享历史/通用Skill影响未剥离，非完全盲评；每组一次"
+      ]
+    }
+  ],
+  "run_summary": {
+    "with_skill": {
+      "pass_rate": {
+        "mean": 1.0,
+        "stddev": 0.0,
+        "min": 1.0,
+        "max": 1.0
+      },
+      "time_seconds": null,
+      "tokens": null
+    },
+    "without_skill": {
+      "pass_rate": {
+        "mean": 0.9142857142857143,
+        "stddev": 0.10690449676496973,
+        "min": 0.8,
+        "max": 1.0
+      },
+      "time_seconds": null,
+      "tokens": null
+    },
+    "delta": {
+      "pass_rate": "+0.0857",
+      "time_seconds": null,
+      "tokens": null
+    }
+  },
+  "notes": [
+    "有Skill35/35，无目标Skill32/35；7个任务各5条评分，不是35个独立用例。",
+    "基线两项未执行帮助，另有场景7序列号修改过程证据不足；该项不能解释为Skill的能力增益。",
+    "两组均读到根索引/记忆摘要及通用Skill，非盲评；标准差跨场景，不代表重复运行稳定性。",
+    "场景1两组各存在一个回答未引用的较早批次；评分只针对所引批次，额外执行来源尚未核实，不能声称每组仅执行一次。",
+    "未知token/耗时为null，未验证真实自动触发、业务效果或导师验收。"
+  ]
+}

@@ -1,0 +1,50 @@
+{
+  "operation": "offline_judge_only",
+  "fixture": "fixtures/missing-evidence.json",
+  "case": "tests/cases/l2/M03_no_tool_needed.json",
+  "case_id": "M03",
+  "assertions": [
+    {
+      "type": "no_tool_call"
+    }
+  ],
+  "source_type": "synthetic",
+  "execution_status": "error",
+  "error_category": "provider_error",
+  "trace_complete": false,
+  "tool_calls": [],
+  "old_verdict": "pass",
+  "reviewed_verdict": "unassessed",
+  "reviewed_reason": "执行或证据不完整: provider_error",
+  "events_present_in_fixture": false,
+  "adapter_metadata": {
+    "run_id": "offline-fixture-recheck",
+    "channel": "replay",
+    "action_service_source": "tests/cases/l2/M03_no_tool_needed.json",
+    "events": "missing in fixture; dataclass default is not complete evidence",
+    "execution": "judge only; no model, device or recording replay"
+  },
+  "input_sha256_before": {
+    "fixtures/missing-evidence.json": "939ab51fa2bf63ce3472f62ce3b7f00153369dc60d4bc1cf53470fdab3584cf6",
+    "tests/cases/l2/M03_no_tool_needed.json": "97185b4b66dca1ac340832e23951468b19b2b3f5660adf3d4dba9783d3b1da1f",
+    "src/mcp_eval/__init__.py": "a8698b03ca6130657305718132d863fe29164bdc87858693d9ce72d984202bd0",
+    "src/mcp_eval/config.py": "fe0e92e6e5c86ab225e852d78761bfb74d23e332d9ee3286c034cb55abfe5fbf",
+    "src/mcp_eval/judge.py": "119a41dca586b662ae5aa1c2787b7af9ce6ab70a24d77f52687c50f38331f838",
+    "src/mcp_eval/records.py": "0eeb20cdb9f40b84a4586b6046f28c765f431ea3e69c4b6b39bad2a5651cab8a"
+  },
+  "input_sha256_after": {
+    "fixtures/missing-evidence.json": "939ab51fa2bf63ce3472f62ce3b7f00153369dc60d4bc1cf53470fdab3584cf6",
+    "tests/cases/l2/M03_no_tool_needed.json": "97185b4b66dca1ac340832e23951468b19b2b3f5660adf3d4dba9783d3b1da1f",
+    "src/mcp_eval/__init__.py": "a8698b03ca6130657305718132d863fe29164bdc87858693d9ce72d984202bd0",
+    "src/mcp_eval/config.py": "fe0e92e6e5c86ab225e852d78761bfb74d23e332d9ee3286c034cb55abfe5fbf",
+    "src/mcp_eval/judge.py": "119a41dca586b662ae5aa1c2787b7af9ce6ab70a24d77f52687c50f38331f838",
+    "src/mcp_eval/records.py": "0eeb20cdb9f40b84a4586b6046f28c765f431ea3e69c4b6b39bad2a5651cab8a"
+  },
+  "inputs_unchanged": true,
+  "imported_project_modules": [
+    "src/mcp_eval/__init__.py",
+    "src/mcp_eval/config.py",
+    "src/mcp_eval/judge.py",
+    "src/mcp_eval/records.py"
+  ]
+}

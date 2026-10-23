@@ -7,11 +7,26 @@ run（一次运行的编排）。所有配置为 JSON，加载时按 schema 校�
 from __future__ import annotations
 
 import json
+import math
 import re
 from pathlib import Path
 from typing import Any
 
 import jsonschema
+
+
+def ensure_finite_json(value: Any, source: str, field: str = "arguments") -> None:
+    """递归拒绝 NaN/Infinity 等非有限数值；它们不是合法 JSON，且会绕过数值范围校验。"""
+    if isinstance(value, bool):
+        return
+    if isinstance(value, float) and not math.isfinite(value):
+        raise ConfigError(f"{source}: {field} 包含非有限数值，不是合法JSON")
+    if isinstance(value, dict):
+        for item in value.values():
+            ensure_finite_json(item, source, field)
+    elif isinstance(value, list):
+        for item in value:
+            ensure_finite_json(item, source, field)
 
 
 class ConfigError(ValueError):
@@ -183,6 +198,8 @@ def _validate_run_cross_fields(run: dict[str, Any], source: str) -> None:
 
 def _validate_case_cross_fields(case: dict[str, Any], source: str) -> None:
     action = case["action"]
+    if "arguments" in case:
+        ensure_finite_json(case["arguments"], source)
     if action == "tools_call" and not case.get("tool"):
         raise ConfigError(f"{source}: action=tools_call 时必须提供 tool 字段")
     if action == "model_task" and not case.get("task"):

@@ -1,0 +1,12 @@
+{
+  "source_type": "synthetic",
+  "case_id": "M03",
+  "execution_status": "error",
+  "error_category": "provider_error",
+  "trace_complete": false,
+  "response_raw": {
+    "tool_calls": []
+  },
+  "verdict": "pass",
+  "fixture_note": "故意保留旧错误判定，用于检查证据解释；不得改写此输入"
+}

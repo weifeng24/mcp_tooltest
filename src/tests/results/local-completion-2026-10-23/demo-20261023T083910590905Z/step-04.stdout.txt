@@ -1,0 +1,36 @@
+{
+  "plan": {
+    "run_id": "demo-negative",
+    "channel": "replay",
+    "l1_cases": 1,
+    "l2_cases": 0,
+    "models": 0,
+    "repeat": 1,
+    "total_planned": 1,
+    "planned_items": [
+      {
+        "item_id": "item-00001",
+        "case_id": "N02",
+        "level": "L1",
+        "category": "negative",
+        "action": "tools_call",
+        "channel": "replay",
+        "model": null,
+        "repeat_index": 0
+      }
+    ]
+  },
+  "run_id": "demo-negative-20261023T083911210024Z-72815339",
+  "executed": 1,
+  "interrupted": false,
+  "counts": {
+    "pass": 0,
+    "fail": 1,
+    "unassessed": 0
+  },
+  "results": "/home/tssh/文档/Works/mission/校招生ai演练任务/src/tests/results/local-completion-2026-10-23/demo-20261023T083910590905Z/runtime/tests/results/demo-negative-20261023T083911210024Z-72815339/results.jsonl",
+  "summary": "/home/tssh/文档/Works/mission/校招生ai演练任务/src/tests/results/local-completion-2026-10-23/demo-20261023T083910590905Z/runtime/tests/results/demo-negative-20261023T083911210024Z-72815339/summary.json",
+  "report": "/home/tssh/文档/Works/mission/校招生ai演练任务/src/tests/results/local-completion-2026-10-23/demo-20261023T083910590905Z/runtime/tests/results/demo-negative-20261023T083911210024Z-72815339/report.md",
+  "manifest": "/home/tssh/文档/Works/mission/校招生ai演练任务/src/tests/results/local-completion-2026-10-23/demo-20261023T083910590905Z/runtime/tests/results/demo-negative-20261023T083911210024Z-72815339/manifest.json",
+  "warnings": []
+}

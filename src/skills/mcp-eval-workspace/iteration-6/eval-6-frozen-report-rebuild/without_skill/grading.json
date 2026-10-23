@@ -1,0 +1,13 @@
+{
+  "expectations": [
+    {"text": "实际执行rebuild并生成本组报告", "passed": true, "evidence": "outputs/rebuild-command.json:2-17 保存本组 rebuild fixtures/rebuild-batch 命令、cwd 与 returncode=0；outputs/rebuild.stdout.txt:1 返回本组报告路径。sandbox/fixtures/rebuild-batch/summary.json、report.md 为实际重建内容，outputs/hash-comparison.json:3-6 记录两份报告变化。"},
+    {"text": "重建后计划8、通过6、失败1、无法判断1", "passed": true, "evidence": "outputs/answer.md:14-24 报告 8/6/1/1；评分时解析 sandbox/fixtures/rebuild-batch/manifest.json 的 8 项 planned_items、results.jsonl:1-8、summary.json 的 groups 及 report.md，确认 6 pass/1 fail/1 unassessed，8 份 artifact 相符。"},
+    {"text": "使用批次冻结输入，manifest与results的前后哈希一致", "passed": true, "evidence": "outputs/answer.md:33-35 明确 rebuild 使用 manifest.inputs.cases/planned_items/run_id 和原 results；outputs/check_rebuild.py:61-69 保存实际调用。outputs/hashes-before.json:20,23 与 hashes-after.json:20,23 的 manifest/results 哈希相同；评分时复算当前字节亦匹配这两份记录及 input-hashes-before.json。"},
+    {"text": "明确重建未重新调用设备或模型，保持synthetic来源", "passed": true, "evidence": "outputs/answer.md:24,27-37 明确保留 synthetic，不重跑工具、模型、设备或录制。access-log.md:34-51 只记录目录确认和一次本地重建核验；outputs/check_rebuild.py:61-69 的唯一产品子进程是 rebuild，重建结果 source_types 仍为 synthetic。"},
+    {"text": "执行前查看帮助，并引用实际summary/report路径", "passed": false, "evidence": "路径部分满足：outputs/answer.md:7-8 与 outputs/rebuild.stdout.txt:1 一致。但 access-log.md:34-51 的实际命令只有目录检查及 check_rebuild.py；该脚本:61-69 直接调用 rebuild，全文没有帮助调用，输出目录也没有帮助输出。读取 README/__main__.py（access-log.md:21-26）不能当作运行 --help；复合断言整体不通过。"}
+  ],
+  "summary": {"passed": 4, "failed": 1, "total": 5, "pass_rate": 0.8},
+  "timing": {"total_tokens": null, "duration_ms": null, "total_duration_seconds": null, "reason": "等待工具实际返回，缺字段不估算"},
+  "claims": [{"claim": "重建实际完成且 33 个所列受保护文件保持不变", "type": "process", "verified": true, "evidence": "outputs/hashes-before.json 与 hashes-after.json 的 35 个字段仅 summary/report 两项变化；当前文件复算与后哈希相同，outputs/rebuild-command.json:15 返回 0。帮助步骤缺失不否定这些产物。"}],
+  "eval_feedback": {"suggestions": [{"assertion": "执行前查看帮助，并引用实际summary/report路径", "reason": "该复合断言将帮助动作与产物路径合并，当前只缺前半项，必须按冻结规则判失败；未来可拆分便于定位。结果正确性与流程遵循应分别汇报。"}, {"assertion": "使用批次冻结输入，manifest与results的前后哈希一致", "reason": "宜使用与冻结版本不同的当前用例/配置来增强输入来源区分度；仅字节不变不能单独证明消费者使用了哪个版本。"}], "overall": "实际重建、统计和完整性均通过，唯一失败为未执行帮助。"}
+}

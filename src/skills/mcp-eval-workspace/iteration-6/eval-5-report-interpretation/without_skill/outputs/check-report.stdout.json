@@ -1,0 +1,553 @@
+{
+  "scope": "offline_saved_report_accounting_only; no product imports, replay, device or API execution",
+  "cwd": "/home/tssh/文档/Works/mission/校招生ai演练任务/src/skills/mcp-eval-workspace/iteration-6/eval-5-report-interpretation/without_skill/sandbox",
+  "executable": "/home/tssh/文档/Works/mission/校招生ai演练任务/src/tests/results/remediation-2026-10-16/.venv/bin/python",
+  "python_version": "3.10.12",
+  "run_id": "replay-smoke-20261023T071912756704Z-a8c6923f",
+  "totals": {
+    "planned": 8,
+    "result_rows": 8,
+    "pass": 6,
+    "fail": 1,
+    "unassessed": 1,
+    "pass_rate_planned": 0.75,
+    "judge_coverage": 0.875,
+    "pass_rate_judged": 0.8571428571428571,
+    "execution_status_counts": {
+      "completed": 7,
+      "not_run": 1
+    },
+    "source_type_counts": {
+      "synthetic": 8
+    },
+    "level_counts": {
+      "L1": 8
+    },
+    "non_null_model_count": 0,
+    "latency_sample_count": 0,
+    "missing_result_ids": [],
+    "unplanned_result_ids": []
+  },
+  "manifest_status_fields": {
+    "state": "finished",
+    "recorded_items": 8,
+    "attempted_items": 8
+  },
+  "computed_summary": {
+    "run_id": "replay-smoke-20261023T071912756704Z-a8c6923f",
+    "schema_version": 2,
+    "total": 8,
+    "observed": 8,
+    "groups": {
+      "replay|L1|negative|-": {
+        "planned": 2,
+        "pass": 1,
+        "fail": 1,
+        "unassessed": 0,
+        "pass_rate_planned": 0.5,
+        "judge_coverage": 1.0,
+        "pass_rate_judged": 0.5,
+        "source_types": [
+          "synthetic"
+        ],
+        "latency_by_verdict": {
+          "pass": {
+            "median": null,
+            "min": null,
+            "max": null,
+            "samples": 0
+          },
+          "fail": {
+            "median": null,
+            "min": null,
+            "max": null,
+            "samples": 0
+          },
+          "unassessed": {
+            "median": null,
+            "min": null,
+            "max": null,
+            "samples": 0
+          }
+        },
+        "latency_ms": {
+          "median": null,
+          "min": null,
+          "max": null,
+          "samples": 0
+        }
+      },
+      "replay|L1|positive|-": {
+        "planned": 6,
+        "pass": 5,
+        "fail": 0,
+        "unassessed": 1,
+        "pass_rate_planned": 0.8333333333333334,
+        "judge_coverage": 0.8333333333333334,
+        "pass_rate_judged": 1.0,
+        "source_types": [
+          "synthetic"
+        ],
+        "latency_by_verdict": {
+          "pass": {
+            "median": null,
+            "min": null,
+            "max": null,
+            "samples": 0
+          },
+          "fail": {
+            "median": null,
+            "min": null,
+            "max": null,
+            "samples": 0
+          },
+          "unassessed": {
+            "median": null,
+            "min": null,
+            "max": null,
+            "samples": 0
+          }
+        },
+        "latency_ms": {
+          "median": null,
+          "min": null,
+          "max": null,
+          "samples": 0
+        }
+      }
+    },
+    "failure_categories": {
+      "assertion_failed": 1
+    }
+  },
+  "items": [
+    {
+      "item_id": "item-00001",
+      "case_id": "N01",
+      "category": "negative",
+      "execution_status": "completed",
+      "verdict": "pass",
+      "verdict_reason": "全部断言及后置条件通过",
+      "error_category": null,
+      "source_type": "synthetic",
+      "trace_complete": true,
+      "latency_ms": null,
+      "model": null,
+      "response_raw": {
+        "jsonrpc": "2.0",
+        "id": 1,
+        "error": {
+          "code": -32602,
+          "message": "Unknown tool: MCPVehicleService.noSuchTool"
+        }
+      },
+      "postcondition_readbacks": [],
+      "fixture_marker": "manually_constructed_mixed_outcomes_not_device_evidence"
+    },
+    {
+      "item_id": "item-00002",
+      "case_id": "N02",
+      "category": "negative",
+      "execution_status": "completed",
+      "verdict": "fail",
+      "verdict_reason": "预期错误未出现",
+      "error_category": null,
+      "source_type": "synthetic",
+      "trace_complete": true,
+      "latency_ms": null,
+      "model": null,
+      "response_raw": {
+        "jsonrpc": "2.0",
+        "id": 1,
+        "result": {
+          "isError": false,
+          "success": true
+        }
+      },
+      "postcondition_readbacks": [],
+      "fixture_marker": "manually_constructed_mixed_outcomes_not_device_evidence"
+    },
+    {
+      "item_id": "item-00003",
+      "case_id": "P01",
+      "category": "positive",
+      "execution_status": "completed",
+      "verdict": "pass",
+      "verdict_reason": "全部断言及后置条件通过",
+      "error_category": null,
+      "source_type": "synthetic",
+      "trace_complete": true,
+      "latency_ms": null,
+      "model": null,
+      "response_raw": {
+        "jsonrpc": "2.0",
+        "id": 1,
+        "result": {
+          "tools": [
+            {
+              "name": "HvacService.getTemp",
+              "inputSchema": {
+                "type": "object",
+                "properties": {}
+              }
+            },
+            {
+              "name": "HvacService.setTemp",
+              "inputSchema": {
+                "type": "object",
+                "properties": {
+                  "temperature": {
+                    "type": "integer",
+                    "minimum": 16,
+                    "maximum": 30
+                  }
+                },
+                "required": [
+                  "temperature"
+                ]
+              }
+            }
+          ]
+        }
+      },
+      "postcondition_readbacks": [],
+      "fixture_marker": "manually_constructed_mixed_outcomes_not_device_evidence"
+    },
+    {
+      "item_id": "item-00004",
+      "case_id": "P02",
+      "category": "positive",
+      "execution_status": "completed",
+      "verdict": "pass",
+      "verdict_reason": "全部断言及后置条件通过",
+      "error_category": null,
+      "source_type": "synthetic",
+      "trace_complete": true,
+      "latency_ms": null,
+      "model": null,
+      "response_raw": {
+        "jsonrpc": "2.0",
+        "id": 1,
+        "result": {
+          "structuredContent": {
+            "success": true
+          },
+          "isError": false
+        }
+      },
+      "postcondition_readbacks": [
+        {
+          "tool": "HvacService.getTemp",
+          "arguments": {},
+          "response_raw": {
+            "jsonrpc": "2.0",
+            "id": 1,
+            "result": {
+              "structuredContent": {
+                "temperature": 22
+              },
+              "isError": false
+            }
+          },
+          "execution_status": "completed",
+          "source_type": "synthetic",
+          "trace_complete": true
+        }
+      ],
+      "fixture_marker": "manually_constructed_mixed_outcomes_not_device_evidence"
+    },
+    {
+      "item_id": "item-00005",
+      "case_id": "P03",
+      "category": "positive",
+      "execution_status": "completed",
+      "verdict": "pass",
+      "verdict_reason": "全部断言及后置条件通过",
+      "error_category": null,
+      "source_type": "synthetic",
+      "trace_complete": true,
+      "latency_ms": null,
+      "model": null,
+      "response_raw": {
+        "jsonrpc": "2.0",
+        "id": 1,
+        "result": {
+          "structuredContent": {
+            "success": true
+          },
+          "isError": false
+        }
+      },
+      "postcondition_readbacks": [
+        {
+          "tool": "HvacService.getTemp",
+          "arguments": {},
+          "response_raw": {
+            "jsonrpc": "2.0",
+            "id": 1,
+            "result": {
+              "structuredContent": {
+                "temperature": 16
+              },
+              "isError": false
+            }
+          },
+          "execution_status": "completed",
+          "source_type": "synthetic",
+          "trace_complete": true
+        }
+      ],
+      "fixture_marker": "manually_constructed_mixed_outcomes_not_device_evidence"
+    },
+    {
+      "item_id": "item-00006",
+      "case_id": "P04",
+      "category": "positive",
+      "execution_status": "completed",
+      "verdict": "pass",
+      "verdict_reason": "全部断言及后置条件通过",
+      "error_category": null,
+      "source_type": "synthetic",
+      "trace_complete": true,
+      "latency_ms": null,
+      "model": null,
+      "response_raw": {
+        "jsonrpc": "2.0",
+        "id": 1,
+        "result": {
+          "structuredContent": {
+            "success": true
+          },
+          "isError": false
+        }
+      },
+      "postcondition_readbacks": [],
+      "fixture_marker": "manually_constructed_mixed_outcomes_not_device_evidence"
+    },
+    {
+      "item_id": "item-00007",
+      "case_id": "P05",
+      "category": "positive",
+      "execution_status": "not_run",
+      "verdict": "unassessed",
+      "verdict_reason": "执行或证据不完整: fixture_missing_evidence",
+      "error_category": "fixture_missing_evidence",
+      "source_type": "synthetic",
+      "trace_complete": false,
+      "latency_ms": null,
+      "model": null,
+      "response_raw": null,
+      "postcondition_readbacks": [],
+      "fixture_marker": "manually_constructed_mixed_outcomes_not_device_evidence"
+    },
+    {
+      "item_id": "item-00008",
+      "case_id": "P06",
+      "category": "positive",
+      "execution_status": "completed",
+      "verdict": "pass",
+      "verdict_reason": "全部断言及后置条件通过",
+      "error_category": null,
+      "source_type": "synthetic",
+      "trace_complete": true,
+      "latency_ms": null,
+      "model": null,
+      "response_raw": {
+        "jsonrpc": "2.0",
+        "id": 1,
+        "result": {
+          "structuredContent": {
+            "success": true
+          },
+          "isError": false
+        }
+      },
+      "postcondition_readbacks": [
+        {
+          "tool": "HvacService.getTemp",
+          "arguments": {},
+          "response_raw": {
+            "jsonrpc": "2.0",
+            "id": 1,
+            "result": {
+              "structuredContent": {
+                "temperature": 30
+              },
+              "isError": false
+            }
+          },
+          "execution_status": "completed",
+          "source_type": "synthetic",
+          "trace_complete": true
+        }
+      ],
+      "fixture_marker": "manually_constructed_mixed_outcomes_not_device_evidence"
+    }
+  ],
+  "recording_input_event_count": 11,
+  "recording_to_saved_result_differences": [
+    {
+      "item_id": "item-00002",
+      "case_id": "N02",
+      "differences": {
+        "response_raw": {
+          "recording_input": {
+            "jsonrpc": "2.0",
+            "id": 1,
+            "error": {
+              "code": -32602,
+              "message": "temperature 40 out of range [16,30]"
+            }
+          },
+          "saved_result": {
+            "jsonrpc": "2.0",
+            "id": 1,
+            "result": {
+              "isError": false,
+              "success": true
+            }
+          }
+        }
+      }
+    },
+    {
+      "item_id": "item-00007",
+      "case_id": "P05",
+      "differences": {
+        "response_raw": {
+          "recording_input": {
+            "jsonrpc": "2.0",
+            "id": 1,
+            "result": {
+              "contents": [
+                {
+                  "uri": "dds://Hvac_Status_topic",
+                  "mimeType": "application/json",
+                  "text": "{\"temperature\":16}"
+                }
+              ]
+            }
+          },
+          "saved_result": null
+        },
+        "execution_status": {
+          "recording_input": "completed",
+          "saved_result": "not_run"
+        },
+        "trace_complete": {
+          "recording_input": true,
+          "saved_result": false
+        }
+      }
+    }
+  ],
+  "artifact_matches": {
+    "item-00001": true,
+    "item-00002": true,
+    "item-00003": true,
+    "item-00004": true,
+    "item-00005": true,
+    "item-00006": true,
+    "item-00007": true,
+    "item-00008": true
+  },
+  "consulted_source_hash_matches": {
+    "report.py": true,
+    "judge.py": true,
+    "runner.py": true
+  },
+  "checks": {
+    "unique_plan_ids": true,
+    "unique_result_ids": true,
+    "all_planned_items_have_results": true,
+    "no_unplanned_results": true,
+    "same_run_id": true,
+    "result_identities_match_plan": true,
+    "case_categories_match_plan": true,
+    "summary_all_fields_match": true,
+    "all_artifacts_equal_results": true,
+    "report_run_id_and_total_match": true,
+    "report_group_rows_match": true,
+    "report_item_rows_match": true,
+    "report_failure_counts_match": true,
+    "current_replay_config_matches_frozen_config": true,
+    "recording_hash_matches_manifest": true,
+    "three_consulted_source_hashes_match_manifest": true,
+    "read_inputs_unchanged_during_check": true
+  },
+  "input_files": {
+    "README.md": {
+      "bytes": 11119,
+      "sha256": "d2a00df48759d4b7039d7a857b946ec9113cac1b0ecf08a758b71e10d8f3b860"
+    },
+    "configs/runs/replay_smoke.json": {
+      "bytes": 498,
+      "sha256": "a2061cc3eff0ac55fc1955944080aa035089a5a9c621fa1cd7b43fb5b9587331"
+    },
+    "fixtures/report-batch/artifacts/item-00001.json": {
+      "bytes": 1254,
+      "sha256": "10ec714fce0496c9aca5f0de95f05c3489740704022b9eef4b490e39d4cfdcc0"
+    },
+    "fixtures/report-batch/artifacts/item-00002.json": {
+      "bytes": 1208,
+      "sha256": "b2eee34edccaa454704496ac0d061993bb427ddf4a88d9b285a957ab01f4deec"
+    },
+    "fixtures/report-batch/artifacts/item-00003.json": {
+      "bytes": 1716,
+      "sha256": "47dda3f0268b8bc5a1e2c441a2bc8dfd6e90f9d29395a7d77cdef60671ac645c"
+    },
+    "fixtures/report-batch/artifacts/item-00004.json": {
+      "bytes": 2761,
+      "sha256": "26ecc7625e2fcef32976e24c82068f0df27715345d3e8d51b8c8e7d238275f3c"
+    },
+    "fixtures/report-batch/artifacts/item-00005.json": {
+      "bytes": 2761,
+      "sha256": "384353049a0dd4adccfcc3b48f196d32e2eef2432f7558f6957637449ec83c3d"
+    },
+    "fixtures/report-batch/artifacts/item-00006.json": {
+      "bytes": 1271,
+      "sha256": "b263414f81da37804fe661575c871b3d416b852e823616e7fd6d55a01a3a301e"
+    },
+    "fixtures/report-batch/artifacts/item-00007.json": {
+      "bytes": 1156,
+      "sha256": "187ba0b9d0017526b996c2c5c6a5d1cce41eea19e2e260f7235b4878bc6e6df1"
+    },
+    "fixtures/report-batch/artifacts/item-00008.json": {
+      "bytes": 2762,
+      "sha256": "b3d38985e58f483565293444fd023e9625d937447069a5e84a4289c9cd90e033"
+    },
+    "fixtures/report-batch/manifest.json": {
+      "bytes": 11526,
+      "sha256": "faaafffd0ce90e3b9c36f7de9e3738162f6c5f7df6aa375be7ecc63032930783"
+    },
+    "fixtures/report-batch/recording-input.jsonl": {
+      "bytes": 3985,
+      "sha256": "0a18cffdb92afe1d683d88177f3821f27240bbcac5506d57457ce588e8bcc848"
+    },
+    "fixtures/report-batch/report.md": {
+      "bytes": 1729,
+      "sha256": "3a4472d5525e1868cff5beeeed0249684b7af88183087fd55dbd5f3352223b39"
+    },
+    "fixtures/report-batch/results.jsonl": {
+      "bytes": 12077,
+      "sha256": "ffbd14e2592447e0a165a6e0520a092d3095e654fd6c0fde8faab81b7f369626"
+    },
+    "fixtures/report-batch/summary.json": {
+      "bytes": 1806,
+      "sha256": "9a22ceefb2eec421b0eda479e857617b9a93c794953c6dcce486b8ea509d66d1"
+    },
+    "src/mcp_eval/judge.py": {
+      "bytes": 12820,
+      "sha256": "119a41dca586b662ae5aa1c2787b7af9ce6ab70a24d77f52687c50f38331f838"
+    },
+    "src/mcp_eval/report.py": {
+      "bytes": 6676,
+      "sha256": "673104565d97fd16641175d99a8fcdaf36c2e32f5a9c6b7ace4f3e9ed23d0374"
+    },
+    "src/mcp_eval/runner.py": {
+      "bytes": 18419,
+      "sha256": "14c9c410713204fc0e219d9a96148a6109806120b3d4f9318cd55fb8043c712a"
+    }
+  },
+  "exit_status": 0
+}

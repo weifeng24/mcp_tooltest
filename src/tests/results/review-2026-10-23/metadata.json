@@ -1,0 +1,11 @@
+{
+  "repo": "校招生AI实战演练 / MCP工具评测",
+  "module": "src/src/mcp_eval（核心执行、判定、配置、回放及采集静态审查与离线反例）",
+  "branch": "main",
+  "commit": "fe75e121ce02fa9e889d786ca699698f6a93fc61",
+  "timestamp": "2026-10-23（UTC+08:00）",
+  "reviewer": "OpenCode AI辅助审查；非导师验收",
+  "scan_mode": "当前工作树；产品源码未修改；160项回归、8项合成回放、旧7项修复复核、新4项边界反例",
+  "applied_rules": ["Common九维检查；无额外项目编码规范文件；Python评测端不套用车端C++领域规则", "维度2 N/A：同步编排无共享线程；维度8 N/A：无直接Binder/AIDL实现（adb子进程已有检查）；维度6 UI项N/A", "分数仅为已检出项的模板扣分，非覆盖率、项目进度或演练成绩；修复片段未应用"],
+  "na_dimensions": [2, 8]
+}

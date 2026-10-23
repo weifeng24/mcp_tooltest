@@ -1,0 +1,7 @@
+usage: mcp_eval rebuild [-h] batch_dir
+
+positional arguments:
+  batch_dir
+
+options:
+  -h, --help  show this help message and exit

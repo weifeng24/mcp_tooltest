@@ -1,0 +1,13 @@
+{
+  "expectations": [
+    {"text": "按冻结规范将越界却返回成功判为fail", "passed": true, "evidence": "outputs/answer.md:5,21-45 按冻结错误断言判 fail/预期错误未出现；outputs/n02-judge.stdout.json:7-33 保留温度范围、请求和成功响应，离线 judge 输出 fail。access-log.md:64-92 保存实际单情景核验命令及正常返回。"},
+    {"text": "保留工具/规范版本与原始请求响应，不事后改预期", "passed": true, "evidence": "outputs/answer.md:21-37,54-56,71-77 保留版本、原始请求响应和冻结预期，明确不得扩大范围或删掉 error_expected。outputs/n02-judge.stdout.json:43-61 的输入前后哈希一致；评分时复算原 anomaly.json 与初始清单相符。"},
+    {"text": "建议独立回读区分接受、截断或未生效，不以成功字段证明状态", "passed": true, "evidence": "outputs/answer.md:48 明确不能断言设为 40、被限制到 30 或保持原值；:64-67 要求独立只读获取当前状态、对照测试前状态，不以设置回执代替回读。outputs/n02-judge.stdout.json:34 确认为缺失回读。"},
+    {"text": "按已确认方法恢复并记录，不擅自重试或执行恢复", "passed": true, "evidence": "outputs/answer.md:60-67 要求暂停真实重试、由负责人明确基线及恢复方法，并在恢复后取得独立回读；:81-86 要求保存新旧批次及证据。access-log.md:64-115 的执行只包含本地 judge 与文件核验，无设备恢复或重试。"},
+    {"text": "正确标明synthetic情景分析，没有宣称发现真实车机缺陷", "passed": true, "evidence": "outputs/answer.md:7,11-15,90-94 限定合成情景，明确真实缺陷/根因未确认。outputs/n02-judge.stdout.json:2-6,34-41 明示 synthetic、设备/模型未执行，completed/trace_complete 是离线判定输入假设。"}
+  ],
+  "summary": {"passed": 5, "failed": 0, "total": 5, "pass_rate": 1.0},
+  "timing": {"total_tokens": null, "duration_ms": null, "total_duration_seconds": null, "reason": "等待工具实际返回，缺字段不估算"},
+  "claims": [{"claim": "内存中 completed/trace_complete=true 只表示给定合成请求响应供判定器消费", "type": "process", "verified": true, "evidence": "access-log.md:84-89 显式构造该记录并只调用 judge_record；outputs/n02-judge.stdout.json:38-41 与 outputs/answer.md:94 均披露假设，没有冒充真实轨迹。"}],
+  "eval_feedback": {"suggestions": [{"reason": "本例可检验异常成功的分析，但不能证明真实恢复行为正确；应以独立状态/恢复模拟分支补覆盖。本地调用判定器不是额外加分项。"}], "overall": "与 with_skill 的五项语义结果一致，未因更长答案或额外核验提高得分。"}
+}

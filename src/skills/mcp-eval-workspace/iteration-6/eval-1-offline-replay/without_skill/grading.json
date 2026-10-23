@@ -1,0 +1,41 @@
+{
+  "expectations": [
+    {
+      "text": "实际执行一次回放并引用本组新批次路径",
+      "passed": true,
+      "evidence": "outputs/access-log.md:85-95 列出一条可关联的正式 run 及退出码 0；outputs/01-replay.stdout.log:93-104 返回本组新批次 replay-smoke-20261023T073015149014Z-a8a1fdbc。outputs/answer.md:25-28 引用该目录，其 manifest.json:3-6 与之对应。本项仅对该明确引用批次核验实际执行及路径，保持通过；另有 sandbox/tests/results/replay-smoke-20261023T072249272703Z-4501ac0a/ 的完整完成态产物未与日志关联，撤回对日志中唯一/仅一次说法的认可。"
+    },
+    {
+      "text": "准确报告计划8、通过8、失败0、无法判断0",
+      "passed": true,
+      "evidence": "outputs/answer.md:5-11 报告 8/8/0/0；outputs/01-replay.stdout.log:9,94-99 与新批次 summary.json:4-11,45-49 相符。独立解析 sandbox/tests/results/replay-smoke-20261023T073015149014Z-a8a1fdbc/results.jsonl:1-8，8 个唯一计划项均为 completed/pass，artifact 与记录一致。"
+    },
+    {
+      "text": "明确synthetic来源，不作真机结论",
+      "passed": true,
+      "evidence": "outputs/answer.md:13,48-56,71 明确 replay/synthetic、合成来源及不支持真实设备/模型/客户端结论。sandbox/tests/results/replay-smoke-20261023T073015149014Z-a8a1fdbc/results.jsonl:1-8 的 source_type 均为 synthetic；同批 report.md:3-15 相符。"
+    },
+    {
+      "text": "执行前查看命令帮助并保存输出依据",
+      "passed": false,
+      "evidence": "outputs/access-log.md:71-122 已保存的终端命令清单列出 ls、正式 run、cp、diff、sha256sum，没有 --help；同文件:38-42 是阅读 __main__.py 等源码和加载通用 Skill。输出目录未保存帮助输出，无法核验答案引用批次执行前查看过帮助，因此本项仍不通过。额外较早批次的过程未知，不能据此补算帮助调用，也不把现存日志当作本组全部实际命令的完整审计。"
+    },
+    {
+      "text": "读取本次manifest、results及summary/report，而不是旧固定目录",
+      "passed": true,
+      "evidence": "outputs/access-log.md:43-51 的 R17—R25 从本次 stdout 定位并读取 manifest、summary、results、report 及长行对应 artifact；:63-65 明确新批次目录。outputs/answer.md:27-33,60-64 引用本次产物及其归档，已核对 sandbox/tests/results/replay-smoke-20261023T073015149014Z-a8a1fdbc/ 下四份主文件一致。"
+    }
+  ],
+  "summary": {"passed": 4, "failed": 1, "total": 5, "pass_rate": 0.8},
+  "timing": {"total_tokens": null, "duration_ms": null, "total_duration_seconds": null, "reason": "等待工具实际返回，缺字段不估算"},
+  "grading_scope": {
+    "scored_batch": "sandbox/tests/results/replay-smoke-20261023T073015149014Z-a8a1fdbc",
+    "unlinked_earlier_batches": ["sandbox/tests/results/replay-smoke-20261023T072249272703Z-4501ac0a"],
+    "total_execution_count_verified": false
+  },
+  "claims": [
+    {"claim": "答案引用的新批次实际回放并得到 8 个 pass", "type": "process", "verified": true, "evidence": "outputs/access-log.md:88-92、outputs/01-replay.stdout.log:93-104 与引用批次 results.jsonl 的 8 条记录相互支持；该结论不包含总执行次数。"},
+    {"claim": "只执行了答案引用的这一次评测，本组评测命令总共1次", "type": "process", "verified": false, "evidence": "outputs/answer.md:29 和 outputs/access-log.md:85,95 声称仅一次；但 sandbox/tests/results/replay-smoke-20261023T072249272703Z-4501ac0a/manifest.json:3-5,346-347 另有 finished/recorded_items=8/attempted_items=8，results.jsonl:1-8 均为 completed/pass/synthetic，8份 artifact 与记录相同。较早批次未关联本组 outputs 的命令、stdout 或退出码；../../../prepare_iteration6.py:39-42,80-95 只在主交付区执行 bootstrap、向 sandbox 复制 tests/cases 和 fixtures，未创建该结果目录。当前产物与仅一次的完整性表述存在未解释冲突；不能确认生成者、启动命令或总次数，不推定任何重试原因。"}
+  ],
+  "eval_feedback": {"suggestions": [{"assertion": "执行前查看命令帮助并保存输出依据", "reason": "该项检查明确的流程动作，必须有命令及输出；不能把阅读源码或未解释的早期批次补算为帮助调用。它与引用批次结果正确性应分别解释。"}, {"assertion": "实际执行一次回放并引用本组新批次路径", "reason": "缺少对所有批次与命令一一关联及额外批次披露的检查。本轮只评明确引用批次，不把未冻结的总次数审计追加成扣分项；未来应预先冻结选择规则和独立执行审计。"}], "overall": "引用批次保持4/5，帮助项不通过；额外较早完成态批次的过程未解释，仅一次声明标为未验证。评分不代表整个副本只运行了一次。"}
+}

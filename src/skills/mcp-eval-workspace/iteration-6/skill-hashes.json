@@ -1,0 +1,8 @@
+{
+  "SKILL.md": "2ea3176ad2b88d38168aded0f6b50f38de92d996ac5d9c95e5f06ca8a9111b9b",
+  "evals/evals.json": "906b1b4f5c1fc14b7b13260198e3ebc3163b6f7d1d88d9e03c6e82798f01e812",
+  "evals/trigger-cases.json": "b9a18fcfbd8fcd66a26462237e06c551a47b9ffb7965d6353abff74f32198b36",
+  "references/report-guide.md": "634d60857e0409e2bcc5d30b3252b1d46aebd41753d15935cf68087b24b052a7",
+  "references/troubleshooting.md": "e0ba2fcac4e9c5663f59cc0b5904c10694896483e61d76708cba48e254124ef3",
+  "scripts/check_env.sh": "aa3a3aa7d5cdf7a249240613440c8b076eb5835e36770bb816ad18b282723d82"
+}

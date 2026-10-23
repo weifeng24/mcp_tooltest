@@ -1,0 +1,16 @@
+{
+    "case_id": "M02",
+    "level": "L2",
+    "category": "positive",
+    "service": "auto",
+    "action": "model_task",
+    "task": "现在空调设置的温度是多少？",
+    "timeout_seconds": 120,
+    "assertions": [
+        {"type": "tool_call_matches", "name": "HvacService.getTemp", "arguments": {}},
+        {"type": "max_rounds", "value": 3},
+        {"type": "manual_review"}
+    ],
+    "expected_source": "任务语义",
+    "notes": "自动验证选择与执行成功；实际温度转述需人工核对，未复核前unassessed。工具名称仍为开发模板。"
+}

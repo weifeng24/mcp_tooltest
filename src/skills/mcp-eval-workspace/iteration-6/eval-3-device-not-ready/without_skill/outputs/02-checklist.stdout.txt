@@ -1,0 +1,4 @@
+# 上机预检（尚未就绪）
+
+先在 Ubuntu Bash 执行 adb devices，确认目标设备状态为 device，将第一列序列号填入 server 配置的 device_serial 后重新生成。不要直接执行含占位符的命令。
+

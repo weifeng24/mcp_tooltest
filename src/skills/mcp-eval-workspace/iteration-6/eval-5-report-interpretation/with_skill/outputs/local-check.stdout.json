@@ -1,0 +1,84 @@
+{
+  "run_id": "replay-smoke-20261023T071912756704Z-a8c6923f",
+  "planned": 8,
+  "observed_records": 8,
+  "verdict_counts": {
+    "pass": 6,
+    "fail": 1,
+    "unassessed": 1
+  },
+  "execution_status_counts": {
+    "completed": 7,
+    "not_run": 1
+  },
+  "pass_rate_planned": 0.75,
+  "judge_coverage": 0.875,
+  "pass_rate_judged": 0.8571428571428571,
+  "missing_result_ids": [],
+  "extra_result_ids": [],
+  "duplicate_result_ids": [],
+  "not_run_case_ids": [
+    "P05"
+  ],
+  "groups": {
+    "negative": {
+      "planned": 2,
+      "pass": 1,
+      "fail": 1,
+      "unassessed": 0,
+      "pass_rate_planned": 0.5,
+      "judge_coverage": 1.0,
+      "pass_rate_judged": 0.5,
+      "summary_matches": true,
+      "report_row_matches": true
+    },
+    "positive": {
+      "planned": 6,
+      "pass": 5,
+      "fail": 0,
+      "unassessed": 1,
+      "pass_rate_planned": 0.8333333333333334,
+      "judge_coverage": 0.8333333333333334,
+      "pass_rate_judged": 1.0,
+      "summary_matches": true,
+      "report_row_matches": true
+    }
+  },
+  "checks": {
+    "plan_result_id_multisets_match": true,
+    "run_ids_match": true,
+    "plan_result_dimensions_match": true,
+    "artifacts_equal_results": true,
+    "summary_total_matches": true,
+    "summary_and_report_groups_match": true
+  },
+  "channels": [
+    "replay"
+  ],
+  "source_types": [
+    "synthetic"
+  ],
+  "fixture_markers": [
+    "manually_constructed_mixed_outcomes_not_device_evidence"
+  ],
+  "model_values": [
+    null
+  ],
+  "known_latency_samples": 0,
+  "postcondition_temperatures": {
+    "P02": [
+      22
+    ],
+    "P03": [
+      16
+    ],
+    "P06": [
+      30
+    ]
+  },
+  "manifest_metadata": {
+    "state": "finished",
+    "recorded_items": 8,
+    "attempted_items": 8
+  }
+}

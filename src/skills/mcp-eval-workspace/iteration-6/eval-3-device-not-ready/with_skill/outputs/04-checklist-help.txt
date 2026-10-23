@@ -1,0 +1,4 @@
+usage: mcp_eval checklist [-h]
+
+options:
+  -h, --help  show this help message and exit

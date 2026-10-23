@@ -1,0 +1,13 @@
+{
+  "expectations": [
+    {"text": "读取并引用指定批次的manifest与实际结果", "passed": true, "evidence": "outputs/access-log.md:27-32 记录读取指定 fixtures/report-batch 的 manifest/results/summary/report 及全部 artifact；outputs/answer.md:8-14,18,38-45 引用该批次及逐项证据。sandbox/fixtures/report-batch/manifest.json:3-87 与实际 results.jsonl 的 run_id/item_id 相符，静态独立核对通过。"},
+    {"text": "准确报告计划8、通过6、失败1、无法判断1", "passed": true, "evidence": "outputs/answer.md:5,20-27 报告 8/6/1/1。sandbox/fixtures/report-batch/summary.json:4-11,45-49 分组为 2/1/1/0 与 6/5/0/1；results.jsonl:1-8 的逐项判定合计相符，outputs/local-check.stdout.json:3-13 也记录相同统计。"},
+    {"text": "计划内通过率为75%，未因无法判断项缩小分母", "passed": true, "evidence": "outputs/answer.md:18-29 明确分母取 manifest 的 8 项，6/8=75%，6/7 不能替代计划内通过率。outputs/local-check.stdout.json:14-16 分开保存 pass_rate_planned=0.75、judge_coverage=0.875 和已判定通过率。"},
+    {"text": "指出N02预期错误未出现、P05未完成且保留在计划中", "passed": true, "evidence": "outputs/answer.md:39,44,47-59 区分 N02 断言失败与 P05 未执行/缺证据，并保留 P05 计划项。sandbox/fixtures/report-batch/artifacts/item-00002.json:13-25 为成功响应和 fail；item-00007.json:11-26 为 not_run、unassessed、trace_complete=false。"},
+    {"text": "识别synthetic来源；只解读记录，未重跑工具或模型", "passed": true, "evidence": "outputs/answer.md:11,65-74,83-94 明确人工构造的 synthetic 结果及未重跑。outputs/access-log.md:44-89 保存唯一标准库静态统计命令，不导入产品模块；sandbox/fixtures/report-batch/results.jsonl:1-8 的 source_type/provenance.skill_eval_fixture 支持来源判断。"}
+  ],
+  "summary": {"passed": 5, "failed": 0, "total": 5, "pass_rate": 1.0},
+  "timing": {"total_tokens": null, "duration_ms": null, "total_duration_seconds": null, "reason": "等待工具实际返回，缺字段不估算"},
+  "claims": [{"claim": "manifest 的 finished/attempted_items=8 不足以证明 8 项均实际完成", "type": "factual", "verified": true, "evidence": "sandbox/fixtures/report-batch/manifest.json:5,346-347 保留原元数据，而 artifacts/item-00007.json:11-26 为 P05 not_run/缺证据；outputs/answer.md:30 已揭示这一限制。"}],
+  "eval_feedback": {"suggestions": [{"reason": "现有断言未单独检查人工修改后的 results 与原 recording-input、manifest 执行计数之间的来源差异。应要求说明本批是派生夹具，不能声称原录制直接回放即可得到 6/1/1；另可加入缺整条结果、重复 item_id、多模型/重复次数以检验固定分母。"}], "overall": "本批解读正确；数量与 synthetic 标签检查对来源链及复杂计划的覆盖有限。"}
+}

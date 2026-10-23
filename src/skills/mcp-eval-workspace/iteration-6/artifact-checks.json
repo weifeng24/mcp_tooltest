@@ -1,0 +1,110 @@
+{
+  "checks": [
+    {
+      "eval_id": 1,
+      "configuration": "with_skill",
+      "fixture_changes": [],
+      "product_unchanged": true
+    },
+    {
+      "eval_id": 1,
+      "configuration": "without_skill",
+      "fixture_changes": [],
+      "product_unchanged": true
+    },
+    {
+      "eval_id": 2,
+      "configuration": "with_skill",
+      "fixture_changes": [],
+      "product_unchanged": true
+    },
+    {
+      "eval_id": 2,
+      "configuration": "without_skill",
+      "fixture_changes": [],
+      "product_unchanged": true
+    },
+    {
+      "eval_id": 3,
+      "configuration": "with_skill",
+      "fixture_changes": [],
+      "product_unchanged": true
+    },
+    {
+      "eval_id": 3,
+      "configuration": "without_skill",
+      "fixture_changes": [],
+      "product_unchanged": true
+    },
+    {
+      "eval_id": 4,
+      "configuration": "with_skill",
+      "fixture_changes": [],
+      "product_unchanged": true
+    },
+    {
+      "eval_id": 4,
+      "configuration": "without_skill",
+      "fixture_changes": [],
+      "product_unchanged": true
+    },
+    {
+      "eval_id": 5,
+      "configuration": "with_skill",
+      "fixture_changes": [],
+      "product_unchanged": true
+    },
+    {
+      "eval_id": 5,
+      "configuration": "without_skill",
+      "fixture_changes": [],
+      "product_unchanged": true
+    },
+    {
+      "eval_id": 6,
+      "configuration": "with_skill",
+      "fixture_changes": [
+        "rebuild-batch/report.md",
+        "rebuild-batch/summary.json"
+      ],
+      "product_unchanged": true
+    },
+    {
+      "eval_id": 6,
+      "configuration": "without_skill",
+      "fixture_changes": [
+        "rebuild-batch/report.md",
+        "rebuild-batch/summary.json"
+      ],
+      "product_unchanged": true
+    },
+    {
+      "eval_id": 7,
+      "configuration": "with_skill",
+      "fixture_changes": [],
+      "product_unchanged": true
+    },
+    {
+      "eval_id": 7,
+      "configuration": "without_skill",
+      "fixture_changes": [],
+      "product_unchanged": true
+    }
+  ],
+  "skill_unchanged": true,
+  "main_engine_unchanged": true,
+  "main_device_serial_empty": true,
+  "additional_batches": [
+    {
+      "configuration": "with_skill",
+      "path": "eval-1-offline-replay/with_skill/sandbox/tests/results/replay-smoke-20261023T072335541722Z-d3d3c6a0",
+      "status": "not_cited_by_answer_provenance_unresolved"
+    },
+    {
+      "configuration": "without_skill",
+      "path": "eval-1-offline-replay/without_skill/sandbox/tests/results/replay-smoke-20261023T072249272703Z-4501ac0a",
+      "status": "not_cited_by_answer_provenance_unresolved"
+    }
+  ],
+  "known_process_gap": "baseline eval7 initial serial/write provenance not verified"
+}

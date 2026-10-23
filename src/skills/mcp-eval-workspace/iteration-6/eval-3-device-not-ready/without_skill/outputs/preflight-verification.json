@@ -1,0 +1,12 @@
+{
+  "checked_input_count": 36,
+  "checked_inputs_unchanged": true,
+  "changed_checked_inputs": [],
+  "expected_exit_codes_observed": true,
+  "commands_completed": 9,
+  "real_device_cases_executed": 0,
+  "model_api_calls": 0,
+  "synthetic_replay_executed_this_run": false,
+  "token_usage": null,
+  "elapsed_seconds": null
+}

@@ -1,0 +1,54 @@
+{
+  "source_type": "synthetic",
+  "purpose": "规范与响应冲突的离线情景，非真实车机缺陷",
+  "tool_version": "fixture-v1",
+  "spec_version": "frozen-fixture-2026-10-23",
+  "allowed_temperature": [
+    16,
+    30
+  ],
+  "case": {
+    "case_id": "N02",
+    "level": "L1",
+    "category": "negative",
+    "service": "auto",
+    "action": "tools_call",
+    "tool": "HvacService.setTemp",
+    "arguments": {
+      "temperature": 40
+    },
+    "timeout_seconds": 30,
+    "assertions": [
+      {
+        "type": "error_expected",
+        "codes": [
+          -32602
+        ],
+        "message_pattern": "(?i)temperature.*(out of range|maximum|range)"
+      }
+    ],
+    "expected_source": "示例schema maximum=30；错误码/信息为开发判据，须在正式运行前由接口契约确认，禁止事后按实测改判为通过",
+    "notes": "参数越界：检验服务端是否落实 schema 约束。"
+  },
+  "request": {
+    "jsonrpc": "2.0",
+    "id": 1,
+    "method": "tools/call",
+    "params": {
+      "name": "HvacService.setTemp",
+      "arguments": {
+        "temperature": 40
+      }
+    }
+  },
+  "response": {
+    "jsonrpc": "2.0",
+    "id": 1,
+    "result": {
+      "isError": false,
+      "success": true
+    }
+  },
+  "independent_state_readback": null,
+  "recovery_method": "未在真实设备确认"
+}

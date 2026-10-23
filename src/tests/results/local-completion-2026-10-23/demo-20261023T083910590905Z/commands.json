@@ -1,0 +1,101 @@
+[
+  {
+    "title": "1 · 查看真实命令帮助",
+    "argv": [
+      "/home/tssh/文档/Works/mission/校招生ai演练任务/src/tests/results/remediation-2026-10-16/.venv/bin/python",
+      "-B",
+      "-m",
+      "mcp_eval",
+      "--help"
+    ],
+    "display_command": "PYTHONPATH=src python3 -m mcp_eval --help",
+    "cwd": "/home/tssh/文档/Works/mission/校招生ai演练任务/src/tests/results/local-completion-2026-10-23/demo-20261023T083910590905Z/runtime",
+    "returncode": 0,
+    "subprocess_seconds": 0.10706228399794782,
+    "stdout_path": "tests/results/local-completion-2026-10-23/demo-20261023T083910590905Z/step-01.stdout.txt",
+    "stderr_path": "tests/results/local-completion-2026-10-23/demo-20261023T083910590905Z/step-01.stderr.txt",
+    "stdout": "usage: mcp_eval [-h]\n                {run,gen-config,checklist,show-call,rebuild,capture-catalog}\n                ...\n\n车载 MCP 评测：独立批次、离线回放、报告重建与上机预检\n\npositional arguments:\n  {run,gen-config,checklist,show-call,rebuild,capture-catalog}\n    run                 按 run 配置执行评测\n    gen-config          历史配置格式参考（不由当前设备通道消费）\n    checklist           输出上机日检查清单\n    show-call           显示单工具调用 argv，不连接设备\n    rebuild             依据批次 manifest 重建报告，不执行工具或模型\n    capture-catalog     只读采集已有注册定义dump，不执行工具或实时tools/list\n\noptions:\n  -h, --help            show this help message and exit\n",
+    "stderr": ""
+  },
+  {
+    "title": "2 · 本地预检，执行数为零",
+    "argv": [
+      "/home/tssh/文档/Works/mission/校招生ai演练任务/src/tests/results/remediation-2026-10-16/.venv/bin/python",
+      "-B",
+      "-m",
+      "mcp_eval",
+      "run",
+      "configs/runs/replay_smoke.json",
+      "--dry-run"
+    ],
+    "display_command": "PYTHONPATH=src python3 -m mcp_eval run configs/runs/replay_smoke.json --dry-run",
+    "cwd": "/home/tssh/文档/Works/mission/校招生ai演练任务/src/tests/results/local-completion-2026-10-23/demo-20261023T083910590905Z/runtime",
+    "returncode": 0,
+    "subprocess_seconds": 0.17978386000322644,
+    "stdout_path": "tests/results/local-completion-2026-10-23/demo-20261023T083910590905Z/step-02.stdout.txt",
+    "stderr_path": "tests/results/local-completion-2026-10-23/demo-20261023T083910590905Z/step-02.stderr.txt",
+    "stdout": "{\n  \"plan\": {\n    \"run_id\": \"replay-smoke\",\n    \"channel\": \"replay\",\n    \"l1_cases\": 8,\n    \"l2_cases\": 0,\n    \"models\": 0,\n    \"repeat\": 1,\n    \"total_planned\": 8,\n    \"planned_items\": [\n      {\n        \"item_id\": \"item-00001\",\n        \"case_id\": \"N01\",\n        \"level\": \"L1\",\n        \"category\": \"negative\",\n        \"action\": \"tools_call\",\n        \"channel\": \"replay\",\n        \"model\": null,\n        \"repeat_index\": 0\n      },\n      {\n        \"item_id\": \"item-00002\",\n        \"case_id\": \"N02\",\n        \"level\": \"L1\",\n        \"category\": \"negative\",\n        \"action\": \"tools_call\",\n        \"channel\": \"replay\",\n        \"model\": null,\n        \"repeat_index\": 0\n      },\n      {\n        \"item_id\": \"item-00003\",\n        \"case_id\": \"P01\",\n        \"level\": \"L1\",\n        \"category\": \"positive\",\n        \"action\": \"tools_list\",\n        \"channel\": \"replay\",\n        \"model\": null,\n        \"repeat_index\": 0\n      },\n      {\n        \"item_id\": \"item-00004\",\n        \"case_id\": \"P02\",\n        \"level\": \"L1\",\n        \"category\": \"positive\",\n        \"action\": \"tools_call\",\n        \"channel\": \"replay\",\n        \"model\": null,\n        \"repeat_index\": 0\n      },\n      {\n        \"item_id\": \"item-00005\",\n        \"case_id\": \"P03\",\n        \"level\": \"L1\",\n        \"category\": \"positive\",\n        \"action\": \"tools_call\",\n        \"channel\": \"replay\",\n        \"model\": null,\n        \"repeat_index\": 0\n      },\n      {\n        \"item_id\": \"item-00006\",\n        \"case_id\": \"P04\",\n        \"level\": \"L1\",\n        \"category\": \"positive\",\n        \"action\": \"tools_call\",\n        \"channel\": \"replay\",\n        \"model\": null,\n        \"repeat_index\": 0\n      },\n      {\n        \"item_id\": \"item-00007\",\n        \"case_id\": \"P05\",\n        \"level\": \"L1\",\n        \"category\": \"positive\",\n        \"action\": \"resources_read\",\n        \"channel\": \"replay\",\n        \"model\": null,\n        \"repeat_index\": 0\n      },\n      {\n        \"item_id\": \"item-00008\",\n        \"case_id\": \"P06\",\n        \"level\": \"L1\",\n        \"category\": \"positive\",\n        \"action\": \"tools_call\",\n        \"channel\": \"replay\",\n        \"model\": null,\n        \"repeat_index\": 0\n      }\n    ]\n  },\n  \"executed\": 0,\n  \"warnings\": [],\n  \"device_verified\": false\n}\n",
+    "stderr": "",
+    "display_output": "{\n  \"planned\": 8,\n  \"executed\": 0,\n  \"device_verified\": false\n}"
+  },
+  {
+    "title": "3 · 实际运行合成回放",
+    "argv": [
+      "/home/tssh/文档/Works/mission/校招生ai演练任务/src/tests/results/remediation-2026-10-16/.venv/bin/python",
+      "-B",
+      "-m",
+      "mcp_eval",
+      "run",
+      "configs/runs/replay_smoke.json"
+    ],
+    "display_command": "PYTHONPATH=src python3 -m mcp_eval run configs/runs/replay_smoke.json",
+    "cwd": "/home/tssh/文档/Works/mission/校招生ai演练任务/src/tests/results/local-completion-2026-10-23/demo-20261023T083910590905Z/runtime",
+    "returncode": 0,
+    "subprocess_seconds": 0.2107559050018608,
+    "stdout_path": "tests/results/local-completion-2026-10-23/demo-20261023T083910590905Z/step-03.stdout.txt",
+    "stderr_path": "tests/results/local-completion-2026-10-23/demo-20261023T083910590905Z/step-03.stderr.txt",
+    "stdout": "{\n  \"plan\": {\n    \"run_id\": \"replay-smoke\",\n    \"channel\": \"replay\",\n    \"l1_cases\": 8,\n    \"l2_cases\": 0,\n    \"models\": 0,\n    \"repeat\": 1,\n    \"total_planned\": 8,\n    \"planned_items\": [\n      {\n        \"item_id\": \"item-00001\",\n        \"case_id\": \"N01\",\n        \"level\": \"L1\",\n        \"category\": \"negative\",\n        \"action\": \"tools_call\",\n        \"channel\": \"replay\",\n        \"model\": null,\n        \"repeat_index\": 0\n      },\n      {\n        \"item_id\": \"item-00002\",\n        \"case_id\": \"N02\",\n        \"level\": \"L1\",\n        \"category\": \"negative\",\n        \"action\": \"tools_call\",\n        \"channel\": \"replay\",\n        \"model\": null,\n        \"repeat_index\": 0\n      },\n      {\n        \"item_id\": \"item-00003\",\n        \"case_id\": \"P01\",\n        \"level\": \"L1\",\n        \"category\": \"positive\",\n        \"action\": \"tools_list\",\n        \"channel\": \"replay\",\n        \"model\": null,\n        \"repeat_index\": 0\n      },\n      {\n        \"item_id\": \"item-00004\",\n        \"case_id\": \"P02\",\n        \"level\": \"L1\",\n        \"category\": \"positive\",\n        \"action\": \"tools_call\",\n        \"channel\": \"replay\",\n        \"model\": null,\n        \"repeat_index\": 0\n      },\n      {\n        \"item_id\": \"item-00005\",\n        \"case_id\": \"P03\",\n        \"level\": \"L1\",\n        \"category\": \"positive\",\n        \"action\": \"tools_call\",\n        \"channel\": \"replay\",\n        \"model\": null,\n        \"repeat_index\": 0\n      },\n      {\n        \"item_id\": \"item-00006\",\n        \"case_id\": \"P04\",\n        \"level\": \"L1\",\n        \"category\": \"positive\",\n        \"action\": \"tools_call\",\n        \"channel\": \"replay\",\n        \"model\": null,\n        \"repeat_index\": 0\n      },\n      {\n        \"item_id\": \"item-00007\",\n        \"case_id\": \"P05\",\n        \"level\": \"L1\",\n        \"category\": \"positive\",\n        \"action\": \"resources_read\",\n        \"channel\": \"replay\",\n        \"model\": null,\n        \"repeat_index\": 0\n      },\n      {\n        \"item_id\": \"item-00008\",\n        \"case_id\": \"P06\",\n        \"level\": \"L1\",\n        \"category\": \"positive\",\n        \"action\": \"tools_call\",\n        \"channel\": \"replay\",\n        \"model\": null,\n        \"repeat_index\": 0\n      }\n    ]\n  },\n  \"run_id\": \"replay-smoke-20261023T083911050669Z-0886a092\",\n  \"executed\": 8,\n  \"interrupted\": false,\n  \"counts\": {\n    \"pass\": 8,\n    \"fail\": 0,\n    \"unassessed\": 0\n  },\n  \"results\": \"/home/tssh/文档/Works/mission/校招生ai演练任务/src/tests/results/local-completion-2026-10-23/demo-20261023T083910590905Z/runtime/tests/results/replay-smoke-20261023T083911050669Z-0886a092/results.jsonl\",\n  \"summary\": \"/home/tssh/文档/Works/mission/校招生ai演练任务/src/tests/results/local-completion-2026-10-23/demo-20261023T083910590905Z/runtime/tests/results/replay-smoke-20261023T083911050669Z-0886a092/summary.json\",\n  \"report\": \"/home/tssh/文档/Works/mission/校招生ai演练任务/src/tests/results/local-completion-2026-10-23/demo-20261023T083910590905Z/runtime/tests/results/replay-smoke-20261023T083911050669Z-0886a092/report.md\",\n  \"manifest\": \"/home/tssh/文档/Works/mission/校招生ai演练任务/src/tests/results/local-completion-2026-10-23/demo-20261023T083910590905Z/runtime/tests/results/replay-smoke-20261023T083911050669Z-0886a092/manifest.json\",\n  \"warnings\": []\n}\n",
+    "stderr": "",
+    "display_output": "{\n  \"run_id\": \"replay-smoke-20261023T083911050669Z-0886a092\",\n  \"counts\": {\n    \"pass\": 8,\n    \"fail\": 0,\n    \"unassessed\": 0\n  },\n  \"source_type\": \"synthetic\",\n  \"report\": \"tests/results/replay-smoke-20261023T083911050669Z-0886a092/report.md\"\n}"
+  },
+  {
+    "title": "4 · 越界返回成功，评测应发现失败",
+    "argv": [
+      "/home/tssh/文档/Works/mission/校招生ai演练任务/src/tests/results/remediation-2026-10-16/.venv/bin/python",
+      "-B",
+      "-m",
+      "mcp_eval",
+      "run",
+      "configs/runs/demo-negative.json"
+    ],
+    "display_command": "PYTHONPATH=src python3 -m mcp_eval run configs/runs/demo-negative.json",
+    "cwd": "/home/tssh/文档/Works/mission/校招生ai演练任务/src/tests/results/local-completion-2026-10-23/demo-20261023T083910590905Z/runtime",
+    "returncode": 1,
+    "subprocess_seconds": 0.13892525999835925,
+    "stdout_path": "tests/results/local-completion-2026-10-23/demo-20261023T083910590905Z/step-04.stdout.txt",
+    "stderr_path": "tests/results/local-completion-2026-10-23/demo-20261023T083910590905Z/step-04.stderr.txt",
+    "stdout": "{\n  \"plan\": {\n    \"run_id\": \"demo-negative\",\n    \"channel\": \"replay\",\n    \"l1_cases\": 1,\n    \"l2_cases\": 0,\n    \"models\": 0,\n    \"repeat\": 1,\n    \"total_planned\": 1,\n    \"planned_items\": [\n      {\n        \"item_id\": \"item-00001\",\n        \"case_id\": \"N02\",\n        \"level\": \"L1\",\n        \"category\": \"negative\",\n        \"action\": \"tools_call\",\n        \"channel\": \"replay\",\n        \"model\": null,\n        \"repeat_index\": 0\n      }\n    ]\n  },\n  \"run_id\": \"demo-negative-20261023T083911210024Z-72815339\",\n  \"executed\": 1,\n  \"interrupted\": false,\n  \"counts\": {\n    \"pass\": 0,\n    \"fail\": 1,\n    \"unassessed\": 0\n  },\n  \"results\": \"/home/tssh/文档/Works/mission/校招生ai演练任务/src/tests/results/local-completion-2026-10-23/demo-20261023T083910590905Z/runtime/tests/results/demo-negative-20261023T083911210024Z-72815339/results.jsonl\",\n  \"summary\": \"/home/tssh/文档/Works/mission/校招生ai演练任务/src/tests/results/local-completion-2026-10-23/demo-20261023T083910590905Z/runtime/tests/results/demo-negative-20261023T083911210024Z-72815339/summary.json\",\n  \"report\": \"/home/tssh/文档/Works/mission/校招生ai演练任务/src/tests/results/local-completion-2026-10-23/demo-20261023T083910590905Z/runtime/tests/results/demo-negative-20261023T083911210024Z-72815339/report.md\",\n  \"manifest\": \"/home/tssh/文档/Works/mission/校招生ai演练任务/src/tests/results/local-completion-2026-10-23/demo-20261023T083910590905Z/runtime/tests/results/demo-negative-20261023T083911210024Z-72815339/manifest.json\",\n  \"warnings\": []\n}\n",
+    "stderr": "",
+    "display_output": "{\n  \"counts\": {\n    \"pass\": 0,\n    \"fail\": 1,\n    \"unassessed\": 0\n  },\n  \"returncode\": 1,\n  \"source_type\": \"synthetic\",\n  \"reason\": \"预期错误未出现；保留fail，不改预期\"\n}"
+  },
+  {
+    "title": "5 · 从冻结输入重建报告",
+    "argv": [
+      "/home/tssh/文档/Works/mission/校招生ai演练任务/src/tests/results/remediation-2026-10-16/.venv/bin/python",
+      "-B",
+      "-m",
+      "mcp_eval",
+      "rebuild",
+      "tests/results/replay-smoke-20261023T083911050669Z-0886a092"
+    ],
+    "display_command": "PYTHONPATH=src python3 -m mcp_eval rebuild tests/results/replay-smoke-20261023T083911050669Z-0886a092",
+    "cwd": "/home/tssh/文档/Works/mission/校招生ai演练任务/src/tests/results/local-completion-2026-10-23/demo-20261023T083910590905Z/runtime",
+    "returncode": 0,
+    "subprocess_seconds": 0.11042904900023132,
+    "stdout_path": "tests/results/local-completion-2026-10-23/demo-20261023T083910590905Z/step-05.stdout.txt",
+    "stderr_path": "tests/results/local-completion-2026-10-23/demo-20261023T083910590905Z/step-05.stderr.txt",
+    "stdout": "{\"summary\": \"/home/tssh/文档/Works/mission/校招生ai演练任务/src/tests/results/local-completion-2026-10-23/demo-20261023T083910590905Z/runtime/tests/results/replay-smoke-20261023T083911050669Z-0886a092/summary.json\", \"report\": \"/home/tssh/文档/Works/mission/校招生ai演练任务/src/tests/results/local-completion-2026-10-23/demo-20261023T083910590905Z/runtime/tests/results/replay-smoke-20261023T083911050669Z-0886a092/report.md\"}\n",
+    "stderr": "",
+    "display_output": "{\n  \"summary_sha256_unchanged\": true,\n  \"device_calls\": 0,\n  \"model_requests\": 0,\n  \"note\": \"重建读取既有结果，不重新执行工具\"\n}"
+  }
+]

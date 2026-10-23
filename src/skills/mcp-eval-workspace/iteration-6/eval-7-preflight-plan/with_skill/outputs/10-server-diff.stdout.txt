@@ -1,0 +1,11 @@
+--- ../outputs/server-before.json	2026-10-23 15:31:04.959152023 +0800
++++ configs/servers/ark_mcp_service.json	2026-10-23 15:31:04.959152023 +0800
+@@ -2,7 +2,7 @@
+     "server_id": "ark_mcp_service",
+     "baseline_tree": "/data/AIOS_Ark_2026-dev/lagvm/LINUX/android/vendor/mcp",
+     "baseline_commit": "f152ba865b433b0769af18c4ab03db501d24bbef",
+-    "device_serial": "",
++    "device_serial": "SYNTHETIC-SERIAL-NOT-A-DEVICE",
+     "service_bin": "mcp_service",
+     "dump_dir": "/data/mcp/dump",
+     "services": [

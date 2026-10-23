@@ -1,0 +1,12 @@
+{
+    "model_config_id": "kimi-coding",
+    "provider": "kimi",
+    "model": "kimi-k2-0905-preview",
+    "base_url": "https://api.moonshot.cn/v1",
+    "api_key_env": "KIMI_API_KEY",
+    "generation": {
+        "temperature": 0.0,
+        "max_tokens": 1024
+    },
+    "notes": "未验证的通用Moonshot示例配置，不代表Kimi Coding Plan可用。须按实际套餐官方说明核对端点、模型及接口协议后修改，不能直接宣称双模型就绪。"
+}

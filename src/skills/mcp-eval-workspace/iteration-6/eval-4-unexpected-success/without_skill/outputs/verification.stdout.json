@@ -1,0 +1,17 @@
+{
+  "status": "verified",
+  "input_files_checked": 7,
+  "read_inputs_unchanged": true,
+  "checked_deliverables": [
+    "../outputs/answer.md",
+    "../access-log.md",
+    "../outputs/01-directory.stdout.txt",
+    "../outputs/01-directory.stderr.txt",
+    "../outputs/n02-judge.stdout.json",
+    "../outputs/n02-judge.stderr.txt"
+  ],
+  "answer_local_links_checked": 3,
+  "raw_stderr_files_empty": true,
+  "directory_stdout_matches_tool_result": true,
+  "answer_sha256": "b449bf01e825c385914f02811f750717b8de524a08cae2d671f4d6c02e77b31c"
+}

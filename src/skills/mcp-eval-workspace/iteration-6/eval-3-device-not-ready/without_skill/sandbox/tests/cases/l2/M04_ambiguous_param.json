@@ -1,0 +1,14 @@
+{
+    "case_id": "M04",
+    "level": "L2",
+    "category": "negative",
+    "service": "auto",
+    "action": "model_task",
+    "task": "把空调温度调到舒服的程度",
+    "timeout_seconds": 120,
+    "assertions": [
+        {"type": "manual_review"}
+    ],
+    "expected_source": "缺少确定值的开发场景；必须在正式评测前确认允许的默认行为或澄清规则，当前仅人工复核，不自动判通过",
+    "notes": "检验模型面对模糊参数时的行为；判定需人工复核，不作为自动 pass/fail。"
+}

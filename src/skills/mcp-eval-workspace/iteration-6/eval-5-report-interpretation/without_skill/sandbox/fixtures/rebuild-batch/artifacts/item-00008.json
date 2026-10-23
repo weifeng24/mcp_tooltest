@@ -1,0 +1,105 @@
+{
+  "run_id": "replay-smoke-20261023T071912756704Z-a8c6923f",
+  "case_id": "P06",
+  "channel": "replay",
+  "action": "tools_call",
+  "service": "auto",
+  "tool": "HvacService.setTemp",
+  "arguments": {
+    "temperature": 30
+  },
+  "model": null,
+  "request_raw": null,
+  "response_raw": {
+    "jsonrpc": "2.0",
+    "id": 1,
+    "result": {
+      "structuredContent": {
+        "success": true
+      },
+      "isError": false
+    }
+  },
+  "execution_status": "completed",
+  "error_category": null,
+  "latency_ms": null,
+  "verdict": "pass",
+  "verdict_reason": "全部断言及后置条件通过",
+  "timestamp": "2026-10-23T15:19:12+08:00",
+  "stdout_tail": "",
+  "evidence": [
+    "artifacts/item-00008.json"
+  ],
+  "schema_version": 2,
+  "item_id": "item-00008",
+  "repeat_index": 0,
+  "source_type": "synthetic",
+  "trace_complete": true,
+  "stdout": "",
+  "stderr": "",
+  "events": [
+    {
+      "kind": "postcondition_started",
+      "tool": "HvacService.getTemp",
+      "arguments": {}
+    }
+  ],
+  "provenance": {
+    "source_run_id": "synthetic-v2",
+    "source_case_id": "P06",
+    "source_timestamp": "2026-10-23T15:19:12+08:00",
+    "source_event_index": "9:0",
+    "source_model": null,
+    "primary_latency_ms": null,
+    "postconditions": [
+      {
+        "run_id": "replay-smoke-20261023T071912756704Z-a8c6923f",
+        "case_id": "P06",
+        "channel": "replay",
+        "action": "tools_call",
+        "service": "auto",
+        "tool": "HvacService.getTemp",
+        "arguments": {},
+        "model": null,
+        "request_raw": null,
+        "response_raw": {
+          "jsonrpc": "2.0",
+          "id": 1,
+          "result": {
+            "structuredContent": {
+              "temperature": 30
+            },
+            "isError": false
+          }
+        },
+        "execution_status": "completed",
+        "error_category": null,
+        "latency_ms": null,
+        "verdict": null,
+        "verdict_reason": null,
+        "timestamp": "2026-10-23T15:19:12+08:00",
+        "stdout_tail": "",
+        "evidence": [
+          "/home/tssh/文档/Works/mission/校招生ai演练任务/src/recordings/DEV_SYNTHETIC_V2_NOT_REAL.jsonl"
+        ],
+        "schema_version": 2,
+        "item_id": "",
+        "repeat_index": 0,
+        "source_type": "synthetic",
+        "trace_complete": true,
+        "stdout": "",
+        "stderr": "",
+        "events": [],
+        "provenance": {
+          "source_run_id": "synthetic-v2",
+          "source_case_id": "P06-check",
+          "source_timestamp": "2026-10-23T15:19:12+08:00",
+          "source_event_index": "10:0",
+          "source_model": null
+        }
+      }
+    ],
+    "replay_wall_ms": 1,
+    "skill_eval_fixture": "manually_constructed_mixed_outcomes_not_device_evidence"
+  }
+}
